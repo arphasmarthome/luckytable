@@ -1,0 +1,77 @@
+{
+  "_sources": {
+    "fruits_vegetables": "https://www.goodgoodgood.co/articles/list-of-fruits-vegetables",
+    "condiments": "https://www.listchallenges.com/100-condiments (from https://en.wikipedia.org/wiki/List_of_condiments)"
+  },
+  "_note": "Reference taxonomy for Lucky Table item categorisation. Culinary convention is used where botany and cooking disagree (tomato, cucumber, pepper, squash are filed as vegetables). Names are lowercase for lookup.",
+  "categories": ["Vegetable", "Fruit", "Grain", "Protein", "Condiment", "Herb", "Dairy"],
+  "zh": {
+    "Vegetable": "蔬菜",
+    "Fruit": "水果",
+    "Grain": "穀類",
+    "Protein": "蛋白質",
+    "Condiment": "調味料",
+    "Herb": "香草",
+    "Dairy": "乳製品"
+  },
+  "vegetable": [
+    "acorn squash", "alfalfa sprout", "arrowroot", "artichoke", "arugula", "asparagus", "bamboo shoot",
+    "bean sprouts", "beetroot", "belgian endive", "bell pepper", "bitter gourd", "bitter melon", "bok choy",
+    "broad beans", "broccoli", "broccoli rabe", "broccolini", "brussels sprout", "burdock", "butternut squash",
+    "cabbage", "capsicum", "cardoon", "carrot", "cassava", "cauliflower", "celeriac", "celery", "chard",
+    "chayote", "chicory", "chinese broccoli", "chinese cabbage", "chive", "collard greens", "corn", "courgette",
+    "cucumber", "daikon", "eggplant", "endive", "fennel", "fiddlehead ferns", "garlic", "garlic scapes",
+    "ginger", "green bean", "green onion", "horseradish", "iceberg lettuce", "jerusalem artichoke", "jicama",
+    "kale", "kohlrabi", "komatsuna", "leek", "lettuce", "lotus root", "malabar spinach", "mizuna",
+    "morel mushroom", "mung bean", "mushroom", "mustard greens", "napa cabbage", "nori", "okra", "onion",
+    "pak choi", "parsnip", "pea", "pea shoots", "potato", "pumpkin", "purple cabbage", "radicchio", "radish",
+    "rapini", "red cabbage", "red onion", "romanesco", "rutabaga", "salsify", "scallion", "seaweed", "shallot",
+    "shiitake mushroom", "snap pea", "snow pea", "spinach", "spring onion", "sprouts", "squash",
+    "sugar snap pea", "swede", "sweet corn", "sweet pepper", "sweet potato", "swiss chard", "taro",
+    "taro root", "tat soi", "tomatillo", "tomato", "turnip", "water chestnut", "water spinach", "watercress",
+    "wax gourd", "welsh onion", "white onion", "wild garlic", "winter melon", "yam", "yellow onion",
+    "yu choy", "zucchini"
+  ],
+  "fruit": [
+    "apple", "apricot", "avocado", "banana", "blackberry", "blueberry", "cantaloupe", "cherry", "clementine",
+    "coconut", "cranberry", "date", "dragon fruit", "durian", "fig", "grape", "grapefruit", "guava",
+    "honeydew", "jackfruit", "kiwi", "kumquat", "lemon", "lime", "longan", "loquat", "lychee", "mandarin",
+    "mango", "mangosteen", "melon", "mulberry", "nectarine", "orange", "papaya", "passionfruit", "peach",
+    "pear", "persimmon", "pineapple", "plum", "pomegranate", "pomelo", "raspberry", "starfruit", "strawberry",
+    "tangerine", "watermelon", "wax apple", "yuzu"
+  ],
+  "grain": [
+    "barley", "basmati rice", "brown rice", "buckwheat", "bulgur", "corn flour", "couscous", "flour",
+    "glutinous rice", "jasmine rice", "millet", "noodles", "oats", "pasta", "polenta", "quinoa", "rice",
+    "rice noodles", "rice vermicelli", "rolled oats", "rye", "semolina", "sorghum", "spelt", "sticky rice",
+    "udon", "wheat", "white rice", "wild rice"
+  ],
+  "protein": [
+    "anchovy", "bacon", "beef", "beef sirloin", "chicken", "chicken breast", "chicken thigh", "clams", "cod",
+    "crab", "duck", "egg", "eggs", "firm tofu", "fish", "ground beef", "ground pork", "ham", "lamb", "lentils",
+    "mackerel", "mussels", "octopus", "oyster", "pork", "pork belly", "prawn", "salmon", "sausage", "scallops",
+    "shrimp", "squid", "tempeh", "tofu", "tuna", "turkey"
+  ],
+  "condiment": [
+    "adobo", "aioli", "ajvar", "alfredo sauce", "almond butter", "amba", "anchovy sauce", "aromat",
+    "au jus sauce", "banana ketchup", "barbecue sauce", "bearnaise sauce", "black vinegar", "brown sauce",
+    "butter", "cane sauce", "caramel", "chili crisp", "chili oil", "chili sauce", "chimichurri",
+    "chocolate syrup", "chutney", "cocktail sauce", "coleslaw", "compote", "cranberry sauce", "dijon mustard",
+    "doubanjiang", "duck sauce", "dulce de leche", "fermented bean paste", "fish paste", "fish sauce",
+    "fruit preserves", "fry sauce", "garlic sauce", "garum", "gochujang", "gravy", "hoisin sauce", "honey",
+    "hot sauce", "jam", "ketchup", "mayonnaise", "mirin", "miso", "mustard", "oyster sauce", "peanut butter",
+    "ponzu", "relish", "rice vinegar", "rice wine", "salad dressing", "salsa", "sesame oil", "sesame paste",
+    "shaoxing wine", "soy sauce", "sriracha", "sweet chili sauce", "tahini", "tartar sauce", "teriyaki sauce",
+    "tomato paste", "vinegar", "wasabi", "worcestershire sauce", "xo sauce"
+  ],
+  "herb": [
+    "basil", "bay leaf", "black pepper", "chili flakes", "cilantro", "cinnamon", "cloves", "coriander",
+    "cumin", "dill", "five spice", "garlic powder", "mint", "nutmeg", "oregano", "paprika", "parsley",
+    "rosemary", "sage", "salt", "sesame seeds", "star anise", "sugar", "thai basil", "thyme", "turmeric",
+    "white pepper"
+  ],
+  "dairy": [
+    "butter", "buttermilk", "cheddar", "cheese", "condensed milk", "cream", "cream cheese", "evaporated milk",
+    "ghee", "milk", "mozzarella", "parmesan", "sour cream", "yoghurt"
+  ]
+}

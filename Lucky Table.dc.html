@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-fbf72441-e2d6-4515-b78c-8db8041672fe/styles.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+  /* the one value the Organic ramp has no token for: a true white page ground */
+  :root { --page: #ffffff; }
+  html, body { margin:0; padding:0; background:var(--page); }
+  * { box-sizing:border-box; }
+  a { color:var(--color-accent-700); text-decoration:none; }
+  a:hover { color:var(--color-accent-600); }
+  button:focus-visible, [tabindex]:focus-visible { outline:3px solid var(--color-accent); outline-offset:4px; }
+  ::selection { background:var(--color-accent-200); }
+  .mono { font-family:ui-monospace, "SF Mono", Menlo, monospace; }
+  .ph { background-image:repeating-linear-gradient(135deg, var(--color-neutral-200) 0 10px, var(--color-neutral-300) 10px 20px); }
+</style>
+</helmet>
+
+<div data-screen-label="Lucky Table" style="--disp:{{ dispFont }}; width:100%; height:100vh; background:var(--page); color:var(--color-text); font-family:var(--font-body), 'Noto Sans TC', sans-serif; display:flex; flex-direction:row; overflow:hidden;">
+
+<nav style="flex:0 0 auto; width:clamp(92px,7.4vw,124px); background:var(--color-neutral-900); display:flex; flex-direction:column; align-items:center; gap:clamp(10px,1vw,16px); padding:clamp(16px,1.5vw,26px) clamp(8px,0.7vw,12px);">
+  <div style="width:clamp(40px,3.4vw,54px); height:clamp(40px,3.4vw,54px); flex:0 0 auto; border-radius:999px; background:var(--color-accent); display:flex; align-items:center; justify-content:center; margin-bottom:clamp(6px,0.6vw,12px);">
+    <div style="width:44%; height:44%; border-radius:999px; background:var(--color-surface);"></div>
+  </div>
+  <sc-for list="{{ sections }}" as="n" hint-placeholder-count="4">
+    <button type="button" onClick="{{ n.go }}" style="width:100%; display:flex; flex-direction:column; align-items:center; gap:6px; border:none; background:{{ n.bg }}; color:{{ n.fg }}; border-radius:var(--radius-lg); padding:clamp(10px,0.9vw,15px) 4px; font-family:inherit; font-weight:600; font-size:clamp(11px,0.85vw,14px); cursor:pointer;">
+      <span style="width:clamp(26px,2.1vw,32px); height:clamp(26px,2.1vw,32px); display:flex; align-items:center; justify-content:center;">
+        <sc-if value="{{ n.isHome }}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:100%;"><path d="M4 11.2l8-6.4 8 6.4"></path><path d="M6.4 10v8.4a1 1 0 0 0 1 1h9.2a1 1 0 0 0 1-1V10"></path></svg>
+        </sc-if>
+        <sc-if value="{{ n.isFood }}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:100%;"><path d="M3 12h18"></path><path d="M20 12a8 8 0 0 1-16 0"></path><path d="M9 7.5c0-1.2 1-1.6 1-2.8"></path><path d="M14 7.5c0-1.2 1-1.6 1-2.8"></path></svg>
+        </sc-if>
+        <sc-if value="{{ n.isRec }}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:100%;"><path d="M5 4.5h11a2.5 2.5 0 0 1 2.5 2.5v12.5H7.5A2.5 2.5 0 0 1 5 17z"></path><path d="M5 17a2.5 2.5 0 0 1 2.5-2.5h11"></path><path d="M9 8.5h6"></path></svg>
+        </sc-if>
+        <sc-if value="{{ n.isCal }}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:100%;"><rect x="3.5" y="5" width="17" height="15" rx="3"></rect><path d="M3.5 10h17"></path><path d="M8 3.5v3"></path><path d="M16 3.5v3"></path></svg>
+        </sc-if>
+        <sc-if value="{{ n.isFam }}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:100%;"><circle cx="9" cy="8" r="3.2"></circle><circle cx="17" cy="9.5" r="2.4"></circle><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"></path><path d="M16 14.2c2.4.2 4.5 2 4.5 4.8"></path></svg>
+        </sc-if>
+      </span>
+      <span>{{ n.label }}</span>
+    </button>
+  </sc-for>
+  <div style="margin-top:auto; display:flex; flex-direction:column; gap:5px; width:100%; background:var(--color-neutral-800); border-radius:var(--radius-lg); padding:5px;">
+    <button type="button" onClick="{{ setEn }}" style="border:none; border-radius:999px; padding:clamp(8px,0.7vw,12px) 4px; font-family:inherit; font-weight:700; font-size:clamp(12px,0.9vw,15px); cursor:pointer; background:{{ enBg }}; color:{{ enFg }};">EN</button>
+    <button type="button" onClick="{{ setZh }}" style="border:none; border-radius:999px; padding:clamp(8px,0.7vw,12px) 4px; font-family:inherit; font-weight:700; font-size:clamp(12px,0.9vw,15px); cursor:pointer; background:{{ zhBg }}; color:{{ zhFg }};">繁中</button>
+  </div>
+</nav>
+
+<div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; overflow:hidden; background:var(--page);">
+
+<sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Dashboard" style="flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:clamp(18px,1.8vw,30px); padding:clamp(26px,2.6vw,46px) clamp(28px,2.8vw,52px);">
+  <header style="flex:0 0 auto; display:flex; align-items:baseline; gap:clamp(14px,1.4vw,24px);">
+    <h1 style="margin:0; font-family:var(--disp); font-weight:700; font-size:clamp(30px,2.8vw,48px); line-height:1;">{{ t.dashTitle }}</h1>
+    <span style="font-size:clamp(15px,1.2vw,21px); color:var(--color-neutral-600);">{{ t.dashDate }}</span>
+  </header>
+  <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1.15fr 1fr 1fr; gap:clamp(16px,1.6vw,28px);">
+
+    <section style="display:flex; flex-direction:column; gap:clamp(10px,1vw,16px); background:var(--color-neutral-100); border-radius:var(--radius-lg); padding:clamp(18px,1.7vw,30px); min-height:0; overflow:auto;">
+      <div style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.tonight }}</div>
+      <div class="ph" style="border-radius:var(--radius-md); overflow:hidden; height:clamp(110px,10vw,170px); background-image:{{ tonightBg }}; background-size:cover; background-position:center; flex:0 0 auto; display:flex; align-items:center; justify-content:center;">
+        <sc-if value="{{ noTonightPhoto }}" hint-placeholder-val="{{ false }}">
+          <span class="mono" style="font-size:clamp(11px,0.85vw,14px); color:var(--color-neutral-700); letter-spacing:0.1em; text-transform:uppercase; background:var(--color-neutral-100); padding:8px 14px; border-radius:999px;">{{ t.dishPhoto }}</span>
+        </sc-if>
+      </div>
+      <div style="font-family:var(--disp); font-weight:700; font-size:clamp(20px,1.7vw,29px); line-height:1.15;">{{ tonightDish }}</div>
+      <div style="font-size:clamp(14px,1.1vw,19px); color:var(--color-neutral-700);">{{ tonightNote }}</div>
+      <sc-for list="{{ tonightExtra }}" as="m" hint-placeholder-count="0">
+        <div style="display:flex; align-items:center; gap:clamp(9px,0.85vw,14px); background:var(--color-surface); border-radius:var(--radius-md); padding:clamp(8px,0.7vw,12px) clamp(10px,0.9vw,14px); flex:0 0 auto;">
+          <span style="flex:0 0 auto; width:8px; height:8px; border-radius:999px; background:{{ m.dot }};"></span>
+          <span style="flex:1 1 auto; min-width:0; font-size:clamp(13px,1.05vw,18px); font-weight:600; line-height:1.3;">{{ m.title }}</span>
+          <span style="flex:0 0 auto; font-size:clamp(12px,0.95vw,16px); color:var(--color-neutral-600);">{{ m.time }} · {{ m.who }}</span>
+        </div>
+      </sc-for>
+      <button type="button" onClick="{{ goFoodApp }}" style="margin-top:auto; align-self:flex-start; border:none; background:var(--color-accent); color:var(--color-accent-100); border-radius:999px; padding:clamp(11px,1vw,17px) clamp(20px,1.8vw,32px); font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,21px); cursor:pointer; flex:0 0 auto;" style-hover="background:var(--color-accent-600);" style-active="background:var(--color-accent-700);">{{ t.openFood }}</button>
+    </section>
+
+    <section style="display:flex; flex-direction:column; gap:clamp(8px,0.8vw,13px); background:var(--color-neutral-100); border-radius:var(--radius-lg); padding:clamp(18px,1.7vw,30px); min-height:0; overflow:auto;">
+      <div style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.weekDishes }}</div>
+      <sc-for list="{{ weekDishes }}" as="d" hint-placeholder-count="5">
+        <div style="display:flex; align-items:center; gap:clamp(9px,0.85vw,14px); background:{{ d.bg }}; border-radius:var(--radius-md); padding:clamp(7px,0.65vw,11px) clamp(9px,0.8vw,13px); flex:0 0 auto;">
+          <span style="flex:0 0 auto; width:8px; height:8px; border-radius:999px; background:{{ d.dot }};"></span>
+          <span style="flex:0 0 auto; width:clamp(44px,3.6vw,58px); font-weight:700; font-size:clamp(13px,1vw,17px); color:var(--color-neutral-700);">{{ d.day }}</span>
+          <span style="flex:1 1 auto; min-width:0; font-size:clamp(13px,1.05vw,18px); font-weight:600; line-height:1.3;">{{ d.title }}</span>
+          <span style="flex:0 0 auto; font-size:clamp(12px,0.95vw,16px); color:var(--color-neutral-600);">{{ d.who }}</span>
+        </div>
+      </sc-for>
+    </section>
+
+    <div style="display:flex; flex-direction:column; gap:clamp(14px,1.4vw,22px); min-height:0; overflow:auto;">
+      <section style="flex:0 0 auto; display:flex; flex-direction:column; gap:clamp(10px,1vw,16px); background:var(--color-neutral-100); border-radius:var(--radius-lg); padding:clamp(18px,1.7vw,30px);">
+        <div style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.navFam }}</div>
+        <sc-for list="{{ family }}" as="p" hint-placeholder-count="4">
+          <div style="display:flex; align-items:center; gap:clamp(10px,1vw,16px);">
+            <span style="flex:0 0 auto; width:clamp(40px,3.2vw,50px); height:clamp(40px,3.2vw,50px); border-radius:999px; background:{{ p.tint }}; color:{{ p.ink }}; display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px);">{{ p.initial }}</span>
+            <span style="display:flex; flex-direction:column; gap:1px;">
+              <span style="font-size:clamp(15px,1.15vw,20px); font-weight:600;">{{ p.name }}</span>
+              <span style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600);">{{ p.role }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </section>
+      <section style="flex:0 0 auto; display:flex; flex-direction:column; gap:clamp(9px,0.9vw,15px); background:var(--color-neutral-100); border-radius:var(--radius-lg); padding:clamp(18px,1.7vw,30px);">
+        <div style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.votesTitle }}</div>
+        <sc-for list="{{ votes }}" as="v" hint-placeholder-count="4">
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px;">
+              <span style="font-size:clamp(14px,1.1vw,19px); font-weight:600;">{{ v.label }}</span>
+              <span style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600);">{{ v.n }}</span>
+            </div>
+            <div style="height:clamp(8px,0.7vw,11px); border-radius:999px; background:var(--color-neutral-300); overflow:hidden;">
+              <div style="height:100%; width:{{ v.w }}; background:{{ v.bar }}; border-radius:999px;"></div>
+            </div>
+          </div>
+        </sc-for>
+        <span style="font-size:clamp(12px,0.95vw,16px); color:var(--color-neutral-600);">{{ t.voteHint }}</span>
+      </section>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCal }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Calendar" style="flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:clamp(14px,1.4vw,22px); padding:clamp(24px,2.4vw,42px) clamp(26px,2.6vw,48px);">
+  <header style="flex:0 0 auto; display:flex; align-items:flex-end; justify-content:space-between; gap:clamp(16px,1.6vw,28px);">
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.12em; text-transform:uppercase; font-weight:700; color:var(--color-accent-2-700);">{{ t.calKicker }}</span>
+      <h1 style="margin:0; font-family:var(--disp); font-weight:700; font-size:clamp(26px,2.4vw,42px); line-height:1.05;">{{ calTitle }}</h1>
+    </div>
+    <div style="flex:0 0 auto; display:flex; align-items:center; gap:clamp(10px,0.9vw,14px);">
+      <div style="display:flex; gap:4px; background:var(--color-neutral-100); border-radius:999px; padding:4px;">
+        <sc-for list="{{ viewBtns }}" as="v" hint-placeholder-count="2">
+          <button type="button" onClick="{{ v.pick }}" style="border:none; background:{{ v.bg }}; color:{{ v.fg }}; box-shadow:{{ v.shadow }}; border-radius:999px; padding:clamp(9px,0.8vw,13px) clamp(16px,1.5vw,26px); font-family:inherit; font-weight:700; font-size:clamp(13px,1.05vw,18px); cursor:pointer; min-height:44px;">{{ v.label }}</button>
+        </sc-for>
+      </div>
+      <button type="button" onClick="{{ openNewEvent }}" style="border:none; background:var(--color-accent-2-800); color:var(--color-bg); border-radius:999px; padding:clamp(12px,1.05vw,17px) clamp(20px,1.8vw,30px); font-family:inherit; font-weight:700; font-size:clamp(14px,1.1vw,19px); cursor:pointer; min-height:44px;" style-hover="background:var(--color-accent-2-700);">+ {{ t.newEvent }}</button>
+    </div>
+  </header>
+
+  <div style="flex:0 0 auto; display:flex; align-items:center; gap:clamp(6px,0.6vw,10px); background:var(--color-neutral-100); border-radius:999px; padding:clamp(6px,0.5vw,9px) clamp(10px,0.9vw,16px);">
+    <span style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600); margin-right:4px;">{{ t.showing }}</span>
+    <sc-for list="{{ calFilters }}" as="f" hint-placeholder-count="5">
+      <button type="button" onClick="{{ f.pick }}" style="display:flex; align-items:center; gap:8px; border:none; background:{{ f.bg }}; box-shadow:{{ f.shadow }}; color:{{ f.fg }}; border-radius:999px; padding:clamp(9px,0.8vw,14px) clamp(14px,1.2vw,20px); font-family:inherit; font-weight:600; font-size:clamp(13px,1.05vw,18px); cursor:pointer; min-height:44px;">
+        <span style="width:10px; height:10px; border-radius:999px; background:{{ f.dot }}; flex:0 0 auto;"></span>{{ f.name }}
+      </button>
+    </sc-for>
+  </div>
+
+  <div style="flex:0 0 auto; display:flex; align-items:center; gap:clamp(10px,1vw,16px); background:var(--color-accent-2-800); color:var(--color-bg); border-radius:var(--radius-lg); padding:clamp(11px,1vw,16px) clamp(16px,1.5vw,26px); flex-wrap:wrap;">
+    <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; font-weight:700; opacity:0.8;">{{ t.tonightEat }}</span>
+    <sc-for list="{{ tonightMeals }}" as="m" hint-placeholder-count="1">
+      <span style="display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.14); border-radius:999px; padding:8px clamp(12px,1.1vw,18px);">
+        <span style="width:8px; height:8px; border-radius:999px; background:{{ m.dot }}; flex:0 0 auto;"></span>
+        <span style="font-family:var(--disp); font-weight:700; font-size:clamp(14px,1.15vw,20px);">{{ m.title }}</span>
+        <span style="font-size:clamp(12px,0.95vw,16px); opacity:0.8;">{{ m.time }} · {{ m.who }}</span>
+      </span>
+    </sc-for>
+    <sc-if value="{{ noTonight }}" hint-placeholder-val="{{ false }}">
+      <span style="font-size:clamp(13px,1.05vw,18px); opacity:0.85;">{{ t.nothingPlanned }}</span>
+    </sc-if>
+    <button type="button" onClick="{{ goFoodApp }}" style="margin-left:auto; border:none; background:var(--color-accent); color:var(--color-accent-100); border-radius:999px; padding:clamp(9px,0.8vw,13px) clamp(16px,1.5vw,24px); font-family:var(--disp); font-weight:700; font-size:clamp(13px,1.05vw,18px); cursor:pointer; min-height:44px;" style-hover="background:var(--color-accent-600);">{{ t.openFood }}</button>
+  </div>
+
+  <sc-if value="{{ isWeekView }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:repeat(7, 1fr); gap:clamp(8px,0.8vw,14px);">
+    <sc-for list="{{ week }}" as="d" hint-placeholder-count="7">
+      <div style="display:flex; flex-direction:column; gap:clamp(8px,0.7vw,12px); background:{{ d.bg }}; border:2px solid {{ d.border }}; border-radius:var(--radius-lg); padding:clamp(11px,1vw,17px); min-height:0; overflow:auto;">
+        <div style="display:flex; align-items:baseline; gap:6px; flex:0 0 auto;">
+          <span style="font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.25vw,21px); color:{{ d.dayFg }};">{{ d.date }}</span>
+          <span style="font-size:clamp(12px,0.95vw,16px); color:var(--color-neutral-600);">{{ d.day }}</span>
+        </div>
+        <sc-for list="{{ d.items }}" as="it" hint-placeholder-count="1">
+          <div style="background:{{ it.bg }}; border-radius:var(--radius-md); padding:clamp(9px,0.8vw,13px); display:flex; flex-direction:column; gap:3px; flex:0 0 auto;">
+            <span style="font-size:clamp(12px,0.95vw,16px); font-weight:600; line-height:1.3; color:{{ it.ink }};">{{ it.title }}</span>
+            <span style="font-size:clamp(11px,0.85vw,14px); color:var(--color-neutral-700);">{{ it.time }} · {{ it.who }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isMonthView }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:clamp(6px,0.6vw,10px);">
+    <div style="flex:0 0 auto; display:grid; grid-template-columns:repeat(7, 1fr); gap:clamp(5px,0.5vw,8px);">
+      <sc-for list="{{ monthHead }}" as="h" hint-placeholder-count="7">
+        <span style="text-align:center; font-size:clamp(11px,0.9vw,15px); font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--color-neutral-600); padding:4px 0;">{{ h.label }}</span>
+      </sc-for>
+    </div>
+    <div style="flex:1 1 auto; min-height:0; overflow:auto; display:grid; grid-template-columns:repeat(7, 1fr); grid-auto-rows:minmax(clamp(96px,15vh,170px), auto); gap:clamp(6px,0.6vw,10px);">
+      <sc-for list="{{ monthCells }}" as="c" hint-placeholder-count="35">
+        <div style="background:{{ c.bg }}; border:2px solid {{ c.border }}; border-radius:var(--radius-md); padding:clamp(8px,0.7vw,12px); display:flex; flex-direction:column; gap:5px; min-height:0; overflow:hidden;">
+          <span style="font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px); color:{{ c.fg }};">{{ c.date }}</span>
+          <sc-for list="{{ c.items }}" as="it" hint-placeholder-count="0">
+            <span style="font-size:clamp(12px,1vw,16px); font-weight:600; background:{{ it.bg }}; color:{{ it.ink }}; border-radius:8px; padding:4px 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ it.title }}</span>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isFam }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Family" style="flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:clamp(14px,1.4vw,24px); padding:clamp(24px,2.4vw,42px) clamp(26px,2.6vw,48px); overflow:auto;">
+  <header style="flex:0 0 auto; display:flex; flex-direction:column; gap:6px;">
+    <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.12em; text-transform:uppercase; font-weight:700; color:var(--color-accent-2-700);">{{ t.famKicker }}</span>
+    <h1 style="margin:0; font-family:var(--disp); font-weight:700; font-size:clamp(26px,2.4vw,42px); line-height:1.05;">{{ t.famTitle }}</h1>
+  </header>
+
+  <div style="display:grid; grid-template-columns:1fr clamp(220px,20vw,300px); gap:clamp(14px,1.4vw,24px); align-items:start;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(clamp(210px,18vw,280px), 1fr)); gap:clamp(12px,1.2vw,20px);">
+      <sc-for list="{{ famPeople }}" as="p" hint-placeholder-count="4">
+        <div style="background:{{ p.cardBg }}; border:2px solid {{ p.cardBorder }}; border-radius:var(--radius-lg); padding:clamp(14px,1.3vw,22px); display:flex; flex-direction:column; gap:clamp(10px,1vw,16px);">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button type="button" onClick="{{ p.pick }}" style="flex:1 1 auto; min-width:0; display:flex; align-items:center; gap:clamp(10px,0.9vw,14px); border:none; background:transparent; padding:0; font-family:inherit; color:inherit; cursor:pointer; text-align:left; min-height:44px;">
+              <span style="flex:0 0 auto; width:clamp(44px,3.4vw,56px); height:clamp(44px,3.4vw,56px); border-radius:999px; background:{{ p.tint }}; color:{{ p.ink }}; display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; font-size:clamp(18px,1.4vw,24px);">{{ p.initial }}</span>
+              <span style="font-family:var(--disp); font-weight:700; font-size:clamp(17px,1.4vw,24px); line-height:1.15;">{{ p.name }}</span>
+            </button>
+            <button type="button" onClick="{{ p.remove }}" aria-label="Remove member" style="flex:0 0 auto; width:34px; height:34px; border-radius:999px; border:none; background:transparent; color:var(--color-neutral-500); font-size:1.1em; line-height:1; cursor:pointer;" style-hover="background:var(--color-neutral-200); color:var(--color-neutral-800);">×</button>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; color:var(--color-neutral-600); font-weight:700;">{{ t.famWeek }}</span>
+            <div style="display:flex; gap:4px;">
+              <sc-for list="{{ p.cook }}" as="d" hint-placeholder-count="7">
+                <button type="button" onClick="{{ d.toggle }}" aria-label="{{ d.full }}" style="flex:1 1 0; min-width:0; height:44px; border-radius:999px; background:{{ d.bg }}; border:2px solid {{ d.border }}; display:flex; align-items:center; justify-content:center; font-family:inherit; font-size:clamp(11px,0.85vw,14px); font-weight:700; color:{{ d.fg }}; cursor:pointer; padding:0;">{{ d.letter }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:clamp(12px,1.2vw,20px);">
+      <div style="border:2px dashed var(--color-neutral-400); border-radius:var(--radius-lg); padding:clamp(14px,1.3vw,22px); display:flex; flex-direction:column; gap:10px; justify-content:center;">
+        <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; color:var(--color-neutral-600); font-weight:700;">{{ t.addMember }}</span>
+        <input value="{{ newMemberVal }}" onInput="{{ onNewMember }}" onKeyDown="{{ onNewMemberKey }}" placeholder="{{ t.memberPh }}" style="border:2px solid var(--color-neutral-300); border-radius:999px; padding:8px clamp(14px,1.2vw,20px); font-family:inherit; font-size:clamp(14px,1.05vw,18px); background:var(--color-neutral-100); color:var(--color-text); min-height:44px; min-width:0;">
+        <button type="button" onClick="{{ addMemberBtn }}" style="border:none; background:var(--color-accent); color:var(--color-accent-100); border-radius:999px; padding:8px clamp(16px,1.4vw,24px); font-family:var(--disp); font-weight:700; font-size:clamp(14px,1.1vw,19px); cursor:pointer; min-height:44px;" style-hover="background:var(--color-accent-600);">{{ t.addWord }}</button>
+      </div>
+
+      <sc-if value="{{ hasTogether }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:8px; background:var(--color-accent-2-100); border:2px solid var(--color-accent-2-300); border-radius:var(--radius-lg); padding:clamp(14px,1.3vw,22px);">
+          <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; font-weight:700; color:var(--color-accent-2-800);">{{ t.together }}</span>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <sc-for list="{{ togetherItems }}" as="tg" hint-placeholder-count="1">
+              <span style="font-size:clamp(14px,1.1vw,19px); font-weight:600; color:var(--color-accent-2-800); line-height:1.3;">{{ tg.line }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,1.4vw,24px); align-items:start;">
+      <section style="background:var(--color-surface); border-radius:var(--radius-lg); padding:clamp(16px,1.5vw,26px); display:flex; flex-direction:column; gap:clamp(12px,1.1vw,18px);">
+        <div style="display:flex; align-items:center; gap:clamp(11px,1vw,16px);">
+          <span style="flex:0 0 auto; width:clamp(46px,3.6vw,58px); height:clamp(46px,3.6vw,58px); border-radius:999px; background:{{ person.tint }}; color:{{ person.ink }}; display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; font-size:clamp(19px,1.5vw,26px);">{{ person.initial }}</span>
+          <span style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font-family:var(--disp); font-weight:700; font-size:clamp(19px,1.6vw,27px); line-height:1.15;">{{ person.name }}</span>
+            <span style="font-size:clamp(13px,1.02vw,17px); color:var(--color-neutral-700);">{{ person.role }}</span>
+          </span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--color-accent-2-700);">{{ t.likes }}</span>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <sc-for list="{{ person.likes }}" as="x" hint-placeholder-count="4">
+              <button type="button" onClick="{{ x.remove }}" style="display:inline-flex; align-items:center; gap:7px; border:none; font-family:inherit; cursor:pointer; background:var(--color-accent-2-100); color:var(--color-accent-2-800); border-radius:999px; padding:8px clamp(12px,1vw,16px); font-size:clamp(13px,1vw,17px); font-weight:600; min-height:44px;">{{ x.label }}<span style="opacity:0.55;">×</span></button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--color-neutral-700);">{{ t.dislikes }}</span>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <sc-for list="{{ person.dislikes }}" as="x" hint-placeholder-count="2">
+              <button type="button" onClick="{{ x.remove }}" style="display:inline-flex; align-items:center; gap:7px; border:none; font-family:inherit; cursor:pointer; background:var(--color-neutral-200); color:var(--color-neutral-800); border-radius:999px; padding:8px clamp(12px,1vw,16px); font-size:clamp(13px,1vw,17px); font-weight:600; min-height:44px;">{{ x.label }}<span style="opacity:0.55;">×</span></button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--color-accent-700);">{{ t.allergies }}</span>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <sc-for list="{{ person.allergies }}" as="x" hint-placeholder-count="1">
+              <button type="button" onClick="{{ x.remove }}" style="display:inline-flex; align-items:center; gap:7px; border:none; font-family:inherit; cursor:pointer; background:var(--color-accent-200); color:var(--color-accent-800); border-radius:999px; padding:8px clamp(12px,1vw,16px); font-size:clamp(13px,1vw,17px); font-weight:700; min-height:44px;">{{ x.label }}<span style="opacity:0.55;">×</span></button>
+            </sc-for>
+            <sc-if value="{{ person.noAllergy }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600); align-self:center;">{{ t.noAllergy }}</span>
+            </sc-if>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--color-neutral-300); padding-top:clamp(10px,1vw,16px);">
+          <div style="display:flex; gap:6px;">
+            <sc-for list="{{ prefFields }}" as="f" hint-placeholder-count="3">
+              <button type="button" onClick="{{ f.pick }}" style="border:2px solid {{ f.border }}; background:{{ f.bg }}; color:{{ f.fg }}; border-radius:999px; padding:8px clamp(13px,1.1vw,18px); font-family:inherit; font-weight:600; font-size:clamp(12px,0.95vw,16px); cursor:pointer; min-height:44px;">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input value="{{ prefInputVal }}" onInput="{{ onPrefInput }}" onKeyDown="{{ onPrefKey }}" placeholder="{{ t.prefPh }}" style="flex:1 1 auto; min-width:0; border:2px solid var(--color-neutral-300); border-radius:999px; padding:8px clamp(14px,1.2vw,20px); font-family:inherit; font-size:clamp(14px,1.05vw,18px); background:var(--color-neutral-100); color:var(--color-text); min-height:44px;">
+            <button type="button" onClick="{{ addPrefBtn }}" style="border:none; background:var(--color-accent); color:var(--color-accent-100); border-radius:999px; padding:8px clamp(16px,1.4vw,24px); font-family:var(--disp); font-weight:700; font-size:clamp(14px,1.1vw,19px); cursor:pointer; min-height:44px;" style-hover="background:var(--color-accent-600);">{{ t.addWord }}</button>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <sc-for list="{{ prefSuggestions }}" as="g" hint-placeholder-count="4">
+              <button type="button" onClick="{{ g.add }}" style="border:2px dashed var(--color-neutral-400); background:transparent; color:var(--color-neutral-700); border-radius:999px; padding:8px clamp(12px,1vw,16px); font-family:inherit; font-weight:600; font-size:clamp(12px,0.95vw,16px); cursor:pointer; min-height:44px;">+ {{ g.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+    <div style="display:flex; flex-direction:column; gap:clamp(12px,1.2vw,20px);">
+
+      <section style="background:var(--color-neutral-100); border-radius:var(--radius-lg); padding:clamp(16px,1.5vw,26px); display:flex; flex-direction:column; gap:clamp(10px,1vw,15px);">
+        <span style="font-family:var(--disp); font-weight:700; font-size:clamp(18px,1.5vw,26px);">{{ t.shared }}</span>
+        <div style="display:flex; flex-direction:column; gap:5px;">
+          <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--color-accent-2-700);">{{ t.sharedLikes }}</span>
+          <sc-for list="{{ sharedLikes }}" as="x" hint-placeholder-count="3">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:5px 0; border-bottom:1px solid var(--color-neutral-300);">
+              <span style="font-size:clamp(13px,1.05vw,18px); font-weight:600;">{{ x.label }}</span>
+              <span style="font-size:clamp(12px,0.95vw,16px); color:var(--color-neutral-600); text-align:right;">{{ x.who }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:5px;">
+          <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--color-neutral-700);">{{ t.sharedDislikes }}</span>
+          <sc-for list="{{ sharedDislikes }}" as="x" hint-placeholder-count="2">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:5px 0; border-bottom:1px solid var(--color-neutral-300);">
+              <span style="font-size:clamp(13px,1.05vw,18px); font-weight:600;">{{ x.label }}</span>
+              <span style="font-size:clamp(12px,0.95vw,16px); color:var(--color-neutral-600); text-align:right;">{{ x.who }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:5px;">
+          <span style="font-size:clamp(11px,0.85vw,14px); letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--color-accent-700);">{{ t.houseAllergies }}</span>
+          <sc-for list="{{ houseAllergies }}" as="x" hint-placeholder-count="2">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:5px 0; border-bottom:1px solid var(--color-neutral-300);">
+              <span style="font-size:clamp(13px,1.05vw,18px); font-weight:700; color:var(--color-accent-700);">{{ x.label }}</span>
+              <span style="font-size:clamp(12px,0.95vw,16px); color:var(--color-neutral-600); text-align:right;">{{ x.who }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="background:var(--color-accent-2-100); border:2px solid var(--color-accent-2-300); border-radius:var(--radius-lg); padding:clamp(16px,1.5vw,26px); display:flex; flex-direction:column; gap:6px;">
+        <span style="font-family:var(--disp); font-weight:700; font-size:clamp(16px,1.3vw,22px); color:var(--color-accent-2-800);">{{ t.allergyTitle }}</span>
+        <span style="font-size:clamp(13px,1.02vw,17px); color:var(--color-accent-2-800); line-height:1.45;">{{ t.allergyBody }}</span>
+      </section>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRec }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Recipes" style="flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:clamp(14px,1.4vw,22px); padding:clamp(24px,2.4vw,42px) clamp(26px,2.6vw,48px);">
+  <header style="flex:0 0 auto; display:flex; flex-direction:column; gap:6px;">
+    <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.12em; text-transform:uppercase; font-weight:700; color:var(--color-accent-2-700);">{{ t.recKicker }}</span>
+    <h1 style="margin:0; font-family:var(--disp); font-weight:700; font-size:clamp(26px,2.4vw,42px); line-height:1.05;">{{ t.navRec }}</h1>
+  </header>
+  <div style="flex:1 1 auto; min-height:0; overflow:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(clamp(240px,21vw,330px), 1fr)); grid-auto-rows:max-content; gap:clamp(16px,1.5vw,26px); align-content:start;">
+    <sc-for list="{{ recipesList }}" as="dish" hint-placeholder-count="6">
+      <button type="button" onClick="{{ dish.open }}" style="text-align:left; font-family:inherit; border:none; padding:0; background:var(--color-neutral-100); border-radius:var(--radius-lg); overflow:hidden; cursor:pointer; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; transition:transform 120ms ease;" style-hover="transform:translateY(-4px); box-shadow:var(--shadow-md);" style-active="transform:translateY(0px);">
+        <span class="ph" style="flex:0 0 auto; height:clamp(120px,10.5vw,168px); position:relative; display:block; overflow:hidden;">
+          <img class="washed" src="{{ dish.img }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+          <span style="position:absolute; top:12px; right:12px; background:{{ dish.pillBg }}; color:{{ dish.pillFg }}; font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px); padding:7px 15px; border-radius:999px;">{{ dish.matchLabel }}</span>
+        </span>
+        <span style="display:flex; flex-direction:column; gap:5px; padding:clamp(14px,1.3vw,22px);">
+          <span style="font-family:var(--disp); font-weight:700; font-size:clamp(18px,1.5vw,25px); line-height:1.18;">{{ dish.label }}</span>
+          <span style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600);">{{ dish.note }}</span>
+        </span>
+      </button>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isFood }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1 1 auto; min-height:0; display:flex; flex-direction:column;">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Home" style="flex:1 1 auto; display:flex; flex-direction:column; padding:clamp(26px,3vw,52px) clamp(32px,3.6vw,64px) clamp(32px,3.6vw,60px); gap:clamp(22px,2.4vw,40px); min-height:0;">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; flex:0 0 auto;">
+    <div style="display:flex; align-items:center; gap:clamp(14px,1.2vw,22px);">
+      <div style="width:clamp(48px,4vw,68px); height:clamp(48px,4vw,68px); border-radius:999px; background:var(--color-accent); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-md);">
+        <div style="width:44%; height:44%; border-radius:999px; background:var(--color-bg);"></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <div style="font-family:var(--disp); font-weight:700; font-size:clamp(26px,2.4vw,40px); line-height:1.05; letter-spacing:-0.01em;">{{ t.brand }}</div>
+        <div style="font-size:clamp(13px,1.05vw,18px); color:var(--color-neutral-600); letter-spacing:0.14em;">{{ t.brandSub }}</div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:clamp(10px,0.9vw,16px);">
+      <button type="button" onClick="{{ goStock }}" style="display:flex; align-items:center; gap:10px; border:2px solid var(--color-neutral-300); background:var(--color-neutral-100); color:var(--color-neutral-800); border-radius:999px; padding:clamp(10px,0.85vw,15px) clamp(16px,1.4vw,24px); font-family:inherit; font-weight:600; font-size:clamp(14px,1.05vw,19px); cursor:pointer;" style-hover="background:var(--color-neutral-200);" style-active="background:var(--color-neutral-300);">
+        <span>{{ t.stockBtn }}</span>
+      </button>
+    </div>
+  </header>
+
+  <main style="flex:1 1 auto; display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(20px,2vw,36px); min-height:0;">
+    <button type="button" onClick="{{ goCapture }}" style="display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; text-align:left; gap:clamp(20px,2vw,32px); padding:clamp(30px,3vw,52px); border:none; border-radius:var(--radius-lg); background:var(--color-accent); color:var(--color-accent-100); cursor:pointer; box-shadow:var(--shadow-lg); font-family:inherit; min-height:0; transition:transform 120ms ease, background 120ms ease;" style-hover="background:var(--color-accent-600); transform:translateY(-4px);" style-active="background:var(--color-accent-700); transform:translateY(0px);">
+      <span style="width:clamp(84px,7.2vw,126px); height:clamp(84px,7.2vw,126px); border-radius:999px; background:rgba(255,242,235,0.18); display:flex; align-items:center; justify-content:center; flex:0 0 auto; margin:auto;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="width:52%; height:52%;"><path d="M4 8.5h3l1.6-2.2h6.8L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z"></path><circle cx="12" cy="13.5" r="3.4"></circle></svg>
+      </span>
+      <span style="display:flex; flex-direction:column; gap:clamp(8px,0.8vw,14px);">
+        <span style="font-family:var(--disp); font-weight:700; font-size:clamp(32px,3.2vw,58px); line-height:1.02; letter-spacing:-0.015em;">{{ t.tile1 }}</span>
+        <sc-if value="{{ showBlurbs }}" hint-placeholder-val="{{ true }}"><span style="display:block; font-size:clamp(15px,1.2vw,22px); color:var(--color-accent-200); line-height:1.4; max-width:22ch;">{{ t.tile1Body }}</span></sc-if>
+      </span>
+    </button>
+
+    <button type="button" onClick="{{ goWantMake }}" style="display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; text-align:left; gap:clamp(20px,2vw,32px); padding:clamp(30px,3vw,52px); border:none; border-radius:var(--radius-lg); background:var(--color-accent-2); color:var(--color-accent-2-100); cursor:pointer; box-shadow:var(--shadow-lg); font-family:inherit; min-height:0; transition:transform 120ms ease, background 120ms ease;" style-hover="background:var(--color-accent-2-600); transform:translateY(-4px);" style-active="background:var(--color-accent-2-700); transform:translateY(0px);">
+      <span style="width:clamp(84px,7.2vw,126px); height:clamp(84px,7.2vw,126px); border-radius:999px; background:rgba(240,250,225,0.18); display:flex; align-items:center; justify-content:center; flex:0 0 auto; margin:auto;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="width:52%; height:52%;"><path d="M3 12h18"></path><path d="M20 12a8 8 0 0 1-16 0"></path><path d="M9 7.5c0-1.2 1-1.6 1-2.8"></path><path d="M14 7.5c0-1.2 1-1.6 1-2.8"></path></svg>
+      </span>
+      <span style="display:flex; flex-direction:column; gap:clamp(8px,0.8vw,14px);">
+        <span style="font-family:var(--disp); font-weight:700; font-size:clamp(32px,3.2vw,58px); line-height:1.02; letter-spacing:-0.015em;">{{ t.tile2 }}</span>
+        <sc-if value="{{ showBlurbs }}" hint-placeholder-val="{{ true }}"><span style="display:block; font-size:clamp(15px,1.2vw,22px); color:var(--color-accent-2-200); line-height:1.4; max-width:22ch;">{{ t.tile2Body }}</span></sc-if>
+      </span>
+    </button>
+
+    <button type="button" onClick="{{ goShare }}" style="display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; text-align:left; gap:clamp(20px,2vw,32px); padding:clamp(30px,3vw,52px); border:3px solid var(--color-neutral-300); border-radius:var(--radius-lg); background:var(--color-neutral-100); color:var(--color-text); cursor:pointer; box-shadow:var(--shadow-md); font-family:inherit; min-height:0; transition:transform 120ms ease, background 120ms ease;" style-hover="background:var(--color-neutral-200); transform:translateY(-4px);" style-active="background:var(--color-neutral-300); transform:translateY(0px);">
+      <span style="width:clamp(84px,7.2vw,126px); height:clamp(84px,7.2vw,126px); border-radius:999px; background:var(--color-accent-200); color:var(--color-accent-700); display:flex; align-items:center; justify-content:center; flex:0 0 auto;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="width:52%; height:52%;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4"></path><path d="M15.4 6.5l-6.8 4"></path></svg>
+      </span>
+      <span style="display:flex; flex-direction:column; gap:clamp(8px,0.8vw,14px);">
+        <span style="font-family:var(--disp); font-weight:700; font-size:clamp(32px,3.2vw,58px); line-height:1.02; letter-spacing:-0.015em;">{{ t.tile3 }}</span>
+        <sc-if value="{{ showBlurbs }}" hint-placeholder-val="{{ true }}"><span style="display:block; font-size:clamp(15px,1.2vw,22px); color:var(--color-neutral-700); line-height:1.4; max-width:22ch;">{{ t.tile3Body }}</span></sc-if>
+      </span>
+    </button>
+  </main>
+</div>
+</sc-if>
+
+<sc-if value="{{ notHome }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1 1 auto; display:flex; flex-direction:column; min-height:0;">
+
+  <header style="flex:0 0 auto; display:flex; align-items:center; gap:clamp(14px,1.4vw,24px); padding:clamp(18px,1.8vw,30px) clamp(24px,2.6vw,48px);">
+    <button type="button" onClick="{{ goHome }}" aria-label="Home" style="width:clamp(50px,4vw,64px); height:clamp(50px,4vw,64px); flex:0 0 auto; border-radius:999px; border:2px solid var(--color-accent-300); background:var(--color-accent-200); color:var(--color-accent-800); display:flex; align-items:center; justify-content:center; cursor:pointer;" style-hover="background:var(--color-accent-300);" style-active="background:var(--color-accent-400);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="width:48%; height:48%;"><path d="M4 11.2l8-6.4 8 6.4"></path><path d="M6.4 10v8.4a1 1 0 0 0 1 1h9.2a1 1 0 0 0 1-1V10"></path></svg>
+    </button>
+    <button type="button" onClick="{{ goBack }}" aria-label="Back" style="width:clamp(50px,4vw,64px); height:clamp(50px,4vw,64px); flex:0 0 auto; border-radius:999px; border:2px solid var(--color-neutral-300); background:var(--color-neutral-100); color:var(--color-text); display:flex; align-items:center; justify-content:center; cursor:pointer;" style-hover="background:var(--color-neutral-200);" style-active="background:var(--color-neutral-300);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="width:46%; height:46%;"><path d="M15 5l-7 7 7 7"></path></svg>
+    </button>
+    <h1 style="margin:0 auto 0 0; font-family:var(--disp); font-weight:700; font-size:clamp(26px,2.4vw,42px); line-height:1.05;">{{ screenTitle }}</h1>
+    <button type="button" onClick="{{ goStock }}" style="display:flex; align-items:center; gap:9px; border:2px solid var(--color-neutral-300); background:var(--color-neutral-100); color:var(--color-neutral-800); border-radius:999px; padding:clamp(9px,0.75vw,14px) clamp(14px,1.25vw,22px); font-family:inherit; font-weight:600; font-size:clamp(13px,1vw,18px); cursor:pointer;" style-hover="background:var(--color-neutral-200);" style-active="background:var(--color-neutral-300);">
+      <span>{{ t.stockBtn }}</span>
+    </button>
+  </header>
+
+  <sc-if value="{{ isCapture }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Capture" style="flex:1 1 auto; display:grid; grid-template-columns:1fr clamp(280px,24vw,390px); gap:clamp(20px,2vw,36px); padding:0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px); min-height:0;">
+    <div class="ph" style="border-radius:var(--radius-lg); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+      <span class="mono" style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-700); letter-spacing:0.1em; text-transform:uppercase; background:var(--color-neutral-100); padding:10px 18px; border-radius:999px;">{{ t.cameraFeed }}</span>
+      <sc-for list="{{ boxes }}" as="b" hint-placeholder-count="0">
+        <span style="position:absolute; left:{{ b.left }}; top:{{ b.top }}; width:{{ b.w }}; height:{{ b.h }}; border:4px solid {{ b.color }}; border-radius:var(--radius-md); box-shadow:var(--shadow-md);">
+          <span style="position:absolute; left:-4px; top:-46px; white-space:nowrap; background:{{ b.color }}; color:var(--color-neutral-100); font-weight:700; font-size:clamp(14px,1.1vw,19px); padding:8px 16px; border-radius:999px;">{{ b.label }}</span>
+        </span>
+      </sc-for>
+    </div>
+
+    <aside style="display:flex; flex-direction:column; gap:clamp(14px,1.3vw,22px); min-height:0;">
+      <div style="flex:1 1 auto; min-height:0; overflow:auto; background:var(--color-surface); border-radius:var(--radius-lg); padding:clamp(16px,1.5vw,26px); display:flex; flex-direction:column; gap:12px;">
+        <div style="font-size:clamp(12px,0.95vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.detectedSoFar }}</div>
+        <sc-if value="{{ noneDetected }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:0; font-size:clamp(14px,1.1vw,19px); color:var(--color-neutral-600); line-height:1.45;">{{ t.nothingYet }}</p>
+        </sc-if>
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          <sc-for list="{{ captured }}" as="d" hint-placeholder-count="0">
+            <span style="display:inline-flex; align-items:center; gap:8px; background:var(--color-neutral-100); border:2px solid var(--color-neutral-300); border-radius:999px; padding:8px 14px; font-size:clamp(14px,1.05vw,18px); font-weight:600;">{{ d.label }}<span style="font-family:var(--disp); font-weight:700; color:var(--color-accent-700);">×{{ d.qty }}</span></span>
+          </sc-for>
+        </div>
+      </div>
+
+      <button type="button" onClick="{{ snap }}" style="flex:0 0 auto; align-self:center; width:clamp(116px,10.5vw,160px); height:clamp(116px,10.5vw,160px); border-radius:999px; border:8px solid var(--color-accent-200); background:var(--color-accent); color:var(--color-accent-100); cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; box-shadow:var(--shadow-lg); font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,21px);" style-hover="background:var(--color-accent-600);" style-active="background:var(--color-accent-700);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="width:32%; height:32%;"><path d="M4 8.5h3l1.6-2.2h6.8L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z"></path><circle cx="12" cy="13.5" r="3.4"></circle></svg>
+        <span>{{ t.capture }}</span>
+      </button>
+
+      <p style="margin:0; text-align:center; font-size:clamp(13px,1vw,17px); color:var(--color-neutral-700); line-height:1.45;">{{ t.captureHint }}</p>
+
+      <button type="button" onClick="{{ goReview }}" disabled="{{ noneDetected }}" style="flex:0 0 auto; border:none; background:{{ reviewBtnBg }}; color:{{ reviewBtnFg }}; border-radius:999px; padding:clamp(14px,1.25vw,20px) clamp(20px,1.8vw,32px); font-family:var(--disp); font-weight:700; font-size:clamp(16px,1.25vw,22px); cursor:pointer;" style-hover="filter:brightness(0.94);">{{ reviewBtnLabel }}</button>
+    </aside>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Scan review" style="flex:1 1 auto; display:flex; flex-direction:column; gap:clamp(16px,1.6vw,28px); padding:0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px); min-height:0;">
+    <div style="flex:1 1 auto; overflow:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(clamp(220px,19vw,300px), 1fr)); gap:clamp(14px,1.4vw,24px); align-content:start; padding-bottom:8px;">
+      <sc-for list="{{ captured }}" as="d" hint-placeholder-count="4">
+        <div style="background:var(--color-surface); border-radius:var(--radius-lg); padding:clamp(14px,1.3vw,22px); display:flex; flex-direction:column; gap:14px;">
+          <div class="ph" style="position:relative; overflow:hidden; flex:0 0 auto; height:clamp(92px,8vw,124px); border-radius:var(--radius-md); display:flex; align-items:flex-end; justify-content:flex-start; padding:10px;">
+            <img src="{{ d.img }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding:8px; background:var(--color-neutral-100);" />
+            <span style="position:relative; background:var(--color-accent-2-200); color:var(--color-accent-2-700); font-size:clamp(11px,0.85vw,14px); font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 12px; border-radius:999px;">{{ d.cat }}</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:3px;">
+            <div style="font-family:var(--disp); font-weight:700; font-size:clamp(18px,1.5vw,26px); line-height:1.15;">{{ d.label }}</div>
+            <div style="font-size:clamp(13px,1.05vw,18px); color:var(--color-neutral-700);">{{ d.confLabel }}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <button type="button" onClick="{{ d.dec }}" aria-label="−" style="width:clamp(44px,3.6vw,54px); height:clamp(44px,3.6vw,54px); border-radius:999px; border:2px solid var(--color-neutral-400); background:var(--color-neutral-100); color:var(--color-text); font-size:1.3em; font-weight:700; cursor:pointer; line-height:1;" style-hover="background:var(--color-neutral-200);" style-active="background:var(--color-neutral-300);">−</button>
+            <span style="font-family:var(--disp); font-weight:700; font-size:clamp(22px,1.9vw,32px); min-width:2ch; text-align:center;">{{ d.qty }}</span>
+            <button type="button" onClick="{{ d.inc }}" aria-label="+" style="width:clamp(44px,3.6vw,54px); height:clamp(44px,3.6vw,54px); border-radius:999px; border:2px solid var(--color-accent-400); background:var(--color-accent-200); color:var(--color-accent-800); font-size:1.3em; font-weight:700; cursor:pointer; line-height:1;" style-hover="background:var(--color-accent-300);" style-active="background:var(--color-accent-400);">+</button>
+            <span style="margin-left:auto; font-size:clamp(13px,1vw,17px); color:var(--color-neutral-700);">{{ d.unit }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="flex:0 0 auto; display:flex; align-items:center; gap:clamp(12px,1.2vw,20px); background:var(--color-neutral-100); border-radius:999px; padding:clamp(12px,1.1vw,18px) clamp(18px,1.6vw,28px); box-shadow:var(--shadow-sm);">
+      <span style="font-size:clamp(15px,1.15vw,20px); color:var(--color-neutral-700);">{{ reviewSummary }}</span>
+      <button type="button" onClick="{{ addToStock }}" style="margin-left:auto; border:2px solid var(--color-neutral-400); background:transparent; color:var(--color-text); border-radius:999px; padding:clamp(12px,1.1vw,18px) clamp(20px,1.8vw,32px); font-family:var(--disp); font-weight:700; font-size:clamp(16px,1.25vw,22px); cursor:pointer;" style-hover="background:var(--color-neutral-200);" style-active="background:var(--color-neutral-300);">{{ t.addToStock }}</button>
+      <button type="button" onClick="{{ goCanMake }}" style="border:none; background:var(--color-accent); color:var(--color-accent-100); border-radius:999px; padding:clamp(12px,1.1vw,18px) clamp(24px,2.2vw,40px); font-family:var(--disp); font-weight:700; font-size:clamp(16px,1.25vw,22px); cursor:pointer;" style-hover="background:var(--color-accent-600);" style-active="background:var(--color-accent-700);">{{ t.seeWhatICanMake }}</button>
+      <button type="button" onClick="{{ goMakeAll }}" style="border:none; background:var(--color-accent-2); color:var(--color-accent-2-100); border-radius:999px; padding:clamp(12px,1.1vw,18px) clamp(24px,2.2vw,40px); font-family:var(--disp); font-weight:700; font-size:clamp(16px,1.25vw,22px); cursor:pointer;" style-hover="background:var(--color-accent-2-600);" style-active="background:var(--color-accent-2-700);">{{ t.makeAll }}</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isCanMake }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="What can I make" style="flex:1 1 auto; display:grid; grid-template-columns:clamp(220px,19vw,300px) 1fr; gap:clamp(20px,2vw,36px); padding:0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px); min-height:0;">
+    <aside style="background:var(--color-surface); border-radius:var(--radius-lg); padding:clamp(16px,1.5vw,26px); display:flex; flex-direction:column; gap:14px; overflow:auto;">
+      <div style="font-size:clamp(12px,0.95vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.matchingFrom }}</div>
+      <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <sc-for list="{{ matchingList }}" as="s" hint-placeholder-count="8">
+          <span style="display:inline-flex; align-items:center; gap:7px; background:var(--color-neutral-100); border:2px solid var(--color-neutral-300); border-radius:999px; padding:7px 13px; font-size:clamp(13px,1vw,17px); font-weight:600;">{{ s.label }}<span style="font-family:var(--disp); font-weight:700; color:var(--color-accent-700);">{{ s.qty }}</span></span>
+        </sc-for>
+      </div>
+    </aside>
+    <div style="overflow:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(clamp(240px,21vw,330px), 1fr)); grid-auto-rows:max-content; gap:clamp(16px,1.5vw,26px); align-content:start;">
+      <sc-for list="{{ dishes }}" as="dish" hint-placeholder-count="6">
+        <button type="button" onClick="{{ dish.open }}" style="text-align:left; font-family:inherit; border:none; padding:0; background:var(--color-neutral-100); border-radius:var(--radius-lg); overflow:hidden; cursor:pointer; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; transition:transform 120ms ease;" style-hover="transform:translateY(-4px); box-shadow:var(--shadow-md);" style-active="transform:translateY(0px);">
+          <span class="ph" style="flex:0 0 auto; height:clamp(120px,10.5vw,168px); position:relative; display:block; overflow:hidden;">
+            <img class="washed" src="{{ dish.img }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+            <span style="position:absolute; top:12px; right:12px; background:{{ dish.pillBg }}; color:{{ dish.pillFg }}; font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px); padding:7px 15px; border-radius:999px;">{{ dish.matchLabel }}</span>
+          </span>
+          <span style="display:flex; flex-direction:column; gap:5px; padding:clamp(14px,1.3vw,22px);">
+            <span style="font-family:var(--disp); font-weight:700; font-size:clamp(18px,1.5vw,25px); line-height:1.18;">{{ dish.label }}</span>
+            <span style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600);">{{ dish.note }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isWantMake }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="I want to make" style="flex:1 1 auto; display:flex; flex-direction:column; gap:clamp(16px,1.6vw,26px); padding:0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px); min-height:0;">
+    <div style="flex:0 0 auto; display:flex; gap:12px; flex-wrap:wrap;">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+        <button type="button" onClick="{{ f.pick }}" style="border:2px solid {{ f.border }}; background:{{ f.bg }}; color:{{ f.fg }}; border-radius:999px; padding:clamp(10px,0.9vw,15px) clamp(18px,1.6vw,28px); font-family:inherit; font-weight:600; font-size:clamp(14px,1.1vw,19px); cursor:pointer;">{{ f.label }}</button>
+      </sc-for>
+    </div>
+    <div style="flex:1 1 auto; overflow:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(clamp(240px,21vw,330px), 1fr)); grid-auto-rows:max-content; gap:clamp(16px,1.5vw,26px); align-content:start;">
+      <sc-for list="{{ wantDishes }}" as="dish" hint-placeholder-count="6">
+        <button type="button" onClick="{{ dish.open }}" style="text-align:left; font-family:inherit; border:none; padding:0; background:var(--color-neutral-100); border-radius:var(--radius-lg); overflow:hidden; cursor:pointer; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; transition:transform 120ms ease;" style-hover="transform:translateY(-4px); box-shadow:var(--shadow-md);" style-active="transform:translateY(0px);">
+          <span class="ph" style="flex:0 0 auto; height:clamp(120px,10.5vw,168px); position:relative; display:block; overflow:hidden;">
+            <img class="washed" src="{{ dish.img }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+            <span style="position:absolute; top:12px; right:12px; background:{{ dish.pillBg }}; color:{{ dish.pillFg }}; font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px); padding:7px 15px; border-radius:999px;">{{ dish.matchLabel }}</span>
+          </span>
+          <span style="display:flex; flex-direction:column; gap:5px; padding:clamp(14px,1.3vw,22px);">
+            <span style="font-family:var(--disp); font-weight:700; font-size:clamp(18px,1.5vw,25px); line-height:1.18;">{{ dish.label }}</span>
+            <span style="font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600);">{{ dish.shopNote }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isDish }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Dish detail" style="flex:1 1 auto; display:grid; grid-template-columns:1fr clamp(320px,30vw,460px); gap:clamp(20px,2vw,36px); padding:0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px); min-height:0;">
+    <section style="display:flex; flex-direction:column; gap:clamp(16px,1.5vw,26px); min-height:0;">
+      <div class="ph" style="position:relative; overflow:hidden; flex:1 1 auto; border-radius:var(--radius-lg); min-height:clamp(140px,15vw,260px); background-image:{{ dishHeroBg }}; background-size:cover; background-position:center;"></div>
+      <div style="flex:0 0 auto; display:grid; grid-template-columns:1fr 1fr; gap:clamp(12px,1.2vw,20px);">
+        <div style="background:var(--color-surface); border-radius:var(--radius-lg); padding:clamp(14px,1.3vw,22px); display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:baseline; gap:10px;">
+            <span style="font-size:clamp(12px,0.95vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.famVote }}</span>
+            <span style="margin-left:auto; font-family:var(--disp); font-weight:700; font-size:clamp(20px,1.7vw,28px); color:var(--color-accent-2-700);">{{ voteCount }}</span>
+          </div>
+          <button type="button" onClick="{{ toggleVote }}" style="border:2px solid {{ voteBorder }}; background:{{ voteBg }}; color:{{ voteFg }}; border-radius:999px; padding:clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px); font-family:var(--disp); font-weight:700; font-size:clamp(14px,1.1vw,19px); cursor:pointer; min-height:44px;">{{ voteLabel }}</button>
+          <span style="font-size:clamp(12px,0.9vw,15px); color:var(--color-neutral-600);">{{ t.voteLine }}</span>
+        </div>
+        <div style="background:var(--color-surface); border-radius:var(--radius-lg); padding:clamp(14px,1.3vw,22px); display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:baseline; gap:10px;">
+            <span style="font-size:clamp(12px,0.95vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.addMenuTitle }}</span>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" onClick="{{ toggleMenu }}" style="flex:1 1 auto; border:2px solid {{ menuBorder }}; background:{{ menuBg }}; color:{{ menuFg }}; border-radius:999px; padding:clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px); font-family:var(--disp); font-weight:700; font-size:clamp(14px,1.1vw,19px); cursor:pointer; min-height:44px;">{{ menuLabel }}</button>
+            <button type="button" onClick="{{ planDish }}" style="flex:1 1 auto; border:2px solid var(--color-accent-2-600); background:var(--color-accent-2-100); color:var(--color-accent-2-800); border-radius:999px; padding:clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px); font-family:var(--disp); font-weight:700; font-size:clamp(14px,1.1vw,19px); cursor:pointer; min-height:44px;" style-hover="background:var(--color-accent-2-200);">{{ t.planDay }}</button>
+          </div>
+          <span style="font-size:clamp(12px,0.9vw,15px); color:var(--color-neutral-600);">{{ t.menuNote }}</span>
+        </div>
+      </div>
+      <sc-if value="{{ showRecipe }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1 1 auto; overflow:auto; background:var(--color-accent-2-100); border:2px solid var(--color-accent-2-300); border-radius:var(--radius-lg); padding:clamp(18px,1.7vw,30px); display:flex; flex-direction:column; gap:clamp(12px,1.1vw,18px); min-height:clamp(200px,22vw,340px);">
+        <div style="display:flex; align-items:baseline; gap:14px;">
+          <span style="font-family:var(--disp); font-weight:700; font-size:clamp(20px,1.7vw,29px); color:var(--color-accent-2-800);">{{ t.recipe }}</span>
+          <span style="font-size:clamp(14px,1.1vw,19px); color:var(--color-accent-2-700);">{{ t.allSet }}</span>
+          <span style="margin-left:auto; font-family:var(--disp); font-weight:700; font-size:clamp(20px,1.7vw,29px); color:var(--color-accent-2-700);">100%</span>
+        </div>
+        <sc-for list="{{ dishSteps }}" as="st" hint-placeholder-count="5">
+          <div style="display:flex; align-items:flex-start; gap:clamp(12px,1.1vw,18px);">
+            <span style="flex:0 0 auto; width:clamp(32px,2.6vw,40px); height:clamp(32px,2.6vw,40px); border-radius:999px; background:var(--color-accent-2); color:var(--color-accent-2-100); display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.15vw,20px);">{{ st.n }}</span>
+            <span style="font-size:clamp(15px,1.2vw,21px); line-height:1.5; color:var(--color-accent-2-900); padding-top:3px;">{{ st.text }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ hasSource }}" hint-placeholder-val="{{ false }}">
+          <a href="{{ recipeSource }}" target="_blank" rel="noopener" style="font-size:clamp(12px,0.9vw,15px); color:var(--color-accent-2-700); margin-top:4px; text-decoration:underline; text-underline-offset:3px;">{{ recipeSourceLabel }}</a>
+        </sc-if>
+        <sc-if value="{{ noSource }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:clamp(12px,0.9vw,15px); color:var(--color-accent-2-700); margin-top:4px;">{{ t.stepsNote }}</div>
+        </sc-if>
+      </div>
+      </sc-if>
+    </section>
+
+    <aside style="display:flex; flex-direction:column; gap:clamp(14px,1.3vw,22px); min-height:0;">
+      <div style="flex:1 1 auto; overflow:auto; background:var(--color-neutral-100); border-radius:var(--radius-lg); padding:clamp(16px,1.5vw,26px); display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:baseline; gap:12px; flex:0 0 auto;">
+          <span style="font-family:var(--disp); font-weight:700; font-size:clamp(17px,1.4vw,24px);">{{ t.readyToCook }}</span>
+          <span style="margin-left:auto; font-family:var(--disp); font-weight:700; font-size:clamp(24px,2.2vw,38px); line-height:1; color:var(--color-accent-700);">{{ dishPct }}%</span>
+        </div>
+        <div style="height:clamp(14px,1.2vw,20px); border-radius:999px; background:var(--color-neutral-300); overflow:hidden; flex:0 0 auto;">
+          <div style="height:100%; width:{{ dishPct }}%; background:var(--color-accent-2); border-radius:999px; transition:width 240ms ease;"></div>
+        </div>
+        <div style="font-size:clamp(13px,1.02vw,17px); color:var(--color-neutral-700); flex:0 0 auto;">{{ dishProgressNote }}</div>
+        <div style="border-top:1px solid var(--color-neutral-300); flex:0 0 auto;"></div>
+        <div style="font-size:clamp(12px,0.95vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.ingredients }}</div>
+        <sc-for list="{{ dishIngredients }}" as="ing" hint-placeholder-count="7">
+          <button type="button" onClick="{{ ing.toggle }}" style="display:flex; align-items:center; gap:14px; text-align:left; font-family:inherit; width:100%; border:2px solid {{ ing.border }}; background:{{ ing.bg }}; border-radius:999px; padding:clamp(10px,0.95vw,15px) clamp(14px,1.3vw,22px); cursor:pointer;">
+            <span style="width:clamp(28px,2.3vw,34px); height:clamp(28px,2.3vw,34px); flex:0 0 auto; border-radius:999px; background:{{ ing.dot }}; color:var(--color-neutral-100); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9em;">{{ ing.mark }}</span>
+            <span style="font-size:clamp(15px,1.2vw,20px); font-weight:600; color:{{ ing.fg }};">{{ ing.label }}</span>
+            <span style="margin-left:auto; font-size:clamp(14px,1.1vw,18px); color:var(--color-neutral-700);">{{ ing.amount }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <div style="flex:0 0 auto; background:var(--color-accent-100); border:2px solid var(--color-accent-300); border-radius:var(--radius-lg); padding:clamp(16px,1.5vw,26px); display:flex; flex-direction:column; gap:12px;">
+        <div style="font-size:clamp(15px,1.2vw,20px); color:var(--color-accent-800); font-weight:600;">{{ missingLine }}</div>
+        <button type="button" onClick="{{ addToCart }}" style="border:{{ cartBorder }}; background:{{ cartBg }}; color:{{ cartFg }}; border-radius:999px; padding:clamp(13px,1.2vw,20px) clamp(20px,1.8vw,32px); font-family:var(--disp); font-weight:700; font-size:clamp(16px,1.25vw,22px); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;" style-hover="background:var(--color-accent-600);" style-active="background:var(--color-accent-700);">{{ cartLabel }}</button>
+        <div class="mono" style="font-size:clamp(11px,0.85vw,14px); color:var(--color-accent-700); text-align:center; letter-spacing:0.04em;">shop.pxgo.com.tw</div>
+      </div>
+    </aside>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isStock }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Stock count" style="flex:1 1 auto; overflow:auto; padding:0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px); min-height:0; display:flex; flex-direction:column; gap:clamp(10px,1vw,16px);">
+    <div style="flex:0 0 auto; display:grid; grid-template-columns:2fr 1fr 1.1fr 1fr; gap:clamp(10px,1vw,18px); padding:0 clamp(18px,1.6vw,28px); font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">
+      <span>{{ t.colItem }}</span><span>{{ t.colCat }}</span><span>{{ t.colCount }}</span><span>{{ t.colAdded }}</span>
+    </div>
+    <sc-for list="{{ stock }}" as="s" hint-placeholder-count="10">
+      <div style="flex:0 0 auto; position:relative; border-radius:999px; overflow:hidden; background:var(--color-accent-600);">
+        <button type="button" onClick="{{ s.remove }}" style="position:absolute; inset:0 0 0 auto; width:190px; border:none; background:var(--color-accent-600); color:var(--color-accent-100); font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px); cursor:pointer; display:flex; align-items:center; justify-content:center;">{{ t.del }}</button>
+        <div onPointerDown="{{ s.onDown }}" onPointerMove="{{ s.onMove }}" onPointerUp="{{ s.onUp }}" onPointerCancel="{{ s.onUp }}" style="position:relative; display:grid; grid-template-columns:2fr 1fr 1.1fr 1fr; align-items:center; gap:clamp(10px,1vw,18px); padding:clamp(13px,1.2vw,20px) clamp(18px,1.6vw,28px); background:var(--color-neutral-100); border-radius:999px; font-size:clamp(15px,1.2vw,21px); touch-action:pan-y; cursor:grab; transform:{{ s.tx }}; transition:{{ s.tween }};">
+          <span style="font-weight:600;">{{ s.label }}</span>
+          <span><span style="background:var(--color-accent-2-200); color:var(--color-accent-2-700); font-size:0.75em; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; padding:5px 12px; border-radius:999px;">{{ s.cat }}</span></span>
+          <span style="display:flex; align-items:center; gap:clamp(8px,0.7vw,12px);">
+            <button type="button" onClick="{{ s.dec }}" aria-label="−" style="width:clamp(38px,3vw,46px); height:clamp(38px,3vw,46px); flex:0 0 auto; border-radius:999px; border:2px solid var(--color-neutral-400); background:var(--color-neutral-200); color:var(--color-text); font-size:1.1em; font-weight:700; line-height:1; cursor:pointer;" style-hover="background:var(--color-neutral-300);" style-active="background:var(--color-neutral-400);">−</button>
+            <span style="font-family:var(--disp); font-weight:700; min-width:1.6ch; text-align:center;">{{ s.qty }}</span>
+            <button type="button" onClick="{{ s.inc }}" aria-label="+" style="width:clamp(38px,3vw,46px); height:clamp(38px,3vw,46px); flex:0 0 auto; border-radius:999px; border:2px solid var(--color-accent-400); background:var(--color-accent-200); color:var(--color-accent-800); font-size:1.1em; font-weight:700; line-height:1; cursor:pointer;" style-hover="background:var(--color-accent-300);" style-active="background:var(--color-accent-400);">+</button>
+          </span>
+          <span style="color:var(--color-neutral-700);">{{ s.added }}</span>
+        </div>
+      </div>
+    </sc-for>
+    <p style="flex:0 0 auto; margin:6px 0 0; padding:0 clamp(18px,1.6vw,28px); font-size:clamp(13px,1vw,17px); color:var(--color-neutral-600);">{{ t.swipeHint }}</p>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isShare }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Share" style="flex:1 1 auto; display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(18px,1.8vw,32px); padding:0 clamp(24px,2.6vw,48px) clamp(28px,2.8vw,52px); min-height:0;">
+    <sc-for list="{{ shareOptions }}" as="o" hint-placeholder-count="3">
+      <div style="background:var(--color-surface); border-radius:var(--radius-lg); padding:clamp(24px,2.4vw,42px); display:flex; flex-direction:column; gap:clamp(14px,1.3vw,22px);">
+        <span style="width:clamp(64px,5.4vw,92px); height:clamp(64px,5.4vw,92px); border-radius:999px; background:var(--color-accent-200); color:var(--color-accent-700); display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; font-size:clamp(24px,2.2vw,38px);">{{ o.num }}</span>
+        <div style="font-family:var(--disp); font-weight:700; font-size:clamp(23px,2vw,34px); line-height:1.15;">{{ o.title }}</div>
+        <p style="margin:0; font-size:clamp(14px,1.1vw,19px); color:var(--color-neutral-700); line-height:1.5;">{{ o.body }}</p>
+        <button type="button" style="margin-top:auto; align-self:flex-start; border:2px solid var(--color-neutral-400); background:var(--color-neutral-100); color:var(--color-text); border-radius:999px; padding:clamp(11px,1vw,17px) clamp(20px,1.8vw,30px); font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,21px); cursor:pointer;" style-hover="background:var(--color-neutral-200);" style-active="background:var(--color-neutral-300);">{{ o.cta }}</button>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+</div>
+</sc-if>
+
+</div>
+</sc-if>
+
+</div>
+</div>
+
+
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+<div style="--disp:{{ dispFont }}; position:fixed; inset:0; z-index:60; background:rgba(43,31,22,0.45); display:flex; align-items:center; justify-content:center; font-family:var(--font-body), 'Noto Sans TC', sans-serif; color:var(--color-text); padding:24px;">
+  <div style="width:min(720px, 94vw); max-height:90vh; overflow:auto; background:var(--page); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); padding:clamp(22px,2.2vw,36px); display:flex; flex-direction:column; gap:clamp(14px,1.3vw,22px);">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span style="font-family:var(--disp); font-weight:700; font-size:clamp(22px,1.9vw,32px);">{{ t.newEvent }}</span>
+      <button type="button" onClick="{{ closeModal }}" aria-label="Close" style="margin-left:auto; width:44px; height:44px; flex:0 0 auto; border-radius:999px; border:2px solid var(--color-neutral-300); background:var(--color-neutral-100); color:var(--color-text); font-size:1.2em; cursor:pointer; line-height:1;" style-hover="background:var(--color-neutral-200);">×</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.evDay }}</span>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <sc-for list="{{ modalDays }}" as="o" hint-placeholder-count="7">
+          <button type="button" onClick="{{ o.pick }}" style="border:2px solid {{ o.border }}; background:{{ o.bg }}; color:{{ o.fg }}; border-radius:999px; padding:9px clamp(13px,1.1vw,18px); font-family:inherit; font-weight:600; font-size:clamp(13px,1vw,17px); cursor:pointer; min-height:44px;">{{ o.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.evTime }}</span>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <sc-for list="{{ modalTimes }}" as="o" hint-placeholder-count="6">
+          <button type="button" onClick="{{ o.pick }}" style="border:2px solid {{ o.border }}; background:{{ o.bg }}; color:{{ o.fg }}; border-radius:999px; padding:9px clamp(13px,1.1vw,18px); font-family:inherit; font-weight:600; font-size:clamp(13px,1vw,17px); cursor:pointer; min-height:44px;">{{ o.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.evWho }}</span>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <sc-for list="{{ modalWho }}" as="o" hint-placeholder-count="5">
+          <button type="button" onClick="{{ o.pick }}" style="border:2px solid {{ o.border }}; background:{{ o.bg }}; color:{{ o.fg }}; border-radius:999px; padding:9px clamp(13px,1.1vw,18px); font-family:inherit; font-weight:600; font-size:clamp(13px,1vw,17px); cursor:pointer; min-height:44px;">{{ o.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <span style="font-size:clamp(12px,0.9vw,15px); letter-spacing:0.1em; text-transform:uppercase; color:var(--color-neutral-700); font-weight:700;">{{ t.evWhat }}</span>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <sc-for list="{{ modalDishes }}" as="o" hint-placeholder-count="6">
+          <button type="button" onClick="{{ o.pick }}" style="border:2px solid {{ o.border }}; background:{{ o.bg }}; color:{{ o.fg }}; border-radius:999px; padding:9px clamp(13px,1.1vw,18px); font-family:inherit; font-weight:600; font-size:clamp(13px,1vw,17px); cursor:pointer; min-height:44px;">{{ o.label }}</button>
+        </sc-for>
+      </div>
+      <input value="{{ evCustomVal }}" onInput="{{ onCustomInput }}" placeholder="{{ t.evCustomPh }}" style="border:2px solid var(--color-neutral-300); border-radius:999px; padding:9px clamp(14px,1.2vw,20px); font-family:inherit; font-size:clamp(14px,1.05vw,18px); background:var(--color-neutral-100); color:var(--color-text); min-height:44px;">
+    </div>
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button type="button" onClick="{{ closeModal }}" style="border:2px solid var(--color-neutral-400); background:transparent; color:var(--color-text); border-radius:999px; padding:clamp(11px,1vw,16px) clamp(20px,1.8vw,30px); font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px); cursor:pointer; min-height:44px;" style-hover="background:var(--color-neutral-200);">{{ t.cancel }}</button>
+      <button type="button" onClick="{{ saveEvent }}" style="border:none; background:{{ canSaveBg }}; color:{{ canSaveFg }}; border-radius:999px; padding:clamp(11px,1vw,16px) clamp(24px,2.2vw,38px); font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.2vw,20px); cursor:pointer; min-height:44px;" style-hover="filter:brightness(0.95);">{{ t.save }}</button>
+    </div>
+  </div>
+</div>
+</sc-if></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showBlurbs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+/* Taxonomy mirrors data/food-categories.json
+   (goodgoodgood.co fruit & vegetable list; listchallenges.com / Wikipedia condiments list). */
+const CAT = { Vegetable: "蔬菜", Fruit: "水果", Grain: "穀類", Protein: "蛋白質", Condiment: "調味料", Herb: "香草", Dairy: "乳製品" };
+const TAXONOMY = {
+  Vegetable: ["broccoli","green onion","scallion","spring onion","onion","red onion","garlic","tomato","potato","carrot","cabbage","napa cabbage","bok choy","spinach","lettuce","cucumber","eggplant","bell pepper","mushroom","shiitake mushroom","daikon","radish","pumpkin","zucchini","corn","sweet potato","taro","leek","ginger","chive","celery","cauliflower","asparagus","green bean","snow pea","pea","bean sprouts","water spinach","seaweed","nori","lotus root","bamboo shoot","winter melon","bitter melon","yam","kale","chard"],
+  Fruit: ["avocado","apple","banana","orange","lemon","lime","mango","papaya","pineapple","grape","pear","peach","plum","strawberry","blueberry","watermelon","melon","guava","lychee","longan","persimmon","pomelo","kiwi","dragon fruit","wax apple","yuzu","coconut","fig","date"],
+  Grain: ["rice","white rice","brown rice","jasmine rice","sticky rice","glutinous rice","noodles","rice noodles","udon","pasta","flour","oats","quinoa","barley","millet","wheat","couscous","bread"],
+  Protein: ["beef","beef sirloin","pork","pork belly","chicken","chicken thigh","chicken breast","duck","lamb","egg","eggs","tofu","firm tofu","tempeh","fish","salmon","tuna","cod","shrimp","prawn","squid","octopus","clams","mussels","scallops","crab","sausage","bacon","ham","lentils"],
+  Condiment: ["soy sauce","oyster sauce","fish sauce","sesame oil","rice wine","shaoxing wine","mirin","rice vinegar","black vinegar","vinegar","hoisin sauce","chili oil","chili sauce","chili crisp","sriracha","gochujang","doubanjiang","miso","ketchup","mayonnaise","mustard","dijon mustard","honey","jam","peanut butter","tahini","xo sauce","ponzu","teriyaki sauce","worcestershire sauce","tomato paste","barbecue sauce","hot sauce","wasabi","sweet chili sauce"],
+  Herb: ["salt","sugar","black pepper","white pepper","salt & pepper","basil","thai basil","cilantro","coriander","parsley","mint","rosemary","thyme","oregano","bay leaf","cinnamon","star anise","five spice","cumin","paprika","turmeric","chili flakes","sesame seeds","garlic powder"],
+  Dairy: ["milk","butter","cheese","cream","yoghurt","sour cream","cream cheese","parmesan","mozzarella","cheddar","condensed milk","ghee"]
+};
+function categoryOf(name) {
+  const n = String(name).toLowerCase();
+  const keys = Object.keys(TAXONOMY);
+  for (let i = 0; i < keys.length; i++) { if (TAXONOMY[keys[i]].indexOf(n) !== -1) { return keys[i]; } }
+  for (let i = 0; i < keys.length; i++) {
+    if (TAXONOMY[keys[i]].some(x => n.indexOf(x) !== -1)) { return keys[i]; }
+  }
+  return "Vegetable";
+}
+const WHERE = { Fridge: "冰箱", Counter: "檯面", Pantry: "儲藏櫃" };
+const WHEN = { Today: "今天", "3 days ago": "三天前", "1 week ago": "一週前", "1 month ago": "一個月前" };
+const UNIT = { heads: "顆", packs: "盒", stalks: "根", pieces: "個", bulbs: "球" };
+const AMT = {
+  "300 g": "300 公克", "250 g": "250 公克", "200 g": "200 公克", "500 g": "500 公克",
+  "1 head": "1 顆", "3 stalks": "3 根", "1 stalk": "1 根", "2 cloves": "2 瓣", "4 cloves": "4 瓣", "6 cloves": "6 瓣",
+  "2 tbsp": "2 大匙", "1 tbsp": "1 大匙", "3 tbsp": "3 大匙", "1 tsp": "1 小匙",
+  "to taste": "適量", "3": "3 顆", "4": "4 顆", "1": "1 顆", "2 bowls": "2 碗", "1 sheet": "1 片", "1 cup": "1 杯"
+};
+
+const STOCK = [
+  { name: "Broccoli", zh: "花椰菜", cat: "Vegetable", qty: 2, where: "Fridge", added: "Today" },
+  { name: "Beef sirloin", zh: "牛肉", cat: "Protein", qty: 1, where: "Fridge", added: "Today" },
+  { name: "Green onion", zh: "青蔥", cat: "Vegetable", qty: 4, where: "Fridge", added: "Today" },
+  { name: "Tomato", zh: "番茄", cat: "Vegetable", qty: 3, where: "Fridge", added: "Today" },
+  { name: "Avocado", zh: "酪梨", cat: "Fruit", qty: 1, where: "Counter", added: "Today" },
+  { name: "Garlic", zh: "蒜頭", cat: "Aromatic", qty: 1, where: "Pantry", added: "3 days ago" },
+  { name: "Eggs", zh: "雞蛋", cat: "Protein", qty: 6, where: "Fridge", added: "3 days ago" },
+  { name: "Onion", zh: "洋蔥", cat: "Vegetable", qty: 2, where: "Pantry", added: "1 week ago" },
+  { name: "Soy sauce", zh: "醬油", cat: "Pantry", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Rice", zh: "白米", cat: "Pantry", qty: 1, where: "Pantry", added: "1 month ago" }
+];
+
+/* Each press of Capture reveals the next frame: the items that shot picks up. */
+const SHOTS = [
+  { items: [["Broccoli", 1], ["Beef sirloin", 1]], boxes: [["Broccoli", "14%", "22%", "26%", "34%", "var(--color-accent)"], ["Beef sirloin", "56%", "44%", "26%", "30%", "var(--color-accent-2)"]] },
+  { items: [["Green onion", 3]], boxes: [["Green onion", "20%", "50%", "34%", "22%", "var(--color-accent)"]] },
+  { items: [["Tomato", 2], ["Avocado", 1]], boxes: [["Tomato", "12%", "26%", "22%", "30%", "var(--color-accent)"], ["Avocado", "48%", "36%", "22%", "28%", "var(--color-accent-2)"]] },
+  { items: [["Tomato", 1], ["Garlic", 1]], boxes: [["Garlic", "34%", "30%", "24%", "26%", "var(--color-accent-2)"]] }
+];
+
+const ITEMS = {
+  Broccoli: { zh: "花椰菜", cat: "Vegetable", conf: 98, unit: "heads" },
+  "Beef sirloin": { zh: "牛肉", cat: "Protein", conf: 94, unit: "packs" },
+  "Green onion": { zh: "青蔥", cat: "Vegetable", conf: 96, unit: "stalks" },
+  Tomato: { zh: "番茄", cat: "Vegetable", conf: 99, unit: "pieces" },
+  Avocado: { zh: "酪梨", cat: "Fruit", conf: 91, unit: "pieces" },
+  Garlic: { zh: "蒜頭", cat: "Aromatic", conf: 88, unit: "bulbs" }
+};
+
+/* Stand-in photography from TheMealDB (themealdb.com) — ingredient cut-outs by name,
+   dish shots by id. Swap for your own photography when you have it. */
+const ING_IMG = {
+  "Broccoli": "Broccoli", "Beef sirloin": "Beef", "Green onion": "Spring Onions",
+  "Tomato": "Tomato", "Avocado": "Avocado", "Garlic": "Garlic", "Eggs": "Egg", "Rice": "Rice"
+};
+const DISH_IMG = {
+  "beef-broccoli": "m0p0j81765568742.jpg",
+  "tomato-egg": "rwvw8q1765660071.jpg",
+  "egg-foo-young": "47y6ii1765658818.jpg",
+  "basil-chicken": "el64dy1763483009.jpg",
+  "banh-mi-bowl": "z0ageb1583189517.jpg",
+  "garlic-broccoli": ""
+};
+const ingImg = name => "https://www.themealdb.com/images/ingredients/" + encodeURIComponent(ING_IMG[name] || name) + ".png";
+const dishImg = id => DISH_IMG[id]
+  ? "https://www.themealdb.com/images/media/meals/" + DISH_IMG[id]
+  : ingImg("Broccoli");
+
+/* Real recipes from TheMealDB — mealId drives the live lookup; the seed ingredient
+   list below is what shows until the fetch lands. */
+const DISHES = [
+  { id: "beef-broccoli", mealId: "53366", name: "Beef and broccoli stir-fry", zh: "蔥爆牛肉花椰菜", cat: "Stir-fry",
+    ing: [["Sirloin steak","牛肉","1 lb"],["Broccoli","花椰菜","1 lb"],["Soy Sauce","醬油","1 tbsp"],["Oyster Sauce","蠔油","2 tbsp"],["Garlic","蒜頭","2 cloves"]] },
+  { id: "tomato-egg", mealId: "53372", name: "Chinese tomato egg stir-fry", zh: "番茄炒蛋", cat: "Stir-fry",
+    ing: [["Plum Tomatoes","番茄","1 lb"],["Eggs","雞蛋","5"],["Spring Onions","青蔥","1"],["Jasmine Rice","白米","2 cups"]] },
+  { id: "egg-foo-young", mealId: "53370", name: "Egg foo young", zh: "芙蓉蛋", cat: "Stir-fry",
+    ing: [["Egg","雞蛋","8"],["Shrimp","蝦仁","20"],["Spring Onions","青蔥","1"],["Soy Sauce","醬油","1 tbsp"],["Oyster Sauce","蠔油","1 tbsp"],["Jasmine Rice","白米","2 cups"]] },
+  { id: "basil-chicken", mealId: "53201", name: "Stir-fried chicken with chillies & basil", zh: "打拋雞", cat: "Stir-fry",
+    ing: [["Chicken","雞肉","450 g"],["Garlic","蒜頭","3 tbsp"],["Shallots","紅蔥頭","3 tbsp"],["Red Chilli","紅辣椒","3"],["Fish Sauce","魚露","2 tbsp"],["Soy Sauce","醬油","2 tsp"],["Basil Leaves","九層塔","handful"]] },
+  { id: "banh-mi-bowl", mealId: "52997", name: "Beef banh mi bowl", zh: "越式牛肉飯", cat: "Rice bowl",
+    ing: [["Rice","白米","1 cup"],["Ground Beef","牛絞肉","1 lb"],["Cucumber","小黃瓜","1"],["Carrots","紅蘿蔔","3 oz"],["Garlic Clove","蒜頭","3"],["Soy Sauce","醬油","2 oz"],["Onion","洋蔥","1"],["Lime","萊姆","1"]] },
+  { id: "garlic-broccoli", mealId: "", name: "Garlic broccoli", zh: "蒜炒花椰菜", cat: "Side",
+    ing: [["Broccoli","花椰菜","1 head"],["Garlic","蒜頭","4 cloves"],["Salt","鹽","to taste"]] }
+];
+
+/* API ingredient names → what the pantry calls them; "*" = assumed always on hand. */
+const ALIAS = {
+  "sirloin steak": "beef sirloin", "ground beef": "beef sirloin", "beef": "beef sirloin",
+  "spring onions": "green onion", "plum tomatoes": "tomato", "tomatoes": "tomato",
+  "jasmine rice": "rice", "white rice": "rice", "egg": "eggs", "garlic clove": "garlic",
+  "mung bean sprouts": "bean sprouts", "basil leaves": "thai basil", "carrots": "carrot",
+  "water": "*", "cornstarch": "*", "corn starch": "*", "dry sherry": "*", "shaoxing wine": "*",
+  "vegetable oil": "*", "high heat cooking oil": "*", "sesame seed oil": "*", "olive oil": "*",
+  "chicken stock": "*", "beef stock": "*", "unsalted beef stock": "*", "chicken bouillon powder": "*",
+  "kosher salt": "*", "pepper": "*", "black pepper": "*", "white pepper": "*", "sugar": "*", "salt": "*",
+  "red chilli": "*", "shallots": "*"
+};
+const ING_ZH = {
+  "sirloin steak": "沙朗牛排", "beef": "牛肉", "ground beef": "牛絞肉", "broccoli": "花椰菜",
+  "soy sauce": "醬油", "oyster sauce": "蠔油", "fish sauce": "魚露", "garlic": "蒜頭",
+  "garlic clove": "蒜頭", "spring onions": "青蔥", "plum tomatoes": "番茄", "tomato": "番茄",
+  "eggs": "雞蛋", "egg": "雞蛋", "jasmine rice": "茉莉香米", "rice": "白米", "shrimp": "蝦仁",
+  "chicken": "雞肉", "shallots": "紅蔥頭", "red chilli": "紅辣椒", "basil leaves": "九層塔",
+  "cucumber": "小黃瓜", "carrots": "紅蘿蔔", "onion": "洋蔥", "lime": "萊姆", "avocado": "酪梨",
+  "sugar": "糖", "salt": "鹽", "pepper": "胡椒", "black pepper": "黑胡椒", "white pepper": "白胡椒",
+  "kosher salt": "鹽", "water": "水", "cornstarch": "太白粉", "vegetable oil": "沙拉油",
+  "sesame seed oil": "香油", "dry sherry": "料理酒", "shaoxing wine": "紹興酒",
+  "chicken stock": "雞高湯", "beef stock": "牛高湯", "unsalted beef stock": "牛高湯",
+  "chicken bouillon powder": "雞粉", "mung bean sprouts": "豆芽菜", "high heat cooking oil": "食用油"
+};
+
+const STEPS = {
+  "garlic-broccoli": {
+    en: ["Cut the broccoli into even florets.", "Fry the sliced garlic in oil over medium heat until pale gold.",
+         "Add the broccoli and a splash of water; cover for 2 minutes.",
+         "Uncover, raise the heat, and toss until the water has gone. Salt and serve."],
+    zh: ["花椰菜切成大小一致的小朵。", "中火以油將蒜片煎至微金黃。",
+         "下花椰菜與少許水，加蓋燜 2 分鐘。", "開蓋轉大火翻炒收乾，加鹽調味即可。"]
+  },
+  "_unused": {
+    en: ["Slice the beef thin across the grain and toss with the soy sauce; rest 20 minutes.",
+         "Blanch the broccoli in salted water for 2 minutes, then drain well.",
+         "Heat the wok until smoking, add oil and garlic, then the beef. Stir-fry 1–2 minutes and lift out.",
+         "Add the broccoli and the white of the green onion; splash in the sauce and cook until it thickens.",
+         "Return the beef, toss to coat, finish with the green tops, salt and pepper. Serve over rice."],
+    zh: ["牛肉逆紋切薄片，拌入醬油醃 20 分鐘。", "花椰菜以鹽水汆燙 2 分鐘後瀝乾。",
+         "熱鍋下油爆香蒜末，放入牛肉快炒 1–2 分鐘後盛起。",
+         "下花椰菜與蔥白，倒入醬汁炒至收稠。",
+         "牛肉回鍋拌勻，撒上蔥綠、鹽與胡椒，配飯上桌。"]
+  },
+  "beef-broccoli-egg": {
+    en: ["Beat the eggs with a pinch of salt.", "Sear the marinated beef over high heat, then set aside.",
+         "Stir-fry the broccoli with a splash of water until just tender.",
+         "Pour in the eggs, let them set at the edges, then fold gently.",
+         "Return the beef, season with soy sauce and sugar, and serve immediately."],
+    zh: ["雞蛋加少許鹽打散。", "大火將醃好的牛肉煎香後盛起。", "花椰菜加少許水炒至熟脆。",
+         "倒入蛋液，邊緣凝固後輕輕翻拌。", "牛肉回鍋，以醬油與糖調味，趁熱上桌。"]
+  },
+  "tomato-egg": {
+    en: ["Cut the tomatoes into wedges; beat the eggs with a pinch of salt.",
+         "Scramble the eggs in hot oil until just set, then lift out.",
+         "Cook the tomatoes until they soften and release their juice.",
+         "Season with sugar and salt, return the eggs, and toss briefly.",
+         "Finish with the green onion and serve with rice."],
+    zh: ["番茄切塊，雞蛋加少許鹽打散。", "熱油炒蛋至半凝固後盛起。", "下番茄炒至出汁軟化。",
+         "以糖與鹽調味，蛋回鍋略拌。", "撒上青蔥，配飯食用。"]
+  },
+  "garlic-broccoli": {
+    en: ["Cut the broccoli into even florets.", "Fry the sliced garlic in oil over medium heat until pale gold.",
+         "Add the broccoli and a splash of water; cover for 2 minutes.",
+         "Uncover, raise the heat, and toss until the water has gone. Salt and serve."],
+    zh: ["花椰菜切成大小一致的小朵。", "中火以油將蒜片煎至微金黃。",
+         "下花椰菜與少許水，加蓋燜 2 分鐘。", "開蓋轉大火翻炒收乾，加鹽調味即可。"]
+  },
+  "avocado-beef-bowl": {
+    en: ["Cook the rice and keep it warm.", "Sear the sliced beef in a hot pan, seasoning with soy sauce.",
+         "Slice the avocado thin and fan it over the rice.", "Lay the beef alongside and spoon over the pan juices.",
+         "Top with torn nori and sesame seeds."],
+    zh: ["白米煮熟保溫。", "熱鍋煎香牛肉片，以醬油調味。", "酪梨切薄片鋪在飯上。",
+         "牛肉擺在一旁，淋上鍋中肉汁。", "撒上海苔碎與白芝麻。"]
+  },
+  "three-cup-chicken": {
+    en: ["Brown the chicken skin-side down in sesame oil with the ginger.",
+         "Add the garlic and cook until fragrant.",
+         "Pour in equal parts soy sauce, rice wine and sesame oil; simmer until glossy.",
+         "Reduce until the sauce clings to the chicken.",
+         "Fold through the basil off the heat and serve in the hot pot."],
+    zh: ["麻油下薑片，雞肉皮朝下煎至上色。", "加入蒜頭炒出香氣。",
+         "倒入等量醬油、米酒與麻油，燒至醬色油亮。", "收汁至醬汁裹住雞肉。",
+         "熄火拌入九層塔，連鍋上桌。"]
+  }
+};
+
+const FAMILY = [
+  { key: "dad", name: "Dad", zh: "爸爸", initial: "D", role: "Cooks Mon & Thu", roleZh: "週一、週四掌廚",
+    note: "No coriander", noteZh: "不吃香菜", stars: [1,0,0,1,0,0,0],
+    likes: [["Beef","牛肉"],["Garlic","蒜頭"],["Rice","白米飯"],["Spicy food","辣的菜"],["Soup","湯品"]],
+    dislikes: [["Coriander","香菜"],["Bitter melon","苦瓜"]],
+    allergies: [],
+    tint: "var(--color-accent-2-100)", ink: "var(--color-accent-2-800)", dot: "var(--color-accent-2-500)", fill: "var(--color-accent-2-700)" },
+  { key: "mom", name: "Mom", zh: "媽媽", initial: "M", role: "Cooks Tue & Fri", roleZh: "週二、週五掌廚",
+    note: "Keeps the stock list", noteZh: "負責庫存清單", stars: [0,1,0,0,1,0,0],
+    likes: [["Soup","湯品"],["Tofu","豆腐"],["Rice","白米飯"],["Tomato","番茄"],["Garlic","蒜頭"]],
+    dislikes: [["Coriander","香菜"],["Offal","內臟"]],
+    allergies: [],
+    tint: "var(--color-accent-100)", ink: "var(--color-accent-800)", dot: "var(--color-accent-500)", fill: "var(--color-accent-700)" },
+  { key: "ellie", name: "Ellie", zh: "小艾", initial: "E", role: "Sets the table", roleZh: "負責擺桌",
+    note: "Mild food · peanut allergy", noteZh: "不辣・花生過敏", stars: [0,0,0,0,1,0,0],
+    likes: [["Eggs","雞蛋"],["Rice","白米飯"],["Broccoli","花椰菜"],["Soup","湯品"]],
+    dislikes: [["Spicy food","辣的菜"],["Coriander","香菜"],["Mushrooms","菇類"]],
+    allergies: [["Peanuts","花生"]],
+    tint: "var(--color-neutral-200)", ink: "var(--color-neutral-800)", dot: "var(--color-neutral-600)", fill: "var(--color-neutral-800)" },
+  { key: "gran", name: "Grandma", zh: "奶奶", initial: "G", role: "Sunday soup", roleZh: "週日煮湯",
+    note: "Low salt · soft textures", noteZh: "少鹽・軟質食物", stars: [0,0,0,0,0,0,1],
+    likes: [["Soup","湯品"],["Tofu","豆腐"],["Rice","白米飯"],["Ginger","薑"]],
+    dislikes: [["Spicy food","辣的菜"],["Fried food","炸物"]],
+    allergies: [["Shellfish","帶殼海鮮"]],
+    tint: "var(--color-accent-2-200)", ink: "var(--color-accent-2-900)", dot: "var(--color-accent-2-700)", fill: "var(--color-accent-2-700)" }
+];
+
+const VOTE_SEED = { "banh-mi-bowl": 3, "beef-broccoli": 2, "tomato-egg": 1 };
+const DAY_EN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DAY_FULL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const DAY_ZH = ["日","一","二","三","四","五","六"];
+const DAY_LETTER = ["M","T","W","R","F","S","S"]; /* Mon..Sun, R = Thursday */
+const MONTH_EN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const SUGGEST = {
+  likes: [["Beef","牛肉"],["Tofu","豆腐"],["Soup","湯品"],["Seafood","海鮮"],["Eggs","雞蛋"],["Spicy food","辣的菜"]],
+  dislikes: [["Coriander","香菜"],["Mushrooms","菇類"],["Bitter melon","苦瓜"],["Offal","內臟"],["Fried food","炸物"],["Spicy food","辣的菜"]],
+  allergies: [["Peanuts","花生"],["Shellfish","帶殼海鮮"],["Eggs","雞蛋"],["Milk","牛奶"],["Gluten","麩質"],["Soy","大豆"]]
+};
+
+const STAPLES_LIST = [
+  ["Salt", "鹽", 1], ["Sugar", "糖", 1], ["Soy sauce", "醬油", 1], ["Vinegar", "醋", 1],
+  ["Cooking oil", "食用油", 1], ["White pepper", "白胡椒", 1], ["Sesame oil", "香油", 1],
+  ["Ginger", "薑", 1], ["Garlic", "蒜頭", 1], ["Green onions", "青蔥", 0], ["Oyster sauce", "蠔油", 0]
+];
+
+/* Events keyed by weekday; the visible week is built from the real current date. */
+const WEEK_EVENTS = {
+  Mon: [["07:30", "Ellie reads before school", "小艾晨讀", "ellie", 0],
+        ["18:30", "Beef and broccoli stir-fry", "蔥爆牛肉花椰菜", "dad", 1, "beef-broccoli"]],
+  Tue: [["16:30", "Art class", "美術課", "ellie", 0],
+        ["18:30", "Chinese tomato egg stir-fry", "番茄炒蛋", "mom", 1, "tomato-egg"]],
+  Wed: [["09:00", "Grandma's check-up", "奶奶回診", "gran", 0]],
+  Thu: [["18:00", "Egg foo young", "芙蓉蛋", "dad", 1, "egg-foo-young"],
+        ["19:30", "Reading together", "親子共讀", "all", 0]],
+  Fri: [["12:00", "Mom's lunch out", "媽媽午餐聚會", "mom", 0],
+        ["19:00", "Beef banh mi bowl", "越式牛肉飯", "mom", 1, "banh-mi-bowl"]],
+  Sat: [["10:30", "Market run", "採買", "all", 0],
+        ["15:00", "Piano practice", "鋼琴練習", "ellie", 0]],
+  Sun: [["17:30", "Grandma's soup", "奶奶的湯", "gran", 1],
+        ["19:30", "Ellie's birthday dinner", "小艾生日晚餐", "all", 1]]
+};
+function buildWeek() {
+  const out = []; const now = new Date();
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+    out.push({ day: DAY_EN[d.getDay()], zh: DAY_ZH[d.getDay()], dow: d.getDay(),
+      date: String(d.getDate()), m: d.getMonth(), y: d.getFullYear(), today: i === 0,
+      items: (WEEK_EVENTS[DAY_EN[d.getDay()]] || []).map(x => x.slice()) });
+  }
+  return out;
+}
+
+const STR = {
+  en: {
+    brand: "Lucky Table", brandSub: "家味開運桌",
+    navHome: "Home", navFood: "Make", navRec: "Recipes", navCal: "Calendar", navFam: "Family",
+    dashTitle: "Good evening", dashDate: "Monday 17 August", tonight: "Tonight's table",
+    everyone: "Everyone", calKicker: "This week at home", newEvent: "New event",
+    weekDishes: "This week's dishes", votesTitle: "Everyone's vote",
+    likes: "Likes", dislikes: "Dislikes", allergies: "Allergies", noAllergy: "None on record",
+    shared: "What everyone shares", sharedLikes: "Liked by more than one", sharedDislikes: "Disliked by more than one",
+    houseAllergies: "Allergies in the house", tapMember: "Tap a name to see their profile",
+    nextUp: "Next up", showing: "Showing",
+    famKicker: "Who's at the table", famTitle: "Family", famWeek: "Will cook this week",
+    staplesTitle: "Kitchen staples", staplesNote: "Tap to mark what you keep on hand. Recipes assume these are in the cupboard.",
+    allergyTitle: "Allergies come first", allergyBody: "No dish suggestion will include peanuts while Ellie is at the table.",
+    tonightEat: "What to eat tonight",
+    voteHint: "Cast your vote from any dish page.",
+    famVote: "Family vote", voteFor: "Vote for this dish", voted: "Voted", voteLine: "Votes show up on Home.",
+    planDay: "Plan for a day", viewWeek: "Week", viewMonth: "Month", nothingPlanned: "Nothing planned yet",
+    together: "Cooking together", evDay: "Day", evTime: "Time", evWho: "Who's cooking", evWhat: "What to make",
+    evCustomPh: "Or type another event…", save: "Add to calendar", cancel: "Cancel",
+    addWord: "Add", prefPh: "Type your own…", isCooking: "is cooking",
+    recKicker: "Matched against what's in stock",
+    addMenuTitle: "Add to menu", addMenu: "Add to tonight", addedMenu: "On tonight's menu",
+    menuNote: "Shows on Home and in the calendar.",
+    addMember: "Add member", memberPh: "Name…",
+    openFood: "View", weekOf: "Week of 17 August", tonightNote: "Dad is cooking · everything's in the fridge",
+    stockBtn: "What's in stock", atHome: "At home · fridge", atStore: "At the store",
+    tile1: "What can I make?", tile1Body: "Snap what you have. We'll match it against your stock.",
+    tile2: "I want to make…", tile2Body: "Pick a dish. We'll list what's missing.",
+    tile3: "Share", tile3Body: "Send a dish, hand off your list, or set the family table.",
+    capture: "Capture", cameraFeed: "live camera feed", detectedSoFar: "Detected so far",
+    nothingYet: "Point at your ingredients and press Capture. Each shot itemizes what it sees.",
+    hintHome: "At home — captures are added to your stock count.",
+    hintStore: "At the store — captures become suggestions, not stock.",
+    reviewNone: "Nothing captured yet", review: "Review",
+    items: "items", item: "item", units: "units",
+    itemized: "itemized",
+    addToStock: "Add to stock", seeWhatICanMake: "See what I can make", makeAll: "Make using everything I have",
+    titleAll: "Using everything I have",
+    matchingFrom: "Matching from", ingredients: "Ingredients", readyToCook: "Ready to cook",
+    ready: "Ready", onHand: "Everything on hand", missing: "Missing", buy: "Buy",
+    allReady: "All ingredients on hand — start cooking.",
+    ofReady: "of", ingReady: "ingredients ready. Tick an item once you've bought it.",
+    nothingToBuy: "Nothing to buy — you're set.", stillNeed: "Still need",
+    nothingInCart: "Nothing in cart", addToCart: "Add", toCart: "to cart", addedToCart: "Added",
+    dishPhoto: "dish photo",
+    colItem: "Item", colCat: "Category", colCount: "Count", colAdded: "Updated",
+    recipe: "Recipe", allSet: "Everything's here — here's how to make it.", swipeHint: "Swipe a row left to remove it.",
+    del: "Remove", stepsNote: "Prototype method — replace with your recipe source.", justAdded: "Just added",
+    titles: { capture: "Capture items", review: "What we found", canmake: "What can I make", wantmake: "I want to make", stock: "What's in stock", share: "Share" },
+    filters: { All: "All", "Stir-fry": "Stir-fry", "Rice bowl": "Rice bowl", Braise: "Braise", Side: "Side" },
+    share: [
+      { num: "1", title: "Send a dish", body: "Send the recipe and its ingredient list to family, LINE or messages.", cta: "Pick a dish" },
+      { num: "2", title: "Hand off the list", body: "Share what's missing so whoever's out can pick it up.", cta: "Share list" },
+      { num: "3", title: "Family table", body: "A shared calendar of who's cooking what, this week.", cta: "Open calendar" }
+    ]
+  },
+  zh: {
+    brand: "家味開運桌", brandSub: "LUCKY TABLE",
+    navHome: "首頁", navFood: "做菜", navRec: "食譜", navCal: "行事曆", navFam: "家人",
+    dashTitle: "晚安", dashDate: "8月17日 星期一", tonight: "今晚的餐桌",
+    everyone: "全家", calKicker: "本週家中行程", newEvent: "新增行程",
+    weekDishes: "本週菜色", votesTitle: "大家的投票",
+    likes: "喜歡", dislikes: "不喜歡", allergies: "過敏", noAllergy: "目前沒有紀錄",
+    shared: "全家的共同點", sharedLikes: "多人都喜歡", sharedDislikes: "多人都不喜歡",
+    houseAllergies: "家中的過敏原", tapMember: "點選名字看個人資料",
+    nextUp: "接下來", showing: "顯示",
+    famKicker: "餐桌上的家人", famTitle: "家人", famWeek: "本週掌廚",
+    staplesTitle: "廚房常備", staplesNote: "點選標記家中常備的調味料，食譜會假設這些都有。",
+    allergyTitle: "過敏優先", allergyBody: "只要小艾在餐桌上，所有建議都不會出現花生。",
+    tonightEat: "今晚吃什麼",
+    voteHint: "在任一道菜的頁面都可以投票。",
+    famVote: "家人投票", voteFor: "投這道菜一票", voted: "已投票", voteLine: "票數會顯示在首頁。",
+    planDay: "安排到行事曆", viewWeek: "週", viewMonth: "月", nothingPlanned: "還沒安排",
+    together: "一起下廚", evDay: "日期", evTime: "時間", evWho: "誰掌廚", evWhat: "想做什麼",
+    evCustomPh: "或輸入其他行程…", save: "加入行事曆", cancel: "取消",
+    addWord: "新增", prefPh: "自行輸入…", isCooking: "掌廚",
+    recKicker: "依照庫存比對",
+    addMenuTitle: "加入菜單", addMenu: "加入今晚", addedMenu: "已在今晚菜單",
+    menuNote: "會顯示在首頁與行事曆。",
+    addMember: "新增成員", memberPh: "姓名…",
+    openFood: "查看", weekOf: "8月17日這週", tonightNote: "今天爸爸掌廚，食材都在冰箱裡",
+    stockBtn: "庫存清單", atHome: "在家 · 冰箱", atStore: "在賣場",
+    tile1: "我能做什麼？", tile1Body: "拍下現有食材，系統會比對你的庫存。",
+    tile2: "我想做…", tile2Body: "選一道菜，我們列出還缺什麼。",
+    tile3: "分享", tile3Body: "分享菜色、代買清單，或安排家庭餐桌。",
+    capture: "拍攝", cameraFeed: "相機畫面", detectedSoFar: "已辨識",
+    nothingYet: "對準食材後按下拍攝，每張照片都會自動列出品項。",
+    hintHome: "居家模式：拍到的食材會加入庫存。",
+    hintStore: "賣場模式：拍到的食材只提供建議，不計入庫存。",
+    reviewNone: "尚未拍攝", review: "確認",
+    items: "項", item: "項", units: "件",
+    itemized: "項已辨識",
+    addToStock: "加入庫存", seeWhatICanMake: "看看能做什麼", makeAll: "用我所有的食材",
+    titleAll: "用現有全部食材",
+    matchingFrom: "比對來源", ingredients: "食材", readyToCook: "備料完成度",
+    ready: "齊全", onHand: "食材齊全", missing: "缺", buy: "需購買",
+    allReady: "食材全部齊全，可以開始下廚。",
+    ofReady: "／", ingReady: "項食材已備妥。買齊後點一下即可打勾。",
+    nothingToBuy: "不用再買了，食材齊全。", stillNeed: "還缺",
+    nothingInCart: "購物車是空的", addToCart: "加入", toCart: "項到購物車", addedToCart: "已加入",
+    dishPhoto: "料理照片",
+    colItem: "品項", colCat: "分類", colCount: "數量", colAdded: "更新",
+    recipe: "食譜", allSet: "食材齊全，照著做即可。", swipeHint: "向左滑動可刪除。",
+    del: "刪除", stepsNote: "示範作法，之後由食譜資料庫取代。", justAdded: "剛剛加入",
+    titles: { capture: "拍攝食材", review: "辨識結果", canmake: "我能做什麼", wantmake: "我想做", stock: "庫存清單", share: "分享" },
+    filters: { All: "全部", "Stir-fry": "快炒", "Rice bowl": "丼飯", Braise: "紅燒", Side: "小菜" },
+    share: [
+      { num: "1", title: "分享菜色", body: "把食譜和食材清單傳給家人、LINE 或訊息。", cta: "選一道菜" },
+      { num: "2", title: "代買清單", body: "把缺的食材分享出去，讓在外面的人順手買回來。", cta: "分享清單" },
+      { num: "3", title: "家庭餐桌", body: "共用行事曆，看這週誰負責做哪一餐。", cta: "開啟行事曆" }
+    ]
+  }
+};
+
+class Component extends DCLogic {
+  state = { section: "dash", screen: "home", stack: [], lang: "en",
+    calWho: "all", famWho: "dad", staples: STAPLES_LIST.filter(x => x[2]).map(x => x[0]), atStore: false, shots: 0, qty: {}, stock: STOCK.slice(), matchMode: "stock", dishId: "beef-broccoli", acquired: [], filter: "All", carted: false, swipeIdx: -1, swipeDx: 0, swipeX0: 0, recipes: {},
+    week: buildWeek(), view: "week", votes: Object.assign({}, VOTE_SEED), myVotes: [],
+    members: FAMILY.slice(), newMember: "",
+    modalOpen: false, evDay: 0, evTime: "18:30", evWho: "dad", evDish: "", evCustom: "",
+    famPrefs: FAMILY.reduce((a, p) => { a[p.key] = { likes: p.likes.slice(), dislikes: p.dislikes.slice(), allergies: p.allergies.slice(), cook: p.stars.slice() }; return a; }, {}),
+    prefField: "likes", prefInput: "" };
+
+  addPref(en, zhv) {
+    const v = String(en || "").trim(); if (!v) { return; }
+    this.setState(st => {
+      const fpp = st.famPrefs[st.famWho];
+      if (fpp[st.prefField].some(x => String(x[0]).toLowerCase() === v.toLowerCase())) { return { prefInput: "" }; }
+      const next = Object.assign({}, fpp); next[st.prefField] = fpp[st.prefField].concat([[v, zhv || v]]);
+      return { famPrefs: Object.assign({}, st.famPrefs, { [st.famWho]: next }), prefInput: "" };
+    });
+  }
+  removePref(field, ix) {
+    this.setState(st => {
+      const fpp = st.famPrefs[st.famWho];
+      const next = Object.assign({}, fpp); next[field] = fpp[field].filter((x, i) => i !== ix);
+      return { famPrefs: Object.assign({}, st.famPrefs, { [st.famWho]: next }) };
+    });
+  }
+  addMember(name) {
+    const v = String(name || "").trim(); if (!v) { return; }
+    this.setState(st => {
+      const pal = [
+        { tint: "var(--color-accent-2-100)", ink: "var(--color-accent-2-800)", dot: "var(--color-accent-2-500)", fill: "var(--color-accent-2-700)" },
+        { tint: "var(--color-accent-100)", ink: "var(--color-accent-800)", dot: "var(--color-accent-500)", fill: "var(--color-accent-700)" },
+        { tint: "var(--color-neutral-200)", ink: "var(--color-neutral-800)", dot: "var(--color-neutral-600)", fill: "var(--color-neutral-800)" }
+      ][st.members.length % 3];
+      const key = "m" + Date.now();
+      const p = Object.assign({ key, name: v, zh: v, initial: v.charAt(0).toUpperCase(), role: "", roleZh: "", note: "", noteZh: "", stars: [0,0,0,0,0,0,0], likes: [], dislikes: [], allergies: [] }, pal);
+      return {
+        members: st.members.concat([p]),
+        famPrefs: Object.assign({}, st.famPrefs, { [key]: { likes: [], dislikes: [], allergies: [], cook: [0,0,0,0,0,0,0] } }),
+        newMember: "", famWho: key
+      };
+    });
+  }
+  removeMember(key) {
+    this.setState(st => {
+      const members = st.members.filter(p => p.key !== key);
+      if (!members.length) { return {}; }
+      return { members,
+        famWho: st.famWho === key ? members[0].key : st.famWho,
+        calWho: st.calWho === key ? "all" : st.calWho,
+        evWho: st.evWho === key ? "all" : st.evWho };
+    });
+  }
+  cookWeekId() {
+    const d = new Date(); d.setDate(d.getDate() - d.getDay());
+    return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  }
+  saveCook() {
+    try {
+      const cook = {};
+      Object.keys(this.state.famPrefs).forEach(k => { cook[k] = this.state.famPrefs[k].cook; });
+      localStorage.setItem("luckytable-cook", JSON.stringify({ week: this.cookWeekId(), cook }));
+    } catch (e) {}
+  }
+
+  componentDidMount() {
+    DISHES.filter(d => d.mealId).forEach(d => {
+      fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + d.mealId)
+        .then(r => r.json())
+        .then(j => {
+          const m = (j.meals || [])[0];
+          if (!m) { return; }
+          const ing = [];
+          for (let i = 1; i <= 20; i++) {
+            const n = m["strIngredient" + i];
+            if (n && n.trim()) { ing.push([n.trim(), "", (m["strMeasure" + i] || "").trim()]); }
+          }
+          const raw = String(m.strInstructions || "")
+            .split(/\r?\n+/).map(x => x.trim().replace(/^\d+[.)]?\s*/, ""))
+            .filter(x => x.length > 2);
+          const steps = [];
+          raw.forEach(line => {
+            if (/:$/.test(line) && line.length < 60) { steps.push(line); }
+            else if (steps.length && /:$/.test(steps[steps.length - 1]) && steps[steps.length - 1].length < 60) {
+              steps[steps.length - 1] += " " + line;
+            } else { steps.push(line); }
+          });
+          this.setState(st => ({
+            recipes: Object.assign({}, st.recipes, {
+              [d.id]: { ing, steps, source: m.strSource || ("https://www.themealdb.com/meal/" + d.mealId), title: m.strMeal }
+            })
+          }));
+        })
+        .catch(() => {});
+    });
+    /* Will-cook days persist per week and reset every Sunday at midnight. */
+    try {
+      const raw = localStorage.getItem("luckytable-cook");
+      if (raw) {
+        const j = JSON.parse(raw);
+        this.setState(st => {
+          const fam = Object.assign({}, st.famPrefs);
+          Object.keys(fam).forEach(k => {
+            const cook = (j.week === this.cookWeekId() && j.cook && j.cook[k]) ? j.cook[k] : [0,0,0,0,0,0,0];
+            fam[k] = Object.assign({}, fam[k], { cook });
+          });
+          return { famPrefs: fam };
+        });
+      }
+    } catch (e) {}
+  }
+
+  go(screen, extra) {
+    this.setState(st => Object.assign({ screen, stack: st.stack.concat([st.screen]) }, extra || {}));
+  }
+  back() {
+    this.setState(st => st.stack.length
+      ? { screen: st.stack[st.stack.length - 1], stack: st.stack.slice(0, -1) }
+      : { screen: "home", stack: [] });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const zh = s.lang === "zh";
+    const t = STR[s.lang];
+    const nm = (en, zhName) => (zh ? zhName : en);
+
+    const FAM = s.members;
+    const memberOf = k => FAM.find(p => p.key === k);
+    const evOf = d => d.items
+      .filter(([, , , who]) => s.calWho === "all" || who === s.calWho || who === "all")
+      .map(([time, title, titleZh, who, meal, dishId]) => {
+        const p = memberOf(who);
+        return {
+          time, title: nm(title, titleZh), meal, dishId,
+          who: p ? nm(p.name, p.zh) : t.everyone,
+          tint: p ? p.tint : "var(--color-neutral-100)",
+          ink: p ? p.ink : "var(--color-neutral-800)",
+          dot: p ? p.dot : "var(--color-neutral-500)"
+        };
+      });
+    const next3 = s.week.reduce((acc, d) => acc.concat(evOf(d).filter(e => !e.meal).map(e => Object.assign({}, e, {
+      day: (zh ? d.zh : d.day) + " " + d.date
+    }))), []).slice(0, 4);
+
+    const sel = FAM.find(p => p.key === s.famWho) || FAM[0];
+    const tally = field => {
+      const seen = {};
+      FAM.forEach(p => s.famPrefs[p.key][field].forEach(([en2, zh2]) => {
+        seen[en2] = seen[en2] || { en: en2, zh: zh2, who: [] };
+        seen[en2].who.push(nm(p.name, p.zh));
+      }));
+      return Object.keys(seen).map(k => seen[k]);
+    };
+    const shared = field => tally(field).filter(x => x.who.length > 1)
+      .sort((a, b) => b.who.length - a.who.length)
+      .map(x => ({ label: nm(x.en, x.zh), who: x.who.join(zh ? "、" : ", "), count: x.who.length + "/" + FAM.length }));
+    const allAllergies = tally("allergies")
+      .map(x => ({ label: nm(x.en, x.zh), who: x.who.join(zh ? "、" : ", ") }));
+
+    const weekDishes = s.week.reduce((acc, d) => acc.concat(
+      d.items.filter(it => it[4]).map(([time, title, titleZh, who]) => {
+        const p = memberOf(who);
+        return {
+          day: (zh ? d.zh : d.day) + " " + d.date, title: nm(title, titleZh),
+          who: p ? nm(p.name, p.zh) : t.everyone, dot: p ? p.dot : "var(--color-neutral-500)",
+          isToday: !!d.today
+        };
+      })), []);
+    const voteIds = Object.keys(VOTE_SEED).concat(s.myVotes.filter(id => !(id in VOTE_SEED)));
+    const voteRows = voteIds.map(id => {
+      const d0 = DISHES.find(x => x.id === id);
+      return { id, label: d0 ? nm(d0.name, d0.zh) : id, n: (s.votes[id] || 0) + (s.myVotes.indexOf(id) !== -1 ? 1 : 0) };
+    }).filter(v => v.n > 0).sort((a, b) => b.n - a.n);
+    const voteTop = Math.max.apply(null, voteRows.map(v => v.n).concat([1]));
+
+    const today0 = s.week[0];
+    const tonight = evOf(today0).filter(e => e.meal).sort((a, b) => (a.time < b.time ? -1 : 1));
+    const tonightDishId = tonight.length ? tonight[0].dishId : null;
+
+    const now0 = new Date();
+    const mDays = new Date(now0.getFullYear(), now0.getMonth() + 1, 0).getDate();
+    const lead = (new Date(now0.getFullYear(), now0.getMonth(), 1).getDay() + 6) % 7;
+    const blank = { date: "", bg: "transparent", border: "transparent", fg: "transparent", items: [] };
+    const monthCells = [];
+    for (let i = 0; i < lead; i++) { monthCells.push(blank); }
+    for (let dd = 1; dd <= mDays; dd++) {
+      const wd = s.week.find(w => Number(w.date) === dd && w.m === now0.getMonth());
+      const isToday = dd === now0.getDate();
+      monthCells.push({
+        date: String(dd),
+        bg: isToday ? "var(--color-accent-100)" : "var(--color-surface)",
+        border: isToday ? "var(--color-accent)" : "var(--color-surface)",
+        fg: isToday ? "var(--color-accent-700)" : "var(--color-text)",
+        items: wd ? evOf(wd).slice(0, 2).map(e => ({ title: e.title, bg: e.tint, ink: e.ink })) : []
+      });
+    }
+    while (monthCells.length % 7 !== 0) { monthCells.push(blank); }
+
+    const cookCount = i => FAM.filter(q => s.famPrefs[q.key].cook[i]).length;
+    const togetherDays = [0, 1, 2, 3, 4, 5, 6].filter(i => cookCount(i) > 1);
+    const dayFull = i => zh ? "星期" + DAY_ZH[(i + 1) % 7] : DAY_FULL[(i + 1) % 7];
+    const fp = s.famPrefs[sel.key];
+
+    // capture: fold the shots taken so far into item → qty
+    const base = {};
+    for (let i = 0; i < s.shots && i < SHOTS.length; i++) {
+      SHOTS[i].items.forEach(([n, q]) => { base[n] = (base[n] || 0) + q; });
+    }
+    const captured = Object.keys(base).map(name => {
+      const meta = ITEMS[name];
+      const q = s.qty[name] !== undefined ? s.qty[name] : base[name];
+      return {
+        name,
+        label: nm(name, meta.zh),
+        cat: zh ? CAT[categoryOf(name)] : categoryOf(name),
+        unit: zh ? UNIT[meta.unit] : meta.unit,
+        confLabel: meta.conf + "% " + (zh ? "把握" : "match"),
+        img: ingImg(name),
+        qty: q,
+        inc: () => this.setState(st => ({ qty: Object.assign({}, st.qty, { [name]: (st.qty[name] !== undefined ? st.qty[name] : base[name]) + 1 }) })),
+        dec: () => this.setState(st => ({ qty: Object.assign({}, st.qty, { [name]: Math.max(0, (st.qty[name] !== undefined ? st.qty[name] : base[name]) - 1) }) }))
+      };
+    });
+    const lastShot = s.shots > 0 ? SHOTS[Math.min(s.shots, SHOTS.length) - 1] : null;
+    const boxes = lastShot ? lastShot.boxes.map(([n, left, top, w, h, color]) => ({
+      label: nm(n, ITEMS[n].zh), left, top, w, h, color
+    })) : [];
+
+    /* what we match against: just this scan, or the whole inventory */
+    const STAPLES = ["salt", "sugar", "salt & pepper", "black pepper", "white pepper", "cooking oil"];
+    const pantry = (s.matchMode === "captured" ? captured.map(c => c.name) : s.stock.map(x => x.name))
+      .map(n => n.toLowerCase());
+    const hasIng = n => {
+      const k = String(n).toLowerCase();
+      const a = ALIAS[k];
+      if (a === "*" || STAPLES.indexOf(k) !== -1) { return true; }
+      const key = a || k;
+      return pantry.indexOf(key) !== -1 || pantry.some(p => key.indexOf(p) !== -1 || p.indexOf(key) !== -1);
+    };
+    const ingList = d => ((s.recipes[d.id] || {}).ing) || d.ing;
+
+    const dish = DISHES.find(d => d.id === s.dishId) || DISHES[0];
+    const ings = ingList(dish).map(([name, zhName, amount]) => {
+      zhName = zhName || ING_ZH[String(name).toLowerCase()] || name;
+      const have = hasIng(name) || s.acquired.indexOf(name) !== -1;
+      return {
+        label: nm(name, zhName),
+        amount: zh ? (AMT[amount] || amount) : amount,
+        mark: have ? "✓" : "+",
+        dot: have ? "var(--color-accent-2-600)" : "var(--color-accent)",
+        bg: have ? "var(--color-accent-2-100)" : "var(--color-neutral-100)",
+        border: have ? "var(--color-accent-2-300)" : "var(--color-accent-300)",
+        fg: have ? "var(--color-accent-2-800)" : "var(--color-text)",
+        have, name,
+        toggle: () => this.setState(st => ({
+          acquired: st.acquired.indexOf(name) !== -1 ? st.acquired.filter(x => x !== name) : st.acquired.concat([name])
+        }))
+      };
+    });
+    const haveCount = ings.filter(i => i.have).length;
+    const pct = Math.round((haveCount / ings.length) * 100);
+    const missing = ings.filter(i => !i.have);
+
+    const decorate = d => {
+      const list = ingList(d);
+      const short = list.filter(x => !hasIng(x[0]));
+      const m = Math.round(((list.length - short.length) / list.length) * 100);
+      const full = short.length === 0;
+      return {
+        id: d.id,
+        label: nm(d.name, d.zh),
+        img: dishImg(d.id),
+        matchLabel: full ? t.ready : m + "%",
+        pillBg: full ? "var(--color-accent-2)" : "var(--color-accent)",
+        pillFg: full ? "var(--color-accent-2-100)" : "var(--color-accent-100)",
+        note: full ? t.onHand : t.missing + " " + short.length + " · " + short.map(x => nm(x[0], x[1] || ING_ZH[String(x[0]).toLowerCase()] || x[0])).join(zh ? "、" : ", "),
+        shopNote: full ? t.onHand : t.buy + " " + short.length + " " + (zh ? t.items : (short.length === 1 ? t.item : t.items)),
+        m, cat: d.cat,
+        open: () => this.go("dish", { dishId: d.id, acquired: [], carted: false })
+      };
+    };
+    const all = DISHES.map(decorate);
+    const totalUnits = captured.reduce((a, c) => a + c.qty, 0);
+    const menuAdded = s.week[0].items.some(x => x[5] === dish.id);
+
+    return {
+      t: Object.assign({}, t, {
+        locationLabel: s.atStore ? t.atStore : t.atHome,
+        captureHint: s.atStore ? t.hintStore : t.hintHome,
+        dashDate: zh ? (today0.m + 1) + "月" + today0.date + "日 星期" + today0.zh
+                     : DAY_FULL[today0.dow] + " " + today0.date + " " + MONTH_EN[today0.m]
+      }),
+      dispFont: zh ? '"Noto Sans TC", sans-serif' : 'var(--font-heading)',
+      isDash: s.section === "dash",
+      calTitle: s.view === "month"
+        ? (zh ? today0.y + "年" + (now0.getMonth() + 1) + "月" : MONTH_EN[now0.getMonth()] + " " + now0.getFullYear())
+        : (zh ? (today0.m + 1) + "月" + today0.date + "日 · 家庭行程" : MONTH_EN[today0.m] + " " + today0.date + " · Family itinerary"),
+      isFood: s.section === "food",
+      isCal: s.section === "cal",
+      isFam: s.section === "fam",
+      isRec: s.section === "rec",
+      sections: [
+        { key: "dash", label: t.navHome, isHome: true, isFood: false, isRec: false, isCal: false, isFam: false },
+        { key: "food", label: t.navFood, isHome: false, isFood: true, isRec: false, isCal: false, isFam: false },
+        { key: "rec", label: t.navRec, isHome: false, isFood: false, isRec: true, isCal: false, isFam: false },
+        { key: "cal", label: t.navCal, isHome: false, isFood: false, isRec: false, isCal: true, isFam: false },
+        { key: "fam", label: t.navFam, isHome: false, isFood: false, isRec: false, isCal: false, isFam: true }
+      ].map(n => Object.assign(n, {
+        go: () => this.setState({ section: n.key }),
+        bg: s.section === n.key ? "var(--color-accent)" : "transparent",
+        fg: s.section === n.key ? "var(--color-accent-100)" : "var(--color-neutral-400)"
+      })),
+      goFoodApp: () => this.setState(tonightDishId
+        ? { section: "food", screen: "dish", stack: ["home"], dishId: tonightDishId, acquired: [], carted: false }
+        : { section: "food", screen: "home", stack: [] }),
+      tonightBg: tonightDishId ? 'url("' + dishImg(tonightDishId) + '")' : "none",
+      tonightDish: tonight.length ? tonight[0].title : t.nothingPlanned,
+      tonightNote: tonight.length
+        ? tonight[0].who + " " + t.isCooking + (tonight.length > 1 ? (zh ? " · 另有 " + (tonight.length - 1) + " 道" : " · +" + (tonight.length - 1) + " more") : "")
+        : "",
+      tonightMeals: tonight.map(e => ({ title: e.title, time: e.time, who: e.who, dot: e.dot })),
+      tonightExtra: tonight.slice(1).map(e => ({ title: e.title, time: e.time, who: e.who, dot: e.dot })),
+      noTonight: tonight.length === 0,
+      noTonightPhoto: !tonightDishId,
+      family: FAM.map(p => ({
+        name: nm(p.name, p.zh), initial: p.initial, role: nm(p.role, p.roleZh),
+        note: nm(p.note, p.noteZh), tint: p.tint, ink: p.ink, dot: p.dot,
+        pick: () => this.setState({ famWho: p.key })
+      })),
+      famPeople: FAM.map(p => ({
+        name: nm(p.name, p.zh), initial: p.initial, tint: p.tint, ink: p.ink,
+        pick: () => this.setState({ famWho: p.key }),
+        remove: () => this.removeMember(p.key),
+        cardBg: s.famWho === p.key ? "var(--color-accent-100)" : "var(--color-surface)",
+        cardBorder: s.famWho === p.key ? "var(--color-accent)" : "transparent",
+        cook: s.famPrefs[p.key].cook.map((on, i) => ({
+          letter: zh ? DAY_ZH[(i + 1) % 7] : DAY_LETTER[i],
+          full: dayFull(i),
+          bg: on ? (p.fill || p.dot) : "transparent",
+          border: on ? (cookCount(i) > 1 ? "var(--color-accent)" : (p.fill || p.dot)) : "var(--color-neutral-300)",
+          fg: on ? "var(--page)" : "var(--color-neutral-700)",
+          toggle: () => this.setState(st => {
+            const fpp = st.famPrefs[p.key];
+            const cook = fpp.cook.slice(); cook[i] = cook[i] ? 0 : 1;
+            return { famPrefs: Object.assign({}, st.famPrefs, { [p.key]: Object.assign({}, fpp, { cook }) }) };
+          }, () => this.saveCook())
+        }))
+      })),
+      hasTogether: togetherDays.length > 0,
+      togetherItems: togetherDays.map(i => ({
+        line: dayFull(i) + " — " + FAM.filter(q => s.famPrefs[q.key].cook[i]).map(q => nm(q.name, q.zh)).join(zh ? "、" : " & ")
+      })),
+      newMemberVal: s.newMember,
+      onNewMember: e => this.setState({ newMember: e.target.value }),
+      onNewMemberKey: e => { if (e.key === "Enter") { this.addMember(this.state.newMember); } },
+      addMemberBtn: () => this.addMember(s.newMember),
+      staples: STAPLES_LIST.map(([en2, zh2]) => {
+        const on = s.staples.indexOf(en2) !== -1;
+        return {
+          label: (on ? "✓ " : "") + nm(en2, zh2), on,
+          bg: on ? "var(--color-accent-2-100)" : "var(--color-surface)",
+          fg: on ? "var(--color-accent-2-800)" : "var(--color-neutral-600)",
+          border: on ? "var(--color-accent-2-300)" : "var(--color-neutral-300)",
+          toggle: () => this.setState(st => ({
+            staples: st.staples.indexOf(en2) !== -1 ? st.staples.filter(x => x !== en2) : st.staples.concat([en2])
+          }))
+        };
+      }),
+      calFilters: [{ key: "all", name: t.everyone, dot: "var(--color-neutral-500)" }]
+        .concat(FAM.map(p => ({ key: p.key, name: nm(p.name, p.zh), dot: p.dot })))
+        .map(f => Object.assign({}, f, {
+          pick: () => this.setState({ calWho: f.key }),
+          bg: s.calWho === f.key ? "var(--color-surface)" : "transparent",
+          shadow: s.calWho === f.key ? "var(--shadow-sm)" : "none",
+          fg: s.calWho === f.key ? "var(--color-text)" : "var(--color-neutral-600)"
+        })),
+      week: s.week.map(d => ({
+        day: zh ? d.zh : d.day, date: d.date,
+        bg: d.today ? "var(--color-accent-100)" : "var(--color-surface)",
+        border: d.today ? "var(--color-accent)" : "var(--color-surface)",
+        dayFg: d.today ? "var(--color-accent-700)" : "var(--color-text)",
+        items: evOf(d).map(e => ({
+          time: e.time, title: e.title, who: e.who,
+          bg: e.tint, ink: e.ink, dot: e.dot, isMeal: !!e.meal
+        }))
+      })),
+      upcoming: next3,
+      isWeekView: s.view === "week",
+      isMonthView: s.view === "month",
+      viewBtns: ["week", "month"].map(k => ({
+        label: k === "week" ? t.viewWeek : t.viewMonth,
+        pick: () => this.setState({ view: k }),
+        bg: s.view === k ? "var(--color-surface)" : "transparent",
+        shadow: s.view === k ? "var(--shadow-sm)" : "none",
+        fg: s.view === k ? "var(--color-text)" : "var(--color-neutral-600)"
+      })),
+      monthHead: [0, 1, 2, 3, 4, 5, 6].map(i => ({ label: zh ? DAY_ZH[(i + 1) % 7] : DAY_EN[(i + 1) % 7] })),
+      monthCells,
+      modalOpen: s.modalOpen,
+      openNewEvent: () => this.setState({ modalOpen: true, evDay: 0, evDish: "", evCustom: "", evWho: "dad", evTime: "18:30" }),
+      closeModal: () => this.setState({ modalOpen: false }),
+      modalDays: s.week.map((d, i) => ({
+        label: (zh ? d.zh : d.day) + " " + d.date,
+        pick: () => this.setState({ evDay: i }),
+        bg: s.evDay === i ? "var(--color-accent)" : "var(--color-neutral-100)",
+        fg: s.evDay === i ? "var(--color-accent-100)" : "var(--color-text)",
+        border: s.evDay === i ? "var(--color-accent)" : "var(--color-neutral-300)"
+      })),
+      modalTimes: ["17:00", "17:30", "18:00", "18:30", "19:00", "19:30"].map(x => ({
+        label: x, pick: () => this.setState({ evTime: x }),
+        bg: s.evTime === x ? "var(--color-accent)" : "var(--color-neutral-100)",
+        fg: s.evTime === x ? "var(--color-accent-100)" : "var(--color-text)",
+        border: s.evTime === x ? "var(--color-accent)" : "var(--color-neutral-300)"
+      })),
+      modalWho: [{ key: "all", label: t.everyone }].concat(FAM.map(p => ({ key: p.key, label: nm(p.name, p.zh) }))).map(o => ({
+        label: o.label, pick: () => this.setState({ evWho: o.key }),
+        bg: s.evWho === o.key ? "var(--color-accent-2-800)" : "var(--color-neutral-100)",
+        fg: s.evWho === o.key ? "var(--color-bg)" : "var(--color-text)",
+        border: s.evWho === o.key ? "var(--color-accent-2-800)" : "var(--color-neutral-300)"
+      })),
+      modalDishes: DISHES.map(d0 => ({
+        label: nm(d0.name, d0.zh), pick: () => this.setState({ evDish: d0.id, evCustom: "" }),
+        bg: s.evDish === d0.id ? "var(--color-accent-2-100)" : "var(--color-neutral-100)",
+        fg: s.evDish === d0.id ? "var(--color-accent-2-800)" : "var(--color-text)",
+        border: s.evDish === d0.id ? "var(--color-accent-2-600)" : "var(--color-neutral-300)"
+      })),
+      evCustomVal: s.evCustom,
+      onCustomInput: e => this.setState({ evCustom: e.target.value, evDish: "" }),
+      canSaveBg: (s.evDish || s.evCustom.trim()) ? "var(--color-accent)" : "var(--color-neutral-300)",
+      canSaveFg: (s.evDish || s.evCustom.trim()) ? "var(--color-accent-100)" : "var(--color-neutral-600)",
+      saveEvent: () => this.setState(st => {
+        const d0 = DISHES.find(x => x.id === st.evDish);
+        const title = d0 ? d0.name : st.evCustom.trim();
+        if (!title) { return {}; }
+        const wk = st.week.map(w => Object.assign({}, w, { items: w.items.slice() }));
+        wk[st.evDay].items.push([st.evTime, title, d0 ? d0.zh : title, st.evWho, d0 ? 1 : 0, d0 ? d0.id : undefined]);
+        wk[st.evDay].items.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+        return { week: wk, modalOpen: false, section: "cal", view: "week" };
+      }),
+      planDish: () => this.setState({ modalOpen: true, evDish: dish.id, evCustom: "", evDay: 0, evWho: "dad", evTime: "18:30" }),
+      voteCount: (s.votes[dish.id] || 0) + (s.myVotes.indexOf(dish.id) !== -1 ? 1 : 0),
+      voteLabel: s.myVotes.indexOf(dish.id) !== -1 ? "✓ " + t.voted : t.voteFor,
+      voteBg: s.myVotes.indexOf(dish.id) !== -1 ? "var(--color-accent-2)" : "var(--color-neutral-100)",
+      voteFg: s.myVotes.indexOf(dish.id) !== -1 ? "var(--color-accent-2-100)" : "var(--color-text)",
+      voteBorder: s.myVotes.indexOf(dish.id) !== -1 ? "var(--color-accent-2)" : "var(--color-neutral-400)",
+      toggleVote: () => this.setState(st => ({
+        myVotes: st.myVotes.indexOf(dish.id) !== -1 ? st.myVotes.filter(x => x !== dish.id) : st.myVotes.concat([dish.id])
+      })),
+      weekDishes: weekDishes.map(d => Object.assign({}, d, {
+        bg: d.isToday ? "var(--color-accent-100)" : "transparent"
+      })),
+      votes: voteRows.map(v => ({
+        label: v.label, n: v.n + (zh ? " 票" : (v.n === 1 ? " vote" : " votes")),
+        w: Math.round((v.n / voteTop) * 100) + "%",
+        bar: v.n === voteTop ? "var(--color-accent)" : "var(--color-accent-2-400)"
+      })),
+      person: {
+        name: nm(sel.name, sel.zh), initial: sel.initial, role: nm(sel.role, sel.roleZh),
+        tint: sel.tint, ink: sel.ink,
+        likes: fp.likes.map(([a, b], ix) => ({ label: nm(a, b || a), remove: () => this.removePref("likes", ix) })),
+        dislikes: fp.dislikes.map(([a, b], ix) => ({ label: nm(a, b || a), remove: () => this.removePref("dislikes", ix) })),
+        allergies: fp.allergies.map(([a, b], ix) => ({ label: nm(a, b || a), remove: () => this.removePref("allergies", ix) })),
+        noAllergy: fp.allergies.length === 0
+      },
+      prefFields: ["likes", "dislikes", "allergies"].map(f => ({
+        label: t[f], pick: () => this.setState({ prefField: f }),
+        bg: s.prefField === f ? "var(--color-accent)" : "var(--color-neutral-100)",
+        fg: s.prefField === f ? "var(--color-accent-100)" : "var(--color-neutral-700)",
+        border: s.prefField === f ? "var(--color-accent)" : "var(--color-neutral-300)"
+      })),
+      prefInputVal: s.prefInput,
+      onPrefInput: e => this.setState({ prefInput: e.target.value }),
+      onPrefKey: e => { if (e.key === "Enter") { this.addPref(this.state.prefInput); } },
+      addPrefBtn: () => this.addPref(s.prefInput),
+      prefSuggestions: SUGGEST[s.prefField]
+        .filter(([a]) => !fp[s.prefField].some(x => x[0] === a))
+        .map(([a, b]) => ({ label: nm(a, b), add: () => this.addPref(a, b) })),
+      sharedLikes: shared("likes"),
+      sharedDislikes: shared("dislikes"),
+      houseAllergies: allAllergies,
+      todayLabel: (zh ? "8月17日 星期一" : "Monday 17 August"),
+      isHome: s.screen === "home",
+      notHome: s.screen !== "home",
+      isCapture: s.screen === "capture",
+      isReview: s.screen === "review",
+      isCanMake: s.screen === "canmake",
+      isWantMake: s.screen === "wantmake",
+      isDish: s.screen === "dish",
+      isStock: s.screen === "stock",
+      isShare: s.screen === "share",
+      screenTitle: s.screen === "dish"
+        ? nm(dish.name, dish.zh)
+        : (s.screen === "canmake" && s.matchMode === "stock" ? t.titleAll : (t.titles[s.screen] || "")),
+      showBlurbs: this.props.showBlurbs ?? true,
+      setEn: () => this.setState({ lang: "en" }),
+      setZh: () => this.setState({ lang: "zh" }),
+      enBg: zh ? "transparent" : "var(--color-accent)",
+      enFg: zh ? "var(--color-neutral-300)" : "var(--color-accent-100)",
+      zhBg: zh ? "var(--color-accent)" : "transparent",
+      zhFg: zh ? "var(--color-accent-100)" : "var(--color-neutral-300)",
+      goHome: () => this.setState({ screen: "home", stack: [] }),
+      goBack: () => this.back(),
+      goCapture: () => this.go("capture", { shots: 0, qty: {} }),
+      goReview: () => this.go("review"),
+      goCanMake: () => this.go("canmake", { matchMode: "captured" }),
+      goMakeAll: () => this.go("canmake", { matchMode: "stock" }),
+      matchingList: s.matchMode === "captured"
+        ? captured.map(c => ({ label: c.label, qty: c.qty }))
+        : s.stock.map(x => ({ label: nm(x.name, x.zh), qty: x.qty })),
+      goWantMake: () => this.go("wantmake", { matchMode: "stock" }),
+      goStock: () => this.go("stock"),
+      goShare: () => this.go("share"),
+      addToStock: () => this.setState(st => {
+        const next = st.stock.map(x => Object.assign({}, x));
+        captured.forEach(c => {
+          const row = next.find(x => x.name === c.name);
+          if (row) { row.qty += c.qty; row.added = "Today"; }
+          else {
+            const meta = ITEMS[c.name];
+            next.push({ name: c.name, zh: meta.zh, cat: categoryOf(c.name), qty: c.qty, where: st.atStore ? "Counter" : "Fridge", added: "Today" });
+          }
+        });
+        return { stock: next, screen: "stock", stack: st.stack.concat([st.screen]) };
+      }),
+      toggleLocation: () => this.setState(st => ({ atStore: !st.atStore })),
+      snap: () => this.setState(st => ({ shots: Math.min(st.shots + 1, SHOTS.length) })),
+      captured,
+      boxes,
+      noneDetected: captured.length === 0,
+      reviewBtnLabel: captured.length === 0 ? t.reviewNone : t.review + " " + captured.length + " " + t.items,
+      reviewBtnBg: captured.length === 0 ? "var(--color-neutral-300)" : "var(--color-accent-2)",
+      reviewBtnFg: captured.length === 0 ? "var(--color-neutral-600)" : "var(--color-accent-2-100)",
+      reviewSummary: captured.length + " " + t.itemized + " · " + totalUnits + " " + t.units,
+      stockCount: s.stock.length,
+      stock: s.stock.map((x, i) => ({
+        label: nm(x.name, x.zh), cat: zh ? CAT[categoryOf(x.name)] : categoryOf(x.name), qty: x.qty,
+        where: zh ? WHERE[x.where] : x.where, added: zh ? WHEN[x.added] : x.added,
+        inc: () => this.setState(st => ({ stock: st.stock.map(r => r.name === x.name ? Object.assign({}, r, { qty: r.qty + 1 }) : r) })),
+        dec: () => this.setState(st => ({ stock: st.stock.map(r => r.name === x.name ? Object.assign({}, r, { qty: Math.max(0, r.qty - 1) }) : r) })),
+        tx: "translateX(" + (s.swipeIdx === i ? s.swipeDx : 0) + "px)",
+        tween: s.swipeIdx === i ? "none" : "transform 160ms ease",
+        onDown: e => {
+          if (e.target && e.target.closest && e.target.closest("button")) { return; }
+          const x = e.clientX;
+          if (e.currentTarget.setPointerCapture) { e.currentTarget.setPointerCapture(e.pointerId); }
+          this.setState({ swipeIdx: i, swipeX0: x, swipeDx: 0 });
+        },
+        onMove: e => { if (this.state.swipeIdx !== i) { return; } const x = e.clientX; this.setState(st => ({ swipeDx: Math.min(0, Math.max(-190, x - st.swipeX0)) })); },
+        onUp: () => this.setState(st => (st.swipeIdx === i && st.swipeDx < -110)
+          ? { stock: st.stock.filter(r => r.name !== x.name), swipeIdx: -1, swipeDx: 0 }
+          : { swipeIdx: -1, swipeDx: 0 }),
+        remove: () => this.setState(st => ({ stock: st.stock.filter(r => r.name !== x.name), swipeIdx: -1, swipeDx: 0 }))
+      })),
+      dishes: all.slice().sort((a, b) => b.m - a.m),
+      recipesList: all.slice().sort((a, b) => b.m - a.m).map(d0 => Object.assign({}, d0, {
+        open: () => this.setState({ section: "food", screen: "dish", stack: ["home"], dishId: d0.id, acquired: [], carted: false })
+      })),
+      menuLabel: menuAdded ? "✓ " + t.addedMenu : t.addMenu,
+      menuBg: menuAdded ? "var(--color-accent)" : "var(--color-neutral-100)",
+      menuFg: menuAdded ? "var(--color-accent-100)" : "var(--color-text)",
+      menuBorder: menuAdded ? "var(--color-accent)" : "var(--color-neutral-400)",
+      toggleMenu: () => this.setState(st => {
+        const wk = st.week.map(w => Object.assign({}, w, { items: w.items.slice() }));
+        const ix = wk[0].items.findIndex(x => x[5] === dish.id);
+        if (ix !== -1) { wk[0].items.splice(ix, 1); }
+        else { wk[0].items.push(["18:30", dish.name, dish.zh, "all", 1, dish.id]); wk[0].items.sort((a, b) => (a[0] < b[0] ? -1 : 1)); }
+        return { week: wk };
+      }),
+      wantDishes: s.filter === "All" ? all : all.filter(d => d.cat === s.filter),
+      filters: ["All", "Stir-fry", "Rice bowl", "Side"].map(key => ({
+        label: t.filters[key],
+        pick: () => this.setState({ filter: key }),
+        bg: s.filter === key ? "var(--color-accent)" : "var(--color-neutral-100)",
+        fg: s.filter === key ? "var(--color-accent-100)" : "var(--color-text)",
+        border: s.filter === key ? "var(--color-accent)" : "var(--color-neutral-300)"
+      })),
+      dishIngredients: ings,
+      dishPct: pct,
+      dishHeroBg: 'url("' + dishImg(dish.id) + '")',
+      showRecipe: pct === 100,
+      hideRecipe: pct !== 100,
+      dishSteps: (((s.recipes[dish.id] || {}).steps) || (STEPS[dish.id] || {})[s.lang] || [])
+        .map((text, i) => ({ n: i + 1, text })),
+      recipeSource: (s.recipes[dish.id] || {}).source || "",
+      recipeSourceLabel: s.recipes[dish.id] ? "Recipe: TheMealDB · " + (s.recipes[dish.id].title || "") : t.stepsNote,
+      hasSource: !!(s.recipes[dish.id] || {}).source,
+      noSource: !(s.recipes[dish.id] || {}).source,
+      dishProgressNote: pct === 100 ? t.allReady : (zh
+        ? haveCount + "／" + ings.length + " " + t.ingReady
+        : haveCount + " " + t.ofReady + " " + ings.length + " " + t.ingReady),
+      missingLine: missing.length === 0 ? t.nothingToBuy
+        : t.stillNeed + " " + missing.length + ": " + missing.map(i => i.label).join(zh ? "、" : ", "),
+      cartLabel: missing.length === 0 ? t.nothingInCart
+        : (s.carted
+            ? t.addedToCart + " " + missing.length + " " + (zh ? t.toCart : t.toCart) + " ✓"
+            : t.addToCart + " " + missing.length + " " + t.toCart),
+      cartBg: missing.length === 0 ? "transparent" : "var(--color-accent)",
+      cartFg: missing.length === 0 ? "var(--color-neutral-600)" : "var(--color-accent-100)",
+      cartBorder: missing.length === 0 ? "2px solid var(--color-neutral-400)" : "2px solid var(--color-accent)",
+      addToCart: () => { if (missing.length) { this.setState({ carted: true }); } },
+      shareOptions: t.share
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+@import "./organic.css";
+
+/* the one value the Organic ramp has no token for: a true white page ground */
+:root {
+  --page: #ffffff;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--color-accent-700);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-600);
+}
+
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: var(--color-accent-200);
+}
+
+.mono {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.ph {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--color-neutral-200) 0 10px,
+    var(--color-neutral-300) 10px 20px
+  );
+}
+
+.washed {
+  filter: saturate(0.94);
+}
