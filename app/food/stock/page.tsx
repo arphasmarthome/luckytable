@@ -22,7 +22,7 @@ function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove }: {
   const [x0, setX0] = useState(0);
 
   return (
-    <div style={{ flex: "0 0 auto", position: "relative", borderRadius: "999px", overflow: "hidden", background: "var(--color-accent-600)" }}>
+    <div className="stock-row-wrap" style={{ flex: "0 0 auto", position: "relative", borderRadius: "999px", overflow: "hidden", background: "var(--color-accent-600)" }}>
       <button
         type="button"
         onClick={onRemove}
@@ -51,6 +51,7 @@ function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove }: {
           setDragging(false);
           setDx(0);
         }}
+        className="stock-row-grid"
         style={{
           position: "relative", display: "grid", gridTemplateColumns: "2fr 1fr 1.1fr 1fr", alignItems: "center",
           gap: "clamp(10px,1vw,18px)", padding: "clamp(13px,1.2vw,20px) clamp(18px,1.6vw,28px)", background: "var(--color-neutral-100)",
@@ -81,7 +82,7 @@ export default function StockPage() {
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <FoodHeader title={str.titles.stock} />
       <div style={{ flex: "1 1 auto", overflow: "auto", padding: "0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px)", minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)" }}>
-        <div style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "2fr 1fr 1.1fr 1fr", gap: "clamp(10px,1vw,18px)", padding: "0 clamp(18px,1.6vw,28px)", fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>
+        <div className="hide-mobile" style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "2fr 1fr 1.1fr 1fr", gap: "clamp(10px,1vw,18px)", padding: "0 clamp(18px,1.6vw,28px)", fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>
           <span>{str.colItem}</span><span>{str.colCat}</span><span>{str.colCount}</span><span>{str.colAdded}</span>
         </div>
         {stock.map((row) => (

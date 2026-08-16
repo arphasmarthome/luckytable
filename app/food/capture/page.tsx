@@ -17,8 +17,8 @@ export default function CapturePage() {
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <FoodHeader title={str.titles.capture} />
-      <div style={{ flex: "1 1 auto", display: "grid", gridTemplateColumns: "1fr clamp(280px,24vw,390px)", gap: "clamp(20px,2vw,36px)", padding: "0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px)", minHeight: 0 }}>
-        <div className="ph" style={{ borderRadius: "var(--radius-lg)", position: "relative", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div className="stack-grid" style={{ flex: "1 1 auto", overflow: "auto", gridTemplateColumns: "1fr clamp(280px,24vw,390px)", gap: "clamp(20px,2vw,36px)", padding: "0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px)", minHeight: 0 }}>
+        <div className="ph" style={{ borderRadius: "var(--radius-lg)", position: "relative", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "clamp(200px,42vh,320px)" }}>
           <span className="mono" style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-700)", letterSpacing: "0.1em", textTransform: "uppercase", background: "var(--color-neutral-100)", padding: "10px 18px", borderRadius: "999px" }}>{str.cameraFeed}</span>
           {boxes.map((b, i) => (
             <span key={i} style={{ position: "absolute", left: b.left, top: b.top, width: b.w, height: b.h, border: `4px solid ${b.color}`, borderRadius: "var(--radius-md)", boxShadow: "var(--shadow-md)" }}>

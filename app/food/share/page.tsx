@@ -11,7 +11,7 @@ export default function SharePage() {
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <FoodHeader title={str.titles.share} />
-      <div style={{ flex: "1 1 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(18px,1.8vw,32px)", padding: "0 clamp(24px,2.6vw,48px) clamp(28px,2.8vw,52px)", minHeight: 0 }}>
+      <div className="stack-grid" style={{ flex: "1 1 auto", overflow: "auto", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(18px,1.8vw,32px)", padding: "0 clamp(24px,2.6vw,48px) clamp(28px,2.8vw,52px)", minHeight: 0 }}>
         {str.share.map((o) => (
           <div key={o.num} style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(24px,2.4vw,42px)", display: "flex", flexDirection: "column", gap: "clamp(14px,1.3vw,22px)" }}>
             <span style={{ width: "clamp(64px,5.4vw,92px)", height: "clamp(64px,5.4vw,92px)", borderRadius: "999px", background: "var(--color-accent-200)", color: "var(--color-accent-700)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(24px,2.2vw,38px)" }}>{o.num}</span>

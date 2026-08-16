@@ -66,7 +66,7 @@ export default function CalendarPage() {
 
   return (
     <div style={{ flex: "1 1 auto", minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(14px,1.4vw,22px)", padding: "clamp(24px,2.4vw,42px) clamp(26px,2.6vw,48px)" }}>
-      <header style={{ flex: "0 0 auto", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "clamp(16px,1.6vw,28px)" }}>
+      <header style={{ flex: "0 0 auto", display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,1.6vw,28px)" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           <span style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 700, color: "var(--color-accent-2-700)" }}>{str.calKicker}</span>
           <h1 style={{ margin: 0, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(26px,2.4vw,42px)", lineHeight: 1.05 }}>{calTitle}</h1>
@@ -117,7 +117,7 @@ export default function CalendarPage() {
       </div>
 
       {view === "week" && (
-        <div style={{ flex: "1 1 auto", minHeight: 0, display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "clamp(8px,0.8vw,14px)" }}>
+        <div style={{ flex: "1 1 auto", minHeight: 0, overflowX: "auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(150px, 1fr))", gap: "clamp(8px,0.8vw,14px)" }}>
           {week.map((d, i) => (
             <div key={i} style={{ display: "flex", flexDirection: "column", gap: "clamp(8px,0.7vw,12px)", background: d.today ? "var(--color-accent-100)" : "var(--color-surface)", border: `2px solid ${d.today ? "var(--color-accent)" : "var(--color-surface)"}`, borderRadius: "var(--radius-lg)", padding: "clamp(11px,1vw,17px)", minHeight: 0, overflow: "auto" }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 6, flex: "0 0 auto" }}>
@@ -136,13 +136,13 @@ export default function CalendarPage() {
       )}
 
       {view === "month" && (
-        <div style={{ flex: "1 1 auto", minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(6px,0.6vw,10px)" }}>
-          <div style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "clamp(5px,0.5vw,8px)" }}>
+        <div style={{ flex: "1 1 auto", minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(6px,0.6vw,10px)", overflowX: "auto" }}>
+          <div style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(90px, 1fr))", gap: "clamp(5px,0.5vw,8px)" }}>
             {monthHead.map((h, i) => (
               <span key={i} style={{ textAlign: "center", fontSize: "clamp(11px,0.9vw,15px)", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--color-neutral-600)", padding: "4px 0" }}>{h}</span>
             ))}
           </div>
-          <div style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gridAutoRows: "minmax(clamp(96px,15vh,170px), auto)", gap: "clamp(6px,0.6vw,10px)" }}>
+          <div style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(90px, 1fr))", gridAutoRows: "minmax(clamp(96px,15vh,170px), auto)", gap: "clamp(6px,0.6vw,10px)" }}>
             {monthCells.map((c, i) => (
               <div key={i} style={{ background: c.bg, border: `2px solid ${c.border}`, borderRadius: "var(--radius-md)", padding: "clamp(8px,0.7vw,12px)", display: "flex", flexDirection: "column", gap: 5, minHeight: 0, overflow: "hidden" }}>
                 <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", color: c.fg }}>{c.date}</span>

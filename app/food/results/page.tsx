@@ -45,7 +45,7 @@ function ResultsInner() {
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <FoodHeader title={title} />
-      <div style={{ flex: "1 1 auto", display: "grid", gridTemplateColumns: "clamp(220px,19vw,300px) 1fr", gap: "clamp(20px,2vw,36px)", padding: "0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px)", minHeight: 0 }}>
+      <div className="stack-grid" style={{ flex: "1 1 auto", overflow: "auto", gridTemplateColumns: "clamp(220px,19vw,300px) 1fr", gap: "clamp(20px,2vw,36px)", padding: "0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px)", minHeight: 0 }}>
         <aside style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(16px,1.5vw,26px)", display: "flex", flexDirection: "column", gap: 14, overflow: "auto" }}>
           <div style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.matchingFrom}</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>

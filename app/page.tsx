@@ -77,7 +77,7 @@ export default function HomePage() {
         <span style={{ fontSize: "clamp(15px,1.2vw,21px)", color: "var(--color-neutral-600)" }}>{dashDate}</span>
       </header>
 
-      <div style={{ flex: "1 1 auto", minHeight: 0, display: "grid", gridTemplateColumns: "1.15fr 1fr 1fr", gap: "clamp(16px,1.6vw,28px)" }}>
+      <div className="stack-grid" style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", gridTemplateColumns: "1.15fr 1fr 1fr", gap: "clamp(16px,1.6vw,28px)" }}>
         <section style={{ display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)", minHeight: 0, overflow: "auto" }}>
           <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.tonight}</div>
           <div

@@ -60,19 +60,9 @@ export default function Rail() {
   ];
 
   return (
-    <nav
-      style={{
-        flex: "0 0 auto",
-        width: "clamp(92px,7.4vw,124px)",
-        background: "var(--color-neutral-900)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "clamp(10px,1vw,16px)",
-        padding: "clamp(16px,1.5vw,26px) clamp(8px,0.7vw,12px)"
-      }}
-    >
+    <nav className="rail">
       <div
+        className="rail-brand"
         style={{
           width: "clamp(40px,3.4vw,54px)",
           height: "clamp(40px,3.4vw,54px)",
@@ -88,58 +78,31 @@ export default function Rail() {
         <div style={{ width: "44%", height: "44%", borderRadius: "999px", background: "var(--color-surface)" }} />
       </div>
 
-      {sections.map((n) => (
-        <Link
-          key={n.key}
-          href={n.href}
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 6,
-            border: "none",
-            background: n.active ? "var(--color-accent)" : "transparent",
-            color: n.active ? "var(--color-accent-100)" : "var(--color-neutral-400)",
-            borderRadius: "var(--radius-lg)",
-            padding: "clamp(10px,0.9vw,15px) 4px",
-            fontFamily: "inherit",
-            fontWeight: 600,
-            fontSize: "clamp(11px,0.85vw,14px)",
-            cursor: "pointer",
-            textAlign: "center"
-          }}
-        >
-          <span style={{ width: "clamp(26px,2.1vw,32px)", height: "clamp(26px,2.1vw,32px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            {ICONS[n.key]}
-          </span>
-          <span>{n.label}</span>
-        </Link>
-      ))}
+      <div className="rail-links">
+        {sections.map((n) => (
+          <Link
+            key={n.key}
+            href={n.href}
+            className="rail-link"
+            style={{
+              background: n.active ? "var(--color-accent)" : "transparent",
+              color: n.active ? "var(--color-accent-100)" : "var(--color-neutral-400)"
+            }}
+          >
+            <span style={{ width: "clamp(26px,2.1vw,32px)", height: "clamp(26px,2.1vw,32px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {ICONS[n.key]}
+            </span>
+            <span>{n.label}</span>
+          </Link>
+        ))}
+      </div>
 
-      <div
-        style={{
-          marginTop: "auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: 5,
-          width: "100%",
-          background: "var(--color-neutral-800)",
-          borderRadius: "var(--radius-lg)",
-          padding: 5
-        }}
-      >
+      <div className="rail-lang">
         <button
           type="button"
           onClick={() => setLang("en")}
+          className="rail-lang-btn"
           style={{
-            border: "none",
-            borderRadius: "999px",
-            padding: "clamp(8px,0.7vw,12px) 4px",
-            fontFamily: "inherit",
-            fontWeight: 700,
-            fontSize: "clamp(12px,0.9vw,15px)",
-            cursor: "pointer",
             background: lang === "zh" ? "transparent" : "var(--color-accent)",
             color: lang === "zh" ? "var(--color-neutral-300)" : "var(--color-accent-100)"
           }}
@@ -149,14 +112,8 @@ export default function Rail() {
         <button
           type="button"
           onClick={() => setLang("zh")}
+          className="rail-lang-btn"
           style={{
-            border: "none",
-            borderRadius: "999px",
-            padding: "clamp(8px,0.7vw,12px) 4px",
-            fontFamily: "inherit",
-            fontWeight: 700,
-            fontSize: "clamp(12px,0.9vw,15px)",
-            cursor: "pointer",
             background: lang === "zh" ? "var(--color-accent)" : "transparent",
             color: lang === "zh" ? "var(--color-accent-100)" : "var(--color-neutral-300)"
           }}

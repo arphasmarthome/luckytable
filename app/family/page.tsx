@@ -54,7 +54,7 @@ export default function FamilyPage() {
         <h1 style={{ margin: 0, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(26px,2.4vw,42px)", lineHeight: 1.05 }}>{str.famTitle}</h1>
       </header>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr clamp(220px,20vw,300px)", gap: "clamp(14px,1.4vw,24px)", alignItems: "start" }}>
+      <div className="stack-grid" style={{ gridTemplateColumns: "1fr clamp(220px,20vw,300px)", gap: "clamp(14px,1.4vw,24px)", alignItems: "start" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(clamp(210px,18vw,280px), 1fr))", gap: "clamp(12px,1.2vw,20px)" }}>
           {members.map((p) => {
             const active = famWho === p.key;
@@ -124,7 +124,7 @@ export default function FamilyPage() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(14px,1.4vw,24px)", alignItems: "start" }}>
+      <div className="stack-grid" style={{ gridTemplateColumns: "1fr 1fr", gap: "clamp(14px,1.4vw,24px)", alignItems: "start" }}>
         <section style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(16px,1.5vw,26px)", display: "flex", flexDirection: "column", gap: "clamp(12px,1.1vw,18px)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "clamp(11px,1vw,16px)" }}>
             <span style={{ flex: "0 0 auto", width: "clamp(46px,3.6vw,58px)", height: "clamp(46px,3.6vw,58px)", borderRadius: "999px", background: sel.tint, color: sel.ink, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(19px,1.5vw,26px)" }}>{sel.initial}</span>
@@ -202,7 +202,7 @@ export default function FamilyPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <span style={{ fontSize: "clamp(11px,0.85vw,14px)", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 700, color: "var(--color-accent-2-700)" }}>{str.sharedLikes}</span>
               {shared("likes").map((x, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10, padding: "5px 0", borderBottom: "1px solid var(--color-neutral-300)" }}>
+                <div key={i} style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 10, padding: "5px 0", borderBottom: "1px solid var(--color-neutral-300)" }}>
                   <span style={{ fontSize: "clamp(13px,1.05vw,18px)", fontWeight: 600 }}>{x.label}</span>
                   <span style={{ fontSize: "clamp(12px,0.95vw,16px)", color: "var(--color-neutral-600)", textAlign: "right" }}>{x.who}</span>
                 </div>
@@ -212,7 +212,7 @@ export default function FamilyPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <span style={{ fontSize: "clamp(11px,0.85vw,14px)", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 700, color: "var(--color-neutral-700)" }}>{str.sharedDislikes}</span>
               {shared("dislikes").map((x, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10, padding: "5px 0", borderBottom: "1px solid var(--color-neutral-300)" }}>
+                <div key={i} style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 10, padding: "5px 0", borderBottom: "1px solid var(--color-neutral-300)" }}>
                   <span style={{ fontSize: "clamp(13px,1.05vw,18px)", fontWeight: 600 }}>{x.label}</span>
                   <span style={{ fontSize: "clamp(12px,0.95vw,16px)", color: "var(--color-neutral-600)", textAlign: "right" }}>{x.who}</span>
                 </div>
@@ -222,7 +222,7 @@ export default function FamilyPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <span style={{ fontSize: "clamp(11px,0.85vw,14px)", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 700, color: "var(--color-accent-700)" }}>{str.houseAllergies}</span>
               {houseAllergies.map((x, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10, padding: "5px 0", borderBottom: "1px solid var(--color-neutral-300)" }}>
+                <div key={i} style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 10, padding: "5px 0", borderBottom: "1px solid var(--color-neutral-300)" }}>
                   <span style={{ fontSize: "clamp(13px,1.05vw,18px)", fontWeight: 700, color: "var(--color-accent-700)" }}>{x.label}</span>
                   <span style={{ fontSize: "clamp(12px,0.95vw,16px)", color: "var(--color-neutral-600)", textAlign: "right" }}>{x.who}</span>
                 </div>

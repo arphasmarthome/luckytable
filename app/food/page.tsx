@@ -10,7 +10,7 @@ export default function FoodHomePage() {
 
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", padding: "clamp(26px,3vw,52px) clamp(32px,3.6vw,64px) clamp(32px,3.6vw,60px)", gap: "clamp(22px,2.4vw,40px)", minHeight: 0 }}>
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, flex: "0 0 auto" }}>
+      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24, flex: "0 0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "clamp(14px,1.2vw,22px)" }}>
           <div style={{ width: "clamp(48px,4vw,68px)", height: "clamp(48px,4vw,68px)", borderRadius: "999px", background: "var(--color-accent)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-md)" }}>
             <div style={{ width: "44%", height: "44%", borderRadius: "999px", background: "var(--color-bg)" }} />
@@ -25,7 +25,7 @@ export default function FoodHomePage() {
         </Link>
       </header>
 
-      <main style={{ flex: "1 1 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(20px,2vw,36px)", minHeight: 0 }}>
+      <main className="stack-grid" style={{ flex: "1 1 auto", overflow: "auto", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(20px,2vw,36px)", minHeight: 0 }}>
         <Link
           href="/food/capture"
           onClick={() => resetCapture()}

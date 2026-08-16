@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { AppStateProvider } from "@/lib/AppState";
 import Rail from "@/components/Rail";
 import ContentFrame from "@/components/ContentFrame";
@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   description: "家味開運桌 — the family kitchen dashboard."
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover"
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -18,15 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" />
       </head>
       <body
+        className="app-shell"
         style={{
-          width: "100%",
-          height: "100vh",
           background: "var(--page)",
           color: "var(--color-text)",
-          fontFamily: "var(--font-body), 'Noto Sans TC', sans-serif",
-          display: "flex",
-          flexDirection: "row",
-          overflow: "hidden"
+          fontFamily: "var(--font-body), 'Noto Sans TC', sans-serif"
         }}
       >
         <AppStateProvider>
