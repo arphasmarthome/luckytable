@@ -213,6 +213,17 @@ button:focus-visible,
   }
 }
 
+/* Home dashboard cards: on tablet/desktop each panel scrolls internally
+   within a fixed-height row. On phone, once stacked to one column, a
+   scrollable grid item gets an automatic minimum size of 0 (per spec)
+   and gets squashed instead of sized to its content — so let it grow
+   naturally and scroll the page instead. */
+@media (max-width: 860px) {
+  .home-card {
+    overflow: visible !important;
+  }
+}
+
 /* Action bars (e.g. the Review screen's Add to stock / see what I can make
    row): stack full-width on phone instead of wrapping a pill container. */
 @media (max-width: 860px) {
