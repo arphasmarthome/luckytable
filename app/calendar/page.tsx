@@ -88,7 +88,7 @@ export default function CalendarPage() {
         </div>
       </header>
 
-      <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", gap: "clamp(6px,0.6vw,10px)", background: "var(--color-neutral-100)", borderRadius: "999px", padding: "clamp(6px,0.5vw,9px) clamp(10px,0.9vw,16px)", flexWrap: "wrap" }}>
+      <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", gap: "clamp(6px,0.6vw,10px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(6px,0.5vw,9px) clamp(10px,0.9vw,16px)", flexWrap: "wrap" }}>
         <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)", marginRight: 4 }}>{str.showing}</span>
         {filters.map((f) => {
           const active = calWho === f.key;

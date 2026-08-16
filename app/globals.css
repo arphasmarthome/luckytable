@@ -167,6 +167,7 @@ button:focus-visible,
     flex: 0 0 auto;
     padding: 6px 6px;
     font-size: 10px;
+    border-radius: var(--radius-md);
   }
   .rail-link span:first-child {
     width: 22px !important;
