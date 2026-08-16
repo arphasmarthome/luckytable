@@ -77,7 +77,7 @@ export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe:
       <FoodHeader title={name(dish.name, dish.zh)} />
       <div className="stack-grid" style={{ flex: "1 1 auto", overflow: "auto", gridTemplateColumns: "1fr clamp(320px,30vw,460px)", gap: "clamp(20px,2vw,36px)", padding: "0 clamp(24px,2.6vw,48px) clamp(24px,2.6vw,44px)", minHeight: 0 }}>
         <section style={{ display: "flex", flexDirection: "column", gap: "clamp(16px,1.5vw,26px)" }}>
-          <div className="ph" style={{ position: "relative", overflow: "hidden", flex: "1 1 auto", borderRadius: "var(--radius-lg)", minHeight: "clamp(140px,15vw,260px)", backgroundImage: `url("${dishImg(dish.id)}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
+          <div className="ph" style={{ position: "relative", overflow: "hidden", flex: "0 0 auto", borderRadius: "var(--radius-lg)", height: "clamp(170px,17vw,280px)", backgroundImage: `url("${dishImg(dish.id)}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
 
           <div className="stack-grid" style={{ flex: "0 0 auto", gridTemplateColumns: "1fr 1fr", gap: "clamp(12px,1.2vw,20px)" }}>
             <div style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(14px,1.3vw,22px)", display: "flex", flexDirection: "column", gap: 10 }}>
