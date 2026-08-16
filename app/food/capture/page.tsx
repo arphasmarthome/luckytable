@@ -27,7 +27,7 @@ export default function CapturePage() {
           ))}
         </div>
 
-        <aside style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,1.3vw,22px)", minHeight: 0 }}>
+        <aside style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,1.3vw,22px)" }}>
           <div style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(16px,1.5vw,26px)", display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.detectedSoFar}</div>
             {captured.length === 0 && <p style={{ margin: 0, fontSize: "clamp(14px,1.1vw,19px)", color: "var(--color-neutral-600)", lineHeight: 1.45 }}>{str.nothingYet}</p>}

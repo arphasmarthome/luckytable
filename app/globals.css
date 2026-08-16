@@ -154,9 +154,6 @@ button:focus-visible,
     gap: 4px;
     overflow-x: auto;
   }
-  .rail-brand {
-    display: none;
-  }
   .rail-links {
     flex-direction: row;
     width: auto;
@@ -213,6 +210,21 @@ button:focus-visible,
 @media (max-width: 860px) {
   .hide-mobile {
     display: none !important;
+  }
+}
+
+/* Action bars (e.g. the Review screen's Add to stock / see what I can make
+   row): stack full-width on phone instead of wrapping a pill container. */
+@media (max-width: 860px) {
+  .action-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    border-radius: var(--radius-lg) !important;
+  }
+  .action-bar > * {
+    margin-left: 0 !important;
+    width: 100%;
+    text-align: center;
   }
 }
 

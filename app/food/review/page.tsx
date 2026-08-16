@@ -41,7 +41,7 @@ export default function ReviewPage() {
           ))}
         </div>
 
-        <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", gap: "clamp(12px,1.2vw,20px)", background: "var(--color-neutral-100)", borderRadius: "999px", padding: "clamp(12px,1.1vw,18px) clamp(18px,1.6vw,28px)", boxShadow: "var(--shadow-sm)", flexWrap: "wrap" }}>
+        <div className="action-bar" style={{ flex: "0 0 auto", display: "flex", alignItems: "center", gap: "clamp(12px,1.2vw,20px)", background: "var(--color-neutral-100)", borderRadius: "999px", padding: "clamp(12px,1.1vw,18px) clamp(18px,1.6vw,28px)", boxShadow: "var(--shadow-sm)", flexWrap: "wrap" }}>
           <span style={{ fontSize: "clamp(15px,1.15vw,20px)", color: "var(--color-neutral-700)" }}>{reviewSummary}</span>
           <button
             type="button"

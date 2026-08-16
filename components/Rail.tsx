@@ -61,23 +61,6 @@ export default function Rail() {
 
   return (
     <nav className="rail">
-      <div
-        className="rail-brand"
-        style={{
-          width: "clamp(40px,3.4vw,54px)",
-          height: "clamp(40px,3.4vw,54px)",
-          flex: "0 0 auto",
-          borderRadius: "999px",
-          background: "var(--color-accent)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "clamp(6px,0.6vw,12px)"
-        }}
-      >
-        <div style={{ width: "44%", height: "44%", borderRadius: "999px", background: "var(--color-surface)" }} />
-      </div>
-
       <div className="rail-links">
         {sections.map((n) => (
           <Link
