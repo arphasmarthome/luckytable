@@ -14,22 +14,28 @@ export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe:
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
 
-  const [acquired, setAcquired] = useState<string[]>([]);
   const [carted, setCarted] = useState(false);
 
-  const pantry = stock.map((x) => x.name.toLowerCase());
-  const hasIng = (n: string) => {
-    const k = String(n).toLowerCase();
-    const a = ALIAS[k];
-    if (a === "*" || STAPLES.indexOf(k) !== -1) return true;
-    const key = a || k;
-    return pantry.indexOf(key) !== -1 || pantry.some((p) => key.indexOf(p) !== -1 || p.indexOf(key) !== -1);
-  };
-
   const ingSource = recipe && recipe.ing.length ? recipe.ing : dish.ing;
-  const ings = ingSource.map(([ingName, zhName, amount]) => {
+
+  const [checked, setChecked] = useState<boolean[]>(() => {
+    const pantry = stock.map((x) => x.name.toLowerCase());
+    const hasIng = (n: string) => {
+      const k = String(n).toLowerCase();
+      const a = ALIAS[k];
+      if (a === "*" || STAPLES.indexOf(k) !== -1) return true;
+      const key = a || k;
+      return pantry.indexOf(key) !== -1 || pantry.some((p) => key.indexOf(p) !== -1 || p.indexOf(key) !== -1);
+    };
+    return ingSource.map(([ingName]) => hasIng(ingName));
+  });
+
+  const toggleIngredient = (ix: number) =>
+    setChecked((prev) => prev.map((v, i) => (i === ix ? !v : v)));
+
+  const ings = ingSource.map(([ingName, zhName, amount], ix) => {
     const zhFallback = zhName || ING_ZH[String(ingName).toLowerCase()] || ingName;
-    const have = hasIng(ingName) || acquired.indexOf(ingName) !== -1;
+    const have = checked[ix];
     return {
       name: ingName,
       label: name(ingName, zhFallback),
@@ -39,7 +45,8 @@ export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe:
       bg: have ? "var(--color-accent-2-100)" : "var(--color-neutral-100)",
       border: have ? "var(--color-accent-2-300)" : "var(--color-accent-300)",
       fg: have ? "var(--color-accent-2-800)" : "var(--color-text)",
-      have
+      have,
+      toggle: () => toggleIngredient(ix)
     };
   });
   const haveCount = ings.filter((i) => i.have).length;
@@ -150,7 +157,7 @@ export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe:
               <button
                 key={ix}
                 type="button"
-                onClick={() => setAcquired((prev) => (prev.indexOf(ing.name) !== -1 ? prev.filter((x) => x !== ing.name) : prev.concat([ing.name])))}
+                onClick={ing.toggle}
                 style={{ display: "flex", alignItems: "center", gap: 14, textAlign: "left", fontFamily: "inherit", width: "100%", border: `2px solid ${ing.border}`, background: ing.bg, borderRadius: "999px", padding: "clamp(10px,0.95vw,15px) clamp(14px,1.3vw,22px)", cursor: "pointer" }}
               >
                 <span style={{ width: "clamp(28px,2.3vw,34px)", height: "clamp(28px,2.3vw,34px)", flex: "0 0 auto", borderRadius: "999px", background: ing.dot, color: "var(--color-neutral-100)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: "0.9em" }}>{ing.mark}</span>
