@@ -219,7 +219,7 @@ button:focus-visible,
    and gets squashed instead of sized to its content — so let it grow
    naturally and scroll the page instead. */
 @media (max-width: 860px) {
-  .home-card {
+  .grow-on-mobile {
     overflow: visible !important;
   }
 }

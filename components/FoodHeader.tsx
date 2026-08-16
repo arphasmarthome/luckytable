@@ -11,7 +11,7 @@ export default function FoodHeader({ title }: { title: string }) {
   const router = useRouter();
 
   return (
-    <header style={{ flex: "0 0 auto", display: "flex", alignItems: "center", gap: "clamp(14px,1.4vw,24px)", padding: "clamp(18px,1.8vw,30px) clamp(24px,2.6vw,48px)" }}>
+    <header style={{ flex: "0 0 auto", display: "flex", alignItems: "center", flexWrap: "wrap", gap: "clamp(14px,1.4vw,24px)", padding: "clamp(18px,1.8vw,30px) clamp(24px,2.6vw,48px)" }}>
       <Link
         href="/food"
         aria-label="Home"
@@ -35,7 +35,7 @@ export default function FoodHeader({ title }: { title: string }) {
       <h1 style={{ margin: "0 auto 0 0", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(26px,2.4vw,42px)", lineHeight: 1.05 }}>{title}</h1>
       <Link
         href="/food/stock"
-        style={{ display: "flex", alignItems: "center", gap: 9, border: "2px solid var(--color-neutral-300)", background: "var(--color-neutral-100)", color: "var(--color-neutral-800)", borderRadius: "999px", padding: "clamp(9px,0.75vw,14px) clamp(14px,1.25vw,22px)", fontFamily: "inherit", fontWeight: 600, fontSize: "clamp(13px,1vw,18px)", cursor: "pointer" }}
+        style={{ display: "flex", alignItems: "center", gap: 9, flex: "0 0 auto", whiteSpace: "nowrap", border: "2px solid var(--color-neutral-300)", background: "var(--color-neutral-100)", color: "var(--color-neutral-800)", borderRadius: "999px", padding: "clamp(9px,0.75vw,14px) clamp(14px,1.25vw,22px)", fontFamily: "inherit", fontWeight: 600, fontSize: "clamp(13px,1vw,18px)", cursor: "pointer" }}
       >
         {str.stockBtn}
       </Link>

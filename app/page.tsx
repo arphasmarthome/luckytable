@@ -76,7 +76,7 @@ export default function HomePage() {
       </header>
 
       <div className="stack-grid" style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", gridTemplateColumns: "1.15fr 1fr 1fr", gap: "clamp(16px,1.6vw,28px)" }}>
-        <section className="home-card" style={{ display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)", overflow: "auto" }}>
+        <section className="grow-on-mobile" style={{ display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)", overflow: "auto" }}>
           <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.tonight}</div>
 
           {tonight.length === 0 && (
@@ -124,7 +124,7 @@ export default function HomePage() {
           </Link>
         </section>
 
-        <section className="home-card" style={{ display: "flex", flexDirection: "column", gap: "clamp(8px,0.8vw,13px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)", overflow: "auto" }}>
+        <section className="grow-on-mobile" style={{ display: "flex", flexDirection: "column", gap: "clamp(8px,0.8vw,13px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)", overflow: "auto" }}>
           <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.weekDishes}</div>
           {weekDishes.map((d, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "clamp(9px,0.85vw,14px)", background: d.isToday ? "var(--color-accent-100)" : "transparent", borderRadius: "var(--radius-md)", padding: "clamp(7px,0.65vw,11px) clamp(9px,0.8vw,13px)", flex: "0 0 auto" }}>
@@ -136,7 +136,7 @@ export default function HomePage() {
           ))}
         </section>
 
-        <div className="home-card" style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,1.4vw,22px)", overflow: "auto" }}>
+        <div className="grow-on-mobile" style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,1.4vw,22px)", overflow: "auto" }}>
           <section style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)" }}>
             <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.navFam}</div>
             {members.map((p) => (

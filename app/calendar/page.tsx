@@ -136,13 +136,13 @@ export default function CalendarPage() {
       )}
 
       {view === "month" && (
-        <div style={{ flex: "1 1 auto", minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(6px,0.6vw,10px)", overflowX: "auto" }}>
-          <div style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(90px, 1fr))", gap: "clamp(5px,0.5vw,8px)" }}>
+        <div style={{ flex: "1 1 auto", minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(6px,0.6vw,10px)" }}>
+          <div style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "clamp(5px,0.5vw,8px)" }}>
             {monthHead.map((h, i) => (
               <span key={i} style={{ textAlign: "center", fontSize: "clamp(11px,0.9vw,15px)", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--color-neutral-600)", padding: "4px 0" }}>{h}</span>
             ))}
           </div>
-          <div style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(90px, 1fr))", gridAutoRows: "minmax(clamp(96px,15vh,170px), auto)", gap: "clamp(6px,0.6vw,10px)" }}>
+          <div className="grow-on-mobile" style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gridAutoRows: "minmax(clamp(96px,15vh,170px), auto)", gap: "clamp(6px,0.6vw,10px)" }}>
             {monthCells.map((c, i) => (
               <div key={i} style={{ background: c.bg, border: `2px solid ${c.border}`, borderRadius: "var(--radius-md)", padding: "clamp(8px,0.7vw,12px)", display: "flex", flexDirection: "column", gap: 5, minHeight: 0, overflow: "hidden" }}>
                 <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", color: c.fg }}>{c.date}</span>
