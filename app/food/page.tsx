@@ -11,9 +11,7 @@ export default function FoodHomePage() {
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", padding: "clamp(26px,3vw,52px) clamp(32px,3.6vw,64px) clamp(32px,3.6vw,60px)", gap: "clamp(22px,2.4vw,40px)", minHeight: 0 }}>
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24, flex: "0 0 auto" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "clamp(14px,1.2vw,22px)" }}>
-          <div style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(20px,1.9vw,30px)", lineHeight: 1.25, letterSpacing: "-0.005em", maxWidth: "18ch" }}>{str.tagline}</div>
-        </div>
+        <h1 style={{ margin: 0, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(26px,2.4vw,42px)", lineHeight: 1.05, whiteSpace: "nowrap" }}>{str.tagline}</h1>
         <Link href="/food/stock" style={{ display: "flex", alignItems: "center", gap: 10, border: "2px solid var(--color-neutral-300)", background: "var(--color-neutral-100)", color: "var(--color-neutral-800)", borderRadius: "999px", padding: "clamp(10px,0.85vw,15px) clamp(16px,1.4vw,24px)", fontFamily: "inherit", fontWeight: 600, fontSize: "clamp(14px,1.05vw,19px)", cursor: "pointer" }}>
           <span>{str.stockBtn}</span>
         </Link>
