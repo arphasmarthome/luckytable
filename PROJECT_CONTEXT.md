@@ -80,7 +80,7 @@ lib/
   family.ts                FAMILY, WEEK_EVENTS, buildWeek(), day/month name tables
   i18n.ts                  STR.en / STR.zh — all UI copy. nm(lang, en, zh) picks the right string.
   mealdb.ts                fetchMealDbRecipe() (single dish), fetchDishIngredients() (all dishes, parallel)
-  pantry.ts                makeHasIng(), matchDish() — shared "do I have this ingredient" matching logic
+  pantry.ts                makeHasIng(), computeChecks(), matchFromChecks() — shared ingredient-matching logic
   useCaptured.ts           Hook: derives the capture-flow's "detected items" list from AppState
 ```
 
@@ -88,10 +88,19 @@ lib/
 
 Everything lives in `lib/AppState.tsx` (`AppStateProvider`, `useAppState()`), a single
 client Context holding: language, stock, calendar week/events, votes, family members +
-their prefs/cook-days, capture-flow shots/qty, and the new-event modal's fields. This is
-**all in-memory** — a refresh resets it (except will-cook days, which persist to
+their prefs/cook-days, capture-flow shots/qty, per-dish ingredient checks
+(`checkedByDish`, see below), and the new-event modal's fields. This is **all
+in-memory** — a refresh resets it (except will-cook days, which persist to
 `localStorage["luckytable-cook"]` and reset weekly). Per `HANDOFF.md`, moving this to a
 real database (Supabase / Vercel Postgres) is planned but not started.
+
+Because it's a single Context mounted once in the root `layout.tsx`, this state survives
+client-side navigation (`<Link>`, `router.back()`) between any pages — it only resets on
+a hard reload. Several bugs have come from forgetting this and putting per-dish or
+per-screen state in local `useState` instead, which silently resets on every navigation.
+When in doubt about whether something needs to live in AppState vs. local state: if the
+user could reasonably navigate away and back and expect to see it unchanged, it belongs
+in AppState.
 
 ### Recipe data — one fetch, one source of truth
 
@@ -108,6 +117,19 @@ Component that calls `fetchDishIngredients(DISHES)` (or `fetchMealDbRecipe()` fo
 dish) and passes the result as a prop into a `"use client"` component that does the
 interactive part. Follow this pattern for any new screen that matches ingredients against
 stock — don't reach for `dish.ing` (the seed list) directly in a client component.
+
+The dish page lets the user manually check/uncheck individual ingredients (independent of
+whether they're actually in stock — this is a deliberate "tick it once you've bought it"
+checklist, not just a stock mirror). Per the note above, that per-dish override array is
+`checkedByDish[dishId]` in AppState (not local state), so it — and the match % derived
+from it — is identical whether you're looking at the dish page, Recipes, or either Make
+results mode, and survives navigating between them. The derivation always goes through
+`lib/pantry.ts`: `computeChecks(ing, hasIng, checkedByDish[dishId])` layers the override
+on top of the stock-based default, then `matchFromChecks(ing, checks)` turns that into
+`{ short, m, full }` for the percentage/pill/missing-list. Toggling goes through
+`toggleDishIngredient(dishId, ix, fallback)`, where `fallback` is the currently-computed
+checks array (so the first toggle on a never-touched dish starts from the right stock-based
+baseline instead of all-false). Don't reintroduce a local `useState` for this.
 
 ## Conventions (hard rules, from CLAUDE.md)
 
