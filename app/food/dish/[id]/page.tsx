@@ -16,7 +16,7 @@ export default async function DishDetailPage({
   if (!dish) notFound();
 
   const recipe = dish.mealId ? await fetchMealDbRecipe(dish.mealId) : null;
-  const matchMode = match === "captured" ? "captured" : "stock";
+  const matchMode = match === "photos" ? "photos" : match === "captured" ? "captured" : "stock";
 
   return <DishDetailClient dish={dish} recipe={recipe} matchMode={matchMode} />;
 }

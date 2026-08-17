@@ -8,34 +8,78 @@ import { DISHES, dishImg, estimateMinutes } from "@/lib/dishes";
 import { makeHasIng, computeChecks, matchFromChecks } from "@/lib/pantry";
 import FoodHeader from "@/components/FoodHeader";
 
+type ResultDish = {
+  id: string;
+  label: string;
+  img: string;
+  matchLabel: string;
+  pillBg: string;
+  pillFg: string;
+  note: string;
+  minutes: number;
+  m: number;
+};
+
+/* Top by % complete, then alphabetical, then least time to make. */
+function sortDishes(list: ResultDish[]): ResultDish[] {
+  return list.slice().sort((a, b) => {
+    if (b.m !== a.m) return b.m - a.m;
+    if (a.label !== b.label) return a.label.localeCompare(b.label);
+    return a.minutes - b.minutes;
+  });
+}
+
+function DishGrid({ dishes, match, minLabel }: { dishes: ResultDish[]; match: "photos" | "captured"; minLabel: string }) {
+  return (
+    <div style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(clamp(240px,21vw,330px), 1fr))", gridAutoRows: "max-content", gap: "clamp(16px,1.5vw,26px)" }}>
+      {dishes.map((dish) => (
+        <Link key={dish.id} href={`/food/dish/${dish.id}?match=${match}`} style={{ textAlign: "left", fontFamily: "inherit", border: "none", padding: 0, background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer", boxShadow: "var(--shadow-sm)", display: "flex", flexDirection: "column" }}>
+          <span className="ph" style={{ flex: "0 0 auto", height: "clamp(120px,10.5vw,168px)", position: "relative", display: "block", overflow: "hidden" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="washed" src={dish.img} alt="" loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+            <span style={{ position: "absolute", top: 12, right: 12, background: dish.pillBg, color: dish.pillFg, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", padding: "7px 15px", borderRadius: "999px" }}>{dish.matchLabel}</span>
+            <span style={{ position: "absolute", top: "clamp(50px,4.6vw,68px)", right: 12, background: "rgba(30,22,18,0.72)", color: "#fff", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(12px,0.95vw,16px)", padding: "5px 12px", borderRadius: "999px" }}>⏱ {dish.minutes} {minLabel}</span>
+          </span>
+          <span style={{ display: "flex", flexDirection: "column", gap: 5, padding: "clamp(14px,1.3vw,22px)" }}>
+            <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(18px,1.5vw,25px)", lineHeight: 1.18 }}>{dish.label}</span>
+            <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{dish.note}</span>
+          </span>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function ResultsClient({ ingredientsByDish }: { ingredientsByDish: Record<string, [string, string, string][]> }) {
   const { lang, stock, checkedByDish } = useAppState();
   const { captured } = useCaptured();
   const str = t(lang);
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
 
-  const capturedList = captured.map((c) => ({ label: c.label, qty: c.qty }));
-  const stockList = stock.map((x) => ({ label: name(x.name, x.zh), qty: x.qty }));
+  const capturedList = captured.map((c) => ({ label: c.label, qty: String(c.qty) }));
+  const stockList = stock.map((x) => ({ label: name(x.name, x.zh), qty: Number.isFinite(x.qty) ? String(x.qty) : "∞" }));
 
-  const pantryNames = captured.map((c) => c.name).concat(stock.map((x) => x.name));
-  const hasIng = makeHasIng(pantryNames);
+  function buildDishes(hasIng: (n: string) => boolean): ResultDish[] {
+    return DISHES.map((d) => {
+      const ing = ingredientsByDish[d.id] || d.ing;
+      const checks = computeChecks(ing, hasIng, checkedByDish[d.id]);
+      const { m, full, short } = matchFromChecks(ing, checks);
+      return {
+        id: d.id,
+        label: name(d.name, d.zh),
+        img: dishImg(d.id),
+        matchLabel: full ? str.ready : m + "%",
+        pillBg: full ? "var(--color-accent-2)" : "var(--color-accent)",
+        pillFg: full ? "var(--color-accent-2-100)" : "var(--color-accent-100)",
+        note: full ? str.onHand : str.missing + " " + short.length,
+        minutes: estimateMinutes(ing, d.cat),
+        m
+      };
+    });
+  }
 
-  const dishes = DISHES.map((d) => {
-    const ing = ingredientsByDish[d.id] || d.ing;
-    const checks = computeChecks(ing, hasIng, checkedByDish[d.id]);
-    const { m, full, short } = matchFromChecks(ing, checks);
-    return {
-      id: d.id,
-      label: name(d.name, d.zh),
-      img: dishImg(d.id),
-      matchLabel: full ? str.ready : m + "%",
-      pillBg: full ? "var(--color-accent-2)" : "var(--color-accent)",
-      pillFg: full ? "var(--color-accent-2-100)" : "var(--color-accent-100)",
-      note: full ? str.onHand : str.missing + " " + short.length,
-      minutes: estimateMinutes(ing, d.cat),
-      m
-    };
-  }).sort((a, b) => b.m - a.m);
+  const photoDishes = sortDishes(buildDishes(makeHasIng(captured.map((c) => c.name))));
+  const combinedDishes = sortDishes(buildDishes(makeHasIng(captured.map((c) => c.name).concat(stock.map((x) => x.name)))));
 
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
@@ -64,21 +108,17 @@ export default function ResultsClient({ ingredientsByDish }: { ingredientsByDish
             ))}
           </div>
         </aside>
-        <div style={{ overflow: "auto", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(clamp(240px,21vw,330px), 1fr))", gridAutoRows: "max-content", gap: "clamp(16px,1.5vw,26px)", alignContent: "start" }}>
-          {dishes.map((dish) => (
-            <Link key={dish.id} href={`/food/dish/${dish.id}?match=captured`} style={{ textAlign: "left", fontFamily: "inherit", border: "none", padding: 0, background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer", boxShadow: "var(--shadow-sm)", display: "flex", flexDirection: "column" }}>
-              <span className="ph" style={{ flex: "0 0 auto", height: "clamp(120px,10.5vw,168px)", position: "relative", display: "block", overflow: "hidden" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="washed" src={dish.img} alt="" loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-                <span style={{ position: "absolute", top: 12, right: 12, background: dish.pillBg, color: dish.pillFg, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", padding: "7px 15px", borderRadius: "999px" }}>{dish.matchLabel}</span>
-                <span style={{ position: "absolute", top: "clamp(50px,4.6vw,68px)", right: 12, background: "rgba(30,22,18,0.72)", color: "#fff", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(12px,0.95vw,16px)", padding: "5px 12px", borderRadius: "999px" }}>⏱ {dish.minutes} {str.minLabel}</span>
-              </span>
-              <span style={{ display: "flex", flexDirection: "column", gap: 5, padding: "clamp(14px,1.3vw,22px)" }}>
-                <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(18px,1.5vw,25px)", lineHeight: 1.18 }}>{dish.label}</span>
-                <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{dish.note}</span>
-              </span>
-            </Link>
-          ))}
+        <div style={{ overflow: "auto", display: "flex", flexDirection: "column", gap: "clamp(24px,2.2vw,36px)" }}>
+          {capturedList.length > 0 && (
+            <section style={{ display: "flex", flexDirection: "column", gap: "clamp(12px,1.1vw,18px)" }}>
+              <div style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.fromPhotos}</div>
+              <DishGrid dishes={photoDishes} match="photos" minLabel={str.minLabel} />
+            </section>
+          )}
+          <section style={{ display: "flex", flexDirection: "column", gap: "clamp(12px,1.1vw,18px)" }}>
+            <div style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.fromCombined}</div>
+            <DishGrid dishes={combinedDishes} match="captured" minLabel={str.minLabel} />
+          </section>
         </div>
       </div>
     </div>
