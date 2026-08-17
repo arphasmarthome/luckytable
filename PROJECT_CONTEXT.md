@@ -131,6 +131,22 @@ on top of the stock-based default, then `matchFromChecks(ing, checks)` turns tha
 checks array (so the first toggle on a never-touched dish starts from the right stock-based
 baseline instead of all-false). Don't reintroduce a local `useState` for this.
 
+**"Captured" vs "stock" pantry — the other thing that has to agree.** `/food/results`
+matches against one of two different pantries depending on how you got there:
+`?mode=captured` (only what was photographed in the capture flow, via `useCaptured()`) or
+`?mode=stock` ("Make using everything I have" — full `stock`). Recipes and Browse always
+use `stock`. **The dish page has to match whichever pantry the list you clicked from used**,
+or the percentage changes the moment you open the dish (this was a real bug, fixed
+2026-08-17 — the dish page used to always read `stock`, ignoring captured mode entirely).
+The mechanism: `ResultsClient` links to the dish with `?match=captured` or `?match=stock`;
+`app/food/dish/[id]/page.tsx` reads it from `searchParams` (so that page is dynamic, not
+static, despite `generateStaticParams`) and passes `matchMode` into `DishDetailClient`,
+which picks `captured` (via `useCaptured()`) or `stock` accordingly before computing
+`hasIng`/`checks`. Recipes/Browse links carry no `match` param and the prop defaults to
+`"stock"`. If you add another entry point into the dish page that's meant to represent a
+specific pantry (not full stock), it needs to pass `?match=` too — don't assume the dish
+page's default is always correct.
+
 ## Conventions (hard rules, from CLAUDE.md)
 
 - **Never hard-code color, font, spacing, or radius.** Use the Organic CSS variables
