@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAppState } from "@/lib/AppState";
+import { useCaptured } from "@/lib/useCaptured";
 import { t, nm } from "@/lib/i18n";
 import { Dish, dishImg, STEPS } from "@/lib/dishes";
 import { MealDbRecipe } from "@/lib/mealdb";
@@ -9,8 +10,17 @@ import { ING_ZH, AMT } from "@/lib/taxonomy";
 import { makeHasIng, computeChecks } from "@/lib/pantry";
 import FoodHeader from "@/components/FoodHeader";
 
-export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe: MealDbRecipe | null }) {
+export default function DishDetailClient({
+  dish,
+  recipe,
+  matchMode = "stock"
+}: {
+  dish: Dish;
+  recipe: MealDbRecipe | null;
+  matchMode?: "captured" | "stock";
+}) {
   const { lang, stock, votes, myVotes, toggleVote, week, toggleMenuTonight, openNewEvent, checkedByDish, toggleDishIngredient } = useAppState();
+  const { captured } = useCaptured();
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
@@ -19,7 +29,8 @@ export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe:
 
   const ingSource = recipe && recipe.ing.length ? recipe.ing : dish.ing;
 
-  const hasIng = makeHasIng(stock.map((x) => x.name));
+  const pantryNames = matchMode === "captured" ? captured.map((c) => c.name) : stock.map((x) => x.name);
+  const hasIng = makeHasIng(pantryNames);
   const checked = computeChecks(ingSource, hasIng, checkedByDish[dish.id]);
 
   const ings = ingSource.map(([ingName, zhName, amount], ix) => {
