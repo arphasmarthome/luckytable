@@ -144,6 +144,16 @@ dish) and passes the result as a prop into a `"use client"` component that does 
 interactive part. Follow this pattern for any new screen that matches ingredients against
 stock — don't reach for `dish.ing` (the seed list) directly in a client component.
 
+**TheMealDB sometimes lists the same ingredient in two slots** (e.g. cornstarch used once
+in the marinade, again in the sauce) — `fetchMealDbRecipe()` merges those by name
+(case-insensitive) while building `ing`, before anything downstream sees it (fixed
+2026-08-17: dishes were showing e.g. "Cornstarch" twice as two separate checkable rows,
+inflating the ingredient count and skewing %). When measures differ, both are kept, joined
+with `" + "` (e.g. `"1/2 tsp + 1 tsp"`); when they match exactly, only one copy is kept.
+Because this dedup happens inside `fetchMealDbRecipe()` itself, both call sites —
+`fetchDishIngredients()` (Recipes/Browse/Results) and the dish page's own direct call —
+get the same deduped list for free; don't add a second dedup pass downstream.
+
 **Adding dishes:** `DISHES` has 134 entries (6 original + 128 pulled from TheMealDB across
 its 14 categories on 2026-08-17). Every dish needs a real `mealId` from TheMealDB so the
 live-fetch/seed-fallback pattern above works — **don't hand-write a dish without one**, and

@@ -18,11 +18,28 @@ export async function fetchMealDbRecipe(mealId: string): Promise<MealDbRecipe | 
     const m = (j.meals || [])[0];
     if (!m) return null;
 
+    /* TheMealDB sometimes lists the same ingredient in two slots (used at two
+       different steps, e.g. cornstarch in both the marinade and the sauce) —
+       merge those into one row so the ingredient list, count, and % don't
+       double-count a single real-world item. Keep both measures (joined with
+       "+") when they differ; a single copy when they match exactly. */
     const ing: [string, string, string][] = [];
+    const seenAt = new Map<string, number>();
     for (let i = 1; i <= 20; i++) {
       const n = m["strIngredient" + i];
-      if (n && String(n).trim()) {
-        ing.push([String(n).trim(), "", String(m["strMeasure" + i] || "").trim()]);
+      if (!n || !String(n).trim()) continue;
+      const name = String(n).trim();
+      const amount = String(m["strMeasure" + i] || "").trim();
+      const key = name.toLowerCase();
+      const existingIx = seenAt.get(key);
+      if (existingIx === undefined) {
+        seenAt.set(key, ing.length);
+        ing.push([name, "", amount]);
+      } else {
+        const existing = ing[existingIx];
+        if (amount && amount !== existing[2]) {
+          ing[existingIx] = [existing[0], existing[1], existing[2] ? existing[2] + " + " + amount : amount];
+        }
       }
     }
 
