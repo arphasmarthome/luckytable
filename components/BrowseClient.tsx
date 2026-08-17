@@ -8,7 +8,10 @@ import { DISHES, dishImg } from "@/lib/dishes";
 import { makeHasIng, computeChecks, matchFromChecks } from "@/lib/pantry";
 import FoodHeader from "@/components/FoodHeader";
 
-const FILTER_KEYS = ["All", "Stir-fry", "Rice bowl", "Side"] as const;
+const FILTER_KEYS = [
+  "All", "Stir-fry", "Rice bowl", "Side", "Beef", "Chicken", "Pork", "Lamb", "Goat",
+  "Seafood", "Pasta", "Dessert", "Breakfast", "Starter", "Vegetarian", "Vegan", "Miscellaneous"
+] as const;
 
 export default function BrowseClient({ ingredientsByDish }: { ingredientsByDish: Record<string, [string, string, string][]> }) {
   const { lang, stock, checkedByDish } = useAppState();

@@ -50,7 +50,12 @@ export const STR = {
     recipe: "Recipe", allSet: "Everything's here — here's how to make it.", swipeHint: "Swipe a row left to remove it.",
     del: "Remove", stepsNote: "Prototype method — replace with your recipe source.", justAdded: "Just added",
     titles: { capture: "Capture items", review: "What we found", canmake: "What can I make", wantmake: "I want to make", stock: "What's in stock", share: "Share" } as Record<string, string>,
-    filters: { All: "All", "Stir-fry": "Stir-fry", "Rice bowl": "Rice bowl", Braise: "Braise", Side: "Side" } as Record<string, string>,
+    filters: {
+      All: "All", "Stir-fry": "Stir-fry", "Rice bowl": "Rice bowl", Braise: "Braise", Side: "Side",
+      Beef: "Beef", Chicken: "Chicken", Pork: "Pork", Lamb: "Lamb", Goat: "Goat", Seafood: "Seafood",
+      Pasta: "Pasta", Dessert: "Dessert", Breakfast: "Breakfast", Starter: "Starter",
+      Vegetarian: "Vegetarian", Vegan: "Vegan", Miscellaneous: "Other"
+    } as Record<string, string>,
     share: [
       { num: "1", title: "Send a dish", body: "Send the recipe and its ingredient list to family, LINE or messages.", cta: "Pick a dish" },
       { num: "2", title: "Hand off the list", body: "Share what's missing so whoever's out can pick it up.", cta: "Share list" },
@@ -106,7 +111,12 @@ export const STR = {
     recipe: "食譜", allSet: "食材齊全，照著做即可。", swipeHint: "向左滑動可刪除。",
     del: "刪除", stepsNote: "示範作法，之後由食譜資料庫取代。", justAdded: "剛剛加入",
     titles: { capture: "拍攝食材", review: "辨識結果", canmake: "我能做什麼", wantmake: "我想做", stock: "庫存清單", share: "分享" } as Record<string, string>,
-    filters: { All: "全部", "Stir-fry": "快炒", "Rice bowl": "丼飯", Braise: "紅燒", Side: "小菜" } as Record<string, string>,
+    filters: {
+      All: "全部", "Stir-fry": "快炒", "Rice bowl": "丼飯", Braise: "紅燒", Side: "小菜",
+      Beef: "牛肉", Chicken: "雞肉", Pork: "豬肉", Lamb: "羊肉", Goat: "山羊肉", Seafood: "海鮮",
+      Pasta: "義大利麵", Dessert: "甜點", Breakfast: "早餐", Starter: "前菜",
+      Vegetarian: "素食", Vegan: "全素", Miscellaneous: "其他"
+    } as Record<string, string>,
     share: [
       { num: "1", title: "分享菜色", body: "把食譜和食材清單傳給家人、LINE 或訊息。", cta: "選一道菜" },
       { num: "2", title: "代買清單", body: "把缺的食材分享出去，讓在外面的人順手買回來。", cta: "分享清單" },
