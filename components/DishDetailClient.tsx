@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppState } from "@/lib/AppState";
 import { useCaptured } from "@/lib/useCaptured";
 import { t, nm } from "@/lib/i18n";
-import { Dish, dishImg, STEPS } from "@/lib/dishes";
+import { Dish, dishImg, STEPS, estimateMinutes } from "@/lib/dishes";
 import { MealDbRecipe } from "@/lib/mealdb";
 import { ING_ZH, AMT } from "@/lib/taxonomy";
 import { makeHasIng, computeChecks } from "@/lib/pantry";
@@ -53,6 +53,7 @@ export default function DishDetailClient({
   const haveCount = ings.filter((i) => i.have).length;
   const pct = Math.round((haveCount / ings.length) * 100);
   const missing = ings.filter((i) => !i.have);
+  const minutes = estimateMinutes(ingSource, dish.cat);
 
   const voteCount = (votes[dish.id] || 0) + (myVotes.indexOf(dish.id) !== -1 ? 1 : 0);
   const voted = myVotes.indexOf(dish.id) !== -1;
@@ -146,6 +147,7 @@ export default function DishDetailClient({
               <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(17px,1.4vw,24px)" }}>{str.readyToCook}</span>
               <span style={{ marginLeft: "auto", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(24px,2.2vw,38px)", lineHeight: 1, color: "var(--color-accent-700)" }}>{pct}%</span>
             </div>
+            <div style={{ fontSize: "clamp(13px,1.02vw,17px)", color: "var(--color-neutral-700)", flex: "0 0 auto", display: "flex", alignItems: "center", gap: 6 }}>⏱ {minutes} {str.minLabel}</div>
             <div style={{ height: "clamp(14px,1.2vw,20px)", borderRadius: "999px", background: "var(--color-neutral-300)", overflow: "hidden", flex: "0 0 auto" }}>
               <div style={{ height: "100%", width: pct + "%", background: "var(--color-accent-2)", borderRadius: "999px", transition: "width 240ms ease" }} />
             </div>

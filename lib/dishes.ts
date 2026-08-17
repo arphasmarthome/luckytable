@@ -34,6 +34,23 @@ export const DISH_FILTER_KEYS = [
   "Seafood", "Pasta", "Dessert", "Breakfast", "Starter", "Vegetarian", "Vegan", "Miscellaneous"
 ] as const;
 
+/* No source gives us a real prep/cook time, so this estimates one from what we do
+   have: category (a proxy for cooking method — a stir-fry moves faster than a
+   braise or a bake) and ingredient count (a proxy for prep work). Rounded to the
+   nearest 5 minutes so it reads as an estimate, not a measurement. */
+const CATEGORY_BASE_MINUTES: Record<string, number> = {
+  "Stir-fry": 15, "Rice bowl": 20, Side: 15, Starter: 20, Salad: 15,
+  Chicken: 30, Seafood: 20, Pasta: 20, Vegetarian: 20, Vegan: 20,
+  Beef: 35, Pork: 35, Lamb: 40, Goat: 45,
+  Breakfast: 20, Dessert: 40, Miscellaneous: 25
+};
+
+export function estimateMinutes(ing: [string, string, string][], cat: string): number {
+  const base = CATEGORY_BASE_MINUTES[cat] ?? 25;
+  const prep = Math.max(0, ing.length - 4) * 2;
+  return Math.round((base + prep) / 5) * 5;
+}
+
 /* Each press of Capture reveals the next frame: the items that shot picks up. */
 export const SHOTS: { items: [string, number][]; boxes: [string, string, string, string, string, string][] }[] = [
   { items: [["Broccoli", 1], ["Beef sirloin", 1]], boxes: [["Broccoli", "14%", "22%", "26%", "34%", "var(--color-accent)"], ["Beef sirloin", "56%", "44%", "26%", "30%", "var(--color-accent-2)"]] },

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAppState } from "@/lib/AppState";
 import { t, nm } from "@/lib/i18n";
-import { DISHES, dishImg, DISH_FILTER_KEYS } from "@/lib/dishes";
+import { DISHES, dishImg, DISH_FILTER_KEYS, estimateMinutes } from "@/lib/dishes";
 import { ING_ZH } from "@/lib/taxonomy";
 import { makeHasIng, computeChecks, matchFromChecks } from "@/lib/pantry";
 
@@ -32,6 +32,7 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
       note: full
         ? str.onHand
         : str.missing + " " + short.length + " · " + short.map((x) => name(x[0], x[1] || ING_ZH[String(x[0]).toLowerCase()] || x[0])).join(zh ? "、" : ", "),
+      minutes: estimateMinutes(ing, d.cat),
       m
     };
   });
@@ -65,6 +66,7 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img className="washed" src={dish.img} alt="" loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
               <span style={{ position: "absolute", top: 12, right: 12, background: dish.pillBg, color: dish.pillFg, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", padding: "7px 15px", borderRadius: "999px" }}>{dish.matchLabel}</span>
+              <span style={{ position: "absolute", top: "clamp(50px,4.6vw,68px)", right: 12, background: "rgba(30,22,18,0.72)", color: "#fff", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(12px,0.95vw,16px)", padding: "5px 12px", borderRadius: "999px" }}>⏱ {dish.minutes} {str.minLabel}</span>
             </span>
             <span style={{ display: "flex", flexDirection: "column", gap: 5, padding: "clamp(14px,1.3vw,22px)" }}>
               <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(18px,1.5vw,25px)", lineHeight: 1.18 }}>{dish.label}</span>

@@ -105,6 +105,17 @@ When in doubt about whether something needs to live in AppState vs. local state:
 user could reasonably navigate away and back and expect to see it unchanged, it belongs
 in AppState.
 
+**Estimated cook time.** TheMealDB's free API doesn't give a prep/cook time field, so
+`estimateMinutes(ing, cat)` in `lib/dishes.ts` derives one from what we do have: a
+per-category base (a stir-fry/side is fast, a braise/bake is slow — see
+`CATEGORY_BASE_MINUTES`) plus 2 minutes per ingredient past the first four, rounded to the
+nearest 5. It's a heuristic, not a measurement — don't present it as more precise than that.
+Shown as a small "⏱ N min" pill under the match-% pill on every dish card (Browse, Recipes,
+Results) and under the "Ready to cook" percentage on the dish page; `str.minLabel` is the
+localized unit ("min" / "分鐘"). If a real time source shows up later (TheMealDB tags,
+a different API), replace `estimateMinutes` — don't bolt a second, disagreeing number on
+next to it.
+
 ### Recipe data — one fetch, one source of truth
 
 `DISHES` in `lib/dishes.ts` has a short **seed** ingredient list per dish (used only as
