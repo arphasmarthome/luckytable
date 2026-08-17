@@ -70,8 +70,9 @@ components/
   Rail.tsx                Left sidebar nav (desktop) / bottom tab bar (mobile, via CSS only)
   ContentFrame.tsx         Sets --disp (display font) based on language; wraps page content
   FoodHeader.tsx           Shared header for /food/* subpages (home/back buttons, title, stock button).
-                             Optional `extra` prop renders a node between the title and the (now
-                             marginLeft:"auto"-pushed) stock button — e.g. AddStockItem.tsx on the stock page.
+                             Optional `extra` prop renders a node right before the stock button, both
+                             pushed to the header's right edge by the title's `margin: "0 auto 0 0"` —
+                             e.g. AddStockItem.tsx sits directly left of "What's in stock" on the stock page.
   AddStockItem.tsx         Small inline "item name + Add item" form, passed as FoodHeader's `extra` on
                              app/food/stock/page.tsx; calls AppState's addStockItem(name)
   NewEventModal.tsx        Calendar "+ New event" modal, mounted globally in layout.tsx (not per-page)
