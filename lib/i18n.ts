@@ -2,7 +2,7 @@ export type Lang = "en" | "zh";
 
 export const STR = {
   en: {
-    brand: "Lucky Table", brandSub: "家味開運桌",
+    tagline: "Good things comes to those who create",
     navHome: "Home", navFood: "Make", navRec: "Recipes", navCal: "Calendar", navFam: "Family",
     dashTitle: "Good evening", tonight: "Tonight's table",
     everyone: "Everyone", calKicker: "This week at home", newEvent: "New event",
@@ -65,7 +65,7 @@ export const STR = {
     ]
   },
   zh: {
-    brand: "家味開運桌", brandSub: "LUCKY TABLE",
+    tagline: "用心創造，好事自然來",
     navHome: "首頁", navFood: "做菜", navRec: "食譜", navCal: "行事曆", navFam: "家人",
     dashTitle: "晚安", tonight: "今晚的餐桌",
     everyone: "全家", calKicker: "本週家中行程", newEvent: "新增行程",

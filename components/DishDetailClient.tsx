@@ -49,7 +49,7 @@ export default function DishDetailClient({
       have,
       toggle: () => toggleDishIngredient(dish.id, ix, checked)
     };
-  });
+  }).sort((a, b) => a.label.localeCompare(b.label));
   const haveCount = ings.filter((i) => i.have).length;
   const pct = Math.round((haveCount / ings.length) * 100);
   const missing = ings.filter((i) => !i.have);

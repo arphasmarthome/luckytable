@@ -170,6 +170,13 @@ on top of the stock-based default, then `matchFromChecks(ing, checks)` turns tha
 `toggleDishIngredient(dishId, ix, fallback)`, where `fallback` is the currently-computed
 checks array (so the first toggle on a never-touched dish starts from the right stock-based
 baseline instead of all-false). Don't reintroduce a local `useState` for this.
+The rendered `ings` list is sorted alphabetically by label (`.sort((a, b) =>
+a.label.localeCompare(b.label))`, added 2026-08-17) *after* being built from
+`ingSource.map(...)` — each ingredient's `toggle` closure still captures its original
+`ingSource`/`checked` index (`ix`) from before the sort, so re-ordering the display never
+breaks which ingredient a click toggles. `haveCount`/`missing`/`pct` are all
+order-independent derivations of `ings`, so sorting it first doesn't need any other
+adjustment downstream.
 
 **`/food/results` ("Using everything I have") is one pantry, split into two sections by
 relevance, not two different pantries.** Reached via a single "Let's cook" button on the
@@ -303,6 +310,23 @@ touching layout again:
    what we did for the calendar month grid) avoid needing horizontal scroll at all by
    letting columns divide evenly (`minmax(0, 1fr)`) instead of enforcing a min column
    width.
+3. **Same-row grid items auto-equalize height; stacked-into-separate-rows items don't.**
+   The Make hub's three tiles (`app/food/page.tsx`) sit in one `.stack-grid` row on
+   desktop, so CSS Grid stretches all three to the tallest one's height automatically —
+   but on mobile, `.stack-grid` collapses to `grid-template-columns: 1fr`, which makes
+   each tile its *own* row, and separate grid rows size independently by content, not
+   equally. Combined with `justifyContent: "space-between"` (bottom-pin the text block)
+   and `margin: "auto"` on the icon (center it in the leftover space), each tile's icon
+   ended up at a different vertical position and its title at a different Y depending on
+   how many lines that tile's own body copy wrapped to on a narrow screen — even though
+   all three tiles use identical code. Fixed 2026-08-17 by decoupling icon/text position
+   from total tile height entirely: each icon now sits inside a fixed-height zone
+   (`height: "clamp(150px,15vw,210px)"`, icon centered within *that*, not within the
+   tile) with plain top-to-bottom flow (no `space-between`, no `margin: auto`) — so the
+   icon and the text block that follows it land at the same offset for all three tiles
+   regardless of each tile's own content length or total height. Reuse this pattern
+   (fixed-height zone + plain flow, not space-between + auto-margin) for any new set of
+   cards that must visually align with each other but can't share a grid row on mobile.
 
 ## Development workflow
 
