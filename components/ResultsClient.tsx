@@ -23,7 +23,8 @@ function ResultsInner({ ingredientsByDish }: { ingredientsByDish: Record<string,
       ? captured.map((c) => ({ label: c.label, qty: c.qty }))
       : stock.map((x) => ({ label: name(x.name, x.zh), qty: x.qty }));
 
-  const pantryNames = mode === "captured" ? captured.map((c) => c.name) : stock.map((x) => x.name);
+  const pantryNames =
+    mode === "captured" ? captured.map((c) => c.name).concat(stock.map((x) => x.name)) : stock.map((x) => x.name);
   const hasIng = makeHasIng(pantryNames);
 
   const dishes = DISHES.map((d) => {

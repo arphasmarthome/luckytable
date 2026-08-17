@@ -29,7 +29,8 @@ export default function DishDetailClient({
 
   const ingSource = recipe && recipe.ing.length ? recipe.ing : dish.ing;
 
-  const pantryNames = matchMode === "captured" ? captured.map((c) => c.name) : stock.map((x) => x.name);
+  const pantryNames =
+    matchMode === "captured" ? captured.map((c) => c.name).concat(stock.map((x) => x.name)) : stock.map((x) => x.name);
   const hasIng = makeHasIng(pantryNames);
   const checked = computeChecks(ingSource, hasIng, checkedByDish[dish.id]);
 

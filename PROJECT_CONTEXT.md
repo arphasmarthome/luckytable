@@ -150,15 +150,26 @@ baseline instead of all-false). Don't reintroduce a local `useState` for this.
 
 **"Captured" vs "stock" pantry — the other thing that has to agree.** `/food/results`
 matches against one of two different pantries depending on how you got there:
-`?mode=captured` (only what was photographed in the capture flow, via `useCaptured()`) or
-`?mode=stock` ("Make using everything I have" — full `stock`). Recipes and Browse always
-use `stock`. **The dish page has to match whichever pantry the list you clicked from used**,
-or the percentage changes the moment you open the dish (this was a real bug, fixed
-2026-08-17 — the dish page used to always read `stock`, ignoring captured mode entirely).
-The mechanism: `ResultsClient` links to the dish with `?match=captured` or `?match=stock`;
+`?mode=captured` ("What can I make" — what was photographed in the capture flow, via
+`useCaptured()`, **plus** everything already in `stock`) or `?mode=stock` ("Make using
+everything I have" — full `stock` only). Recipes and Browse always use `stock`. Captured
+mode is additive, not exclusive: photographing an ingredient means "I also have this,"
+not "only count what I just photographed" — a dish only needs the pantry items you don't
+already own, so `pantryNames` for captured mode is
+`captured.map(c => c.name).concat(stock.map(x => x.name))` (fixed 2026-08-17; before that,
+captured mode ignored `stock` entirely, so a dish could show a low match % even though
+every missing ingredient was already sitting in "What's in stock"). The "Matching from"
+panel on `/food/results` still only lists the captured items themselves — that's showing
+what you just photographed, not the full pantry the match % is computed against; don't
+"fix" it to include stock too, that's a different, deliberately narrower list.
+
+**The dish page has to match whichever pantry the list you clicked from used**, or the
+percentage changes the moment you open the dish (this was a real bug, fixed 2026-08-17 —
+the dish page used to always read `stock`, ignoring captured mode entirely). The mechanism:
+`ResultsClient` links to the dish with `?match=captured` or `?match=stock`;
 `app/food/dish/[id]/page.tsx` reads it from `searchParams` (so that page is dynamic, not
 static, despite `generateStaticParams`) and passes `matchMode` into `DishDetailClient`,
-which picks `captured` (via `useCaptured()`) or `stock` accordingly before computing
+which builds the same `captured ∪ stock` (or plain `stock`) pantry before computing
 `hasIng`/`checks`. Recipes/Browse links carry no `match` param and the prop defaults to
 `"stock"`. If you add another entry point into the dish page that's meant to represent a
 specific pantry (not full stock), it needs to pass `?match=` too — don't assume the dish
