@@ -60,7 +60,7 @@ app/
     page.tsx                Food home (3 tiles: capture / browse / share)
     capture/page.tsx         Simulated camera capture
     review/page.tsx          "What we found" — review captured items
-    results/page.tsx         SERVER component — "What can I make" / "Make using everything I have" (?mode=captured|stock)
+    results/page.tsx         SERVER component — "Using everything I have" (two sections, see ResultsClient)
     browse/page.tsx          SERVER component — "I want to make…", category filter
     stock/page.tsx            Stock list (swipe-to-delete rows)
     share/page.tsx            Share screen (static, no real sharing wired up)
@@ -69,7 +69,11 @@ app/
 components/
   Rail.tsx                Left sidebar nav (desktop) / bottom tab bar (mobile, via CSS only)
   ContentFrame.tsx         Sets --disp (display font) based on language; wraps page content
-  FoodHeader.tsx           Shared header for /food/* subpages (home/back buttons, title, stock button)
+  FoodHeader.tsx           Shared header for /food/* subpages (home/back buttons, title, stock button).
+                             Optional `extra` prop renders a node between the title and the (now
+                             marginLeft:"auto"-pushed) stock button — e.g. AddStockItem.tsx on the stock page.
+  AddStockItem.tsx         Small inline "item name + Add item" form, passed as FoodHeader's `extra` on
+                             app/food/stock/page.tsx; calls AppState's addStockItem(name)
   NewEventModal.tsx        Calendar "+ New event" modal, mounted globally in layout.tsx (not per-page)
   DishDetailClient.tsx     Dish detail screen: ingredient checklist, vote, add-to-menu, recipe steps
   ResultsClient.tsx        Client half of results/page.tsx
@@ -250,6 +254,16 @@ alphabetical sort**, and renders its quantity as "∞" with no +/−/Remove cont
 (`StockRow`'s `locked` prop) since adjusting or removing an unlimited resource that's
 always-checked regardless is meaningless. `sortedStock` filters Water out before sorting,
 then appends it.
+
+**Adding a stock item by name** (`AddStockItem.tsx` → `addStockItem(name)` in
+`lib/AppState.tsx`, added 2026-08-17) matches case-insensitively against existing `stock`
+rows: a match increments that row's `qty` and bumps `added` to `"Today"`; no match creates
+a new `StockItem` with `qty: 1`, `where: "Pantry"`, `added: "Today"`, and `cat:
+categoryOf(name)` (auto-classified from `lib/taxonomy.ts`, same as every other stock
+category label). This is the only path that creates a `StockItem` from free-typed text —
+if the name doesn't match anything in `TAXONOMY`, `categoryOf()` falls back to
+`"Vegetable"`, which is a display-only quirk (the stock page recomputes `categoryOf(row.name)`
+fresh rather than trusting the stored `cat`), not a matching bug.
 
 **`ALIAS` is for same-product spelling variants only, never for different products.**
 `"ground beef": "beef sirloin"` and `"corn starch": "cornstarch"` are fine — same thing,

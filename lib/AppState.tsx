@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, ReactNode } from "react";
 import { FAMILY, FamilyMember, STAPLES_LIST, VOTE_SEED, buildWeek, WeekDay, CalendarEvent } from "./family";
 import { STOCK, StockItem, DISHES } from "./dishes";
+import { categoryOf } from "./taxonomy";
 import { Lang } from "./i18n";
 
 export type FamPrefs = Record<string, { likes: [string, string][]; dislikes: [string, string][]; allergies: [string, string][]; cook: number[] }>;
@@ -46,6 +47,7 @@ type Ctx = State & {
   incStock: (name: string) => void;
   decStock: (name: string) => void;
   removeStock: (name: string) => void;
+  addStockItem: (name: string) => void;
   addCapturedToStock: (captured: { name: string; qty: number }[]) => void;
   addMember: (name: string) => void;
   removeMember: (key: string) => void;
@@ -224,6 +226,21 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       decStock: (name) =>
         setStock((prev) => prev.map((r) => (r.name === name ? Object.assign({}, r, { qty: Math.max(0, r.qty - 1) }) : r))),
       removeStock: (name) => setStock((prev) => prev.filter((r) => r.name !== name)),
+
+      addStockItem: (name) => {
+        const v = String(name || "").trim();
+        if (!v) return;
+        setStock((prev) => {
+          const ix = prev.findIndex((r) => r.name.toLowerCase() === v.toLowerCase());
+          if (ix !== -1) {
+            const next = prev.slice();
+            next[ix] = Object.assign({}, next[ix], { qty: next[ix].qty + 1, added: "Today" });
+            return next;
+          }
+          const item: StockItem = { name: v, zh: v, cat: categoryOf(v), qty: 1, where: "Pantry", added: "Today" };
+          return prev.concat([item]);
+        });
+      },
 
       addCapturedToStock: (captured) =>
         setStock((prev) => {
