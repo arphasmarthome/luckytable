@@ -1,3 +1,5 @@
+import { Dish } from "./dishes";
+
 export type MealDbRecipe = {
   ing: [string, string, string][];
   steps: string[];
@@ -48,4 +50,18 @@ export async function fetchMealDbRecipe(mealId: string): Promise<MealDbRecipe | 
   } catch {
     return null;
   }
+}
+
+/* Ingredient list per dish, using the live TheMealDB recipe when it's
+   reachable and falling back to the seed list otherwise — the same
+   source of truth the dish-detail page uses, so match percentages
+   computed from this list line up with "Ready to cook" there. */
+export async function fetchDishIngredients(dishes: Dish[]): Promise<Record<string, [string, string, string][]>> {
+  const entries = await Promise.all(
+    dishes.map(async (d) => {
+      const recipe = d.mealId ? await fetchMealDbRecipe(d.mealId) : null;
+      return [d.id, recipe && recipe.ing.length ? recipe.ing : d.ing] as const;
+    })
+  );
+  return Object.fromEntries(entries);
 }
