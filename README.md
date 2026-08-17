@@ -21,7 +21,7 @@ rules) and `HANDOFF.md` (file map, external APIs, what's still simulated).
 
 ## Deploy
 
-Push to `github.com/arphasmarthome/luckytable`; Vercel builds from `main`.
+Push to `github.com/talo1019/luckytable`; Vercel builds from `main`.
 
 ## Security note
 

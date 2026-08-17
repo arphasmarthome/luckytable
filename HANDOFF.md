@@ -80,7 +80,7 @@
 
 ## Deploy
 
-Push to `github.com/arphasmarthome/luckytable`, then import the repo in Vercel.
+Push to `github.com/talo1019/luckytable`, then import the repo in Vercel.
 Vercel auto-detects Next.js; no build config needed.
 
 Note: rotate the GitHub token and password that were shared in chat.

@@ -1,4 +1,4 @@
-repo: arphasmarthome/luckytable
+repo: talo1019/luckytable
 branch: main
 
 ## Last sync
