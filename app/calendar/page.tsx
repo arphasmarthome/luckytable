@@ -106,12 +106,12 @@ export default function CalendarPage() {
         {tonightMeals.map((m, i) => (
           <span key={i} style={{ display: "flex", alignItems: "center", gap: 9, background: "rgba(255,255,255,0.14)", borderRadius: "999px", padding: "8px clamp(12px,1.1vw,18px)" }}>
             <span style={{ width: 8, height: 8, borderRadius: "999px", background: m.dot, flex: "0 0 auto" }} />
-            <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(14px,1.15vw,20px)" }}>{m.title}</span>
+            <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(14px,1.15vw,20px)" }}>{m.title}</span>
             <span style={{ fontSize: "clamp(12px,0.95vw,16px)", opacity: 0.8 }}>{m.time} · {m.who}</span>
           </span>
         ))}
         {tonightMeals.length === 0 && <span style={{ fontSize: "clamp(13px,1.05vw,18px)", opacity: 0.85 }}>{str.nothingPlanned}</span>}
-        <Link href="/food" style={{ marginLeft: "auto", border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(9px,0.8vw,13px) clamp(16px,1.5vw,24px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(13px,1.05vw,18px)", cursor: "pointer", minHeight: 44 }}>
+        <Link href="/food" style={{ marginLeft: "auto", border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(9px,0.8vw,13px) clamp(16px,1.5vw,24px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(13px,1.05vw,18px)", cursor: "pointer", minHeight: 44 }}>
           {str.openFood}
         </Link>
       </div>
@@ -121,7 +121,7 @@ export default function CalendarPage() {
           {week.map((d, i) => (
             <div key={i} style={{ display: "flex", flexDirection: "column", gap: "clamp(8px,0.7vw,12px)", background: d.today ? "var(--color-accent-100)" : "var(--color-surface)", border: `2px solid ${d.today ? "var(--color-accent)" : "var(--color-surface)"}`, borderRadius: "var(--radius-lg)", padding: "clamp(11px,1vw,17px)", minHeight: 0, overflow: "auto" }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 6, flex: "0 0 auto" }}>
-                <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.25vw,21px)", color: d.today ? "var(--color-accent-700)" : "var(--color-text)" }}>{d.date}</span>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.25vw,21px)", color: d.today ? "var(--color-accent-700)" : "var(--color-text)" }}>{d.date}</span>
                 <span style={{ fontSize: "clamp(12px,0.95vw,16px)", color: "var(--color-neutral-600)" }}>{zh ? d.zh : d.day}</span>
               </div>
               {evOf(d).map((it, ix) => (
@@ -145,7 +145,7 @@ export default function CalendarPage() {
           <div className="grow-on-mobile" style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto", display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gridAutoRows: "minmax(clamp(96px,15vh,170px), auto)", gap: "clamp(6px,0.6vw,10px)" }}>
             {monthCells.map((c, i) => (
               <div key={i} style={{ background: c.bg, border: `2px solid ${c.border}`, borderRadius: "var(--radius-md)", padding: "clamp(8px,0.7vw,12px)", display: "flex", flexDirection: "column", gap: 5, minHeight: 0, overflow: "hidden" }}>
-                <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", color: c.fg }}>{c.date}</span>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", color: c.fg }}>{c.date}</span>
                 {c.items.map((it, ix) => (
                   <span key={ix} style={{ fontSize: "clamp(12px,1vw,16px)", fontWeight: 600, background: it.bg, color: it.ink, borderRadius: 8, padding: "4px 8px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{it.title}</span>
                 ))}

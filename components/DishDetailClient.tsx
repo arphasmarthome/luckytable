@@ -85,9 +85,9 @@ export default function DishDetailClient({
             <div style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(14px,1.3vw,22px)", display: "flex", flexDirection: "column", gap: 10 }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
                 <span style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.famVote}</span>
-                <span style={{ marginLeft: "auto", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(20px,1.7vw,28px)", color: "var(--color-accent-2-700)" }}>{voteCount}</span>
+                <span style={{ marginLeft: "auto", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(20px,1.7vw,28px)", color: "var(--color-accent-2-700)" }}>{voteCount}</span>
               </div>
-              <button type="button" onClick={() => toggleVote(dish.id)} style={{ border: `2px solid ${voted ? "var(--color-accent-2)" : "var(--color-neutral-400)"}`, background: voted ? "var(--color-accent-2)" : "var(--color-neutral-100)", color: voted ? "var(--color-accent-2-100)" : "var(--color-text)", borderRadius: "999px", padding: "clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}>
+              <button type="button" onClick={() => toggleVote(dish.id)} style={{ border: `2px solid ${voted ? "var(--color-accent-2)" : "var(--color-neutral-400)"}`, background: voted ? "var(--color-accent-2)" : "var(--color-neutral-100)", color: voted ? "var(--color-accent-2-100)" : "var(--color-text)", borderRadius: "999px", padding: "clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}>
                 {voted ? "✓ " + str.voted : str.voteFor}
               </button>
               <span style={{ fontSize: "clamp(12px,0.9vw,15px)", color: "var(--color-neutral-600)" }}>{str.voteLine}</span>
@@ -101,14 +101,14 @@ export default function DishDetailClient({
                 <button
                   type="button"
                   onClick={() => toggleMenuTonight({ id: dish.id, name: dish.name, zh: dish.zh })}
-                  style={{ flex: "1 1 auto", border: `2px solid ${menuAdded ? "var(--color-accent)" : "var(--color-neutral-400)"}`, background: menuAdded ? "var(--color-accent)" : "var(--color-neutral-100)", color: menuAdded ? "var(--color-accent-100)" : "var(--color-text)", borderRadius: "999px", padding: "clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}
+                  style={{ flex: "1 1 auto", border: `2px solid ${menuAdded ? "var(--color-accent)" : "var(--color-neutral-400)"}`, background: menuAdded ? "var(--color-accent)" : "var(--color-neutral-100)", color: menuAdded ? "var(--color-accent-100)" : "var(--color-text)", borderRadius: "999px", padding: "clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}
                 >
                   {menuAdded ? "✓ " + str.addedMenu : str.addMenu}
                 </button>
                 <button
                   type="button"
                   onClick={() => openNewEvent({ evDish: dish.id, evDay: 0, evWho: "dad", evTime: "18:30" })}
-                  style={{ flex: "1 1 auto", border: "2px solid var(--color-accent-2-600)", background: "var(--color-accent-2-100)", color: "var(--color-accent-2-800)", borderRadius: "999px", padding: "clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}
+                  style={{ flex: "1 1 auto", border: "2px solid var(--color-accent-2-600)", background: "var(--color-accent-2-100)", color: "var(--color-accent-2-800)", borderRadius: "999px", padding: "clamp(10px,0.9vw,15px) clamp(14px,1.2vw,20px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}
                 >
                   {str.planDay}
                 </button>
@@ -120,13 +120,13 @@ export default function DishDetailClient({
           {pct === 100 && (
             <div style={{ flex: "1 1 auto", overflow: "auto", background: "var(--color-accent-2-100)", border: "2px solid var(--color-accent-2-300)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)", display: "flex", flexDirection: "column", gap: "clamp(12px,1.1vw,18px)", minHeight: "clamp(200px,22vw,340px)" }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
-                <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(20px,1.7vw,29px)", color: "var(--color-accent-2-800)" }}>{str.recipe}</span>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(20px,1.7vw,29px)", color: "var(--color-accent-2-800)" }}>{str.recipe}</span>
                 <span style={{ fontSize: "clamp(14px,1.1vw,19px)", color: "var(--color-accent-2-700)" }}>{str.allSet}</span>
-                <span style={{ marginLeft: "auto", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(20px,1.7vw,29px)", color: "var(--color-accent-2-700)" }}>100%</span>
+                <span style={{ marginLeft: "auto", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(20px,1.7vw,29px)", color: "var(--color-accent-2-700)" }}>100%</span>
               </div>
               {dishSteps.map((st) => (
                 <div key={st.n} style={{ display: "flex", alignItems: "flex-start", gap: "clamp(12px,1.1vw,18px)" }}>
-                  <span style={{ flex: "0 0 auto", width: "clamp(32px,2.6vw,40px)", height: "clamp(32px,2.6vw,40px)", borderRadius: "999px", background: "var(--color-accent-2)", color: "var(--color-accent-2-100)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.15vw,20px)" }}>{st.n}</span>
+                  <span style={{ flex: "0 0 auto", width: "clamp(32px,2.6vw,40px)", height: "clamp(32px,2.6vw,40px)", borderRadius: "999px", background: "var(--color-accent-2)", color: "var(--color-accent-2-100)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.15vw,20px)" }}>{st.n}</span>
                   <span style={{ fontSize: "clamp(15px,1.2vw,21px)", lineHeight: 1.5, color: "var(--color-accent-2-900)", paddingTop: 3 }}>{st.text}</span>
                 </div>
               ))}
@@ -144,8 +144,8 @@ export default function DishDetailClient({
         <aside style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,1.3vw,22px)" }}>
           <div style={{ flex: "1 1 auto", overflow: "auto", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(16px,1.5vw,26px)", display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12, flex: "0 0 auto" }}>
-              <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(17px,1.4vw,24px)" }}>{str.readyToCook}</span>
-              <span style={{ marginLeft: "auto", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(24px,2.2vw,38px)", lineHeight: 1, color: "var(--color-accent-700)" }}>{pct}%</span>
+              <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(17px,1.4vw,24px)" }}>{str.readyToCook}</span>
+              <span style={{ marginLeft: "auto", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(24px,2.2vw,38px)", lineHeight: 1, color: "var(--color-accent-700)" }}>{pct}%</span>
             </div>
             <div style={{ fontSize: "clamp(13px,1.02vw,17px)", color: "var(--color-neutral-700)", flex: "0 0 auto", display: "flex", alignItems: "center", gap: 6 }}>⏱ {minutes} {str.minLabel}</div>
             <div style={{ height: "clamp(14px,1.2vw,20px)", borderRadius: "999px", background: "var(--color-neutral-300)", overflow: "hidden", flex: "0 0 auto" }}>
@@ -174,7 +174,7 @@ export default function DishDetailClient({
             <button
               type="button"
               onClick={() => { if (missing.length) setCarted(true); }}
-              style={{ border: missing.length === 0 ? "2px solid var(--color-neutral-400)" : "2px solid var(--color-accent)", background: missing.length === 0 ? "transparent" : "var(--color-accent)", color: missing.length === 0 ? "var(--color-neutral-600)" : "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(13px,1.2vw,20px) clamp(20px,1.8vw,32px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}
+              style={{ border: missing.length === 0 ? "2px solid var(--color-neutral-400)" : "2px solid var(--color-accent)", background: missing.length === 0 ? "transparent" : "var(--color-accent)", color: missing.length === 0 ? "var(--color-neutral-600)" : "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(13px,1.2vw,20px) clamp(20px,1.8vw,32px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}
             >
               {cartLabel}
             </button>

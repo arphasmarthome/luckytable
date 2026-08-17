@@ -35,7 +35,7 @@ export default function FoodHomePage() {
             </svg>
           </span>
           <span style={{ display: "flex", flexDirection: "column", gap: "clamp(8px,0.8vw,14px)" }}>
-            <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(32px,3.2vw,58px)", lineHeight: 1.02, letterSpacing: "-0.015em" }}>{str.tile1}</span>
+            <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(32px,3.2vw,58px)", lineHeight: 1.02, letterSpacing: "-0.015em" }}>{str.tile1}</span>
             <span style={{ display: "block", fontSize: "clamp(15px,1.2vw,22px)", color: "var(--color-accent-200)", lineHeight: 1.4, maxWidth: "22ch" }}>{str.tile1Body}</span>
           </span>
         </Link>
@@ -53,7 +53,7 @@ export default function FoodHomePage() {
             </svg>
           </span>
           <span style={{ display: "flex", flexDirection: "column", gap: "clamp(8px,0.8vw,14px)" }}>
-            <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(32px,3.2vw,58px)", lineHeight: 1.02, letterSpacing: "-0.015em" }}>{str.tile2}</span>
+            <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(32px,3.2vw,58px)", lineHeight: 1.02, letterSpacing: "-0.015em" }}>{str.tile2}</span>
             <span style={{ display: "block", fontSize: "clamp(15px,1.2vw,22px)", color: "var(--color-accent-2-200)", lineHeight: 1.4, maxWidth: "22ch" }}>{str.tile2Body}</span>
           </span>
         </Link>
@@ -72,7 +72,7 @@ export default function FoodHomePage() {
             </svg>
           </span>
           <span style={{ display: "flex", flexDirection: "column", gap: "clamp(8px,0.8vw,14px)" }}>
-            <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(32px,3.2vw,58px)", lineHeight: 1.02, letterSpacing: "-0.015em" }}>{str.tile3}</span>
+            <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(32px,3.2vw,58px)", lineHeight: 1.02, letterSpacing: "-0.015em" }}>{str.tile3}</span>
             <span style={{ display: "block", fontSize: "clamp(15px,1.2vw,22px)", color: "var(--color-neutral-700)", lineHeight: 1.4, maxWidth: "22ch" }}>{str.tile3Body}</span>
           </span>
         </Link>

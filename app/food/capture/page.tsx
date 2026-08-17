@@ -34,7 +34,7 @@ export default function CapturePage() {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
               {captured.map((d) => (
                 <span key={d.name} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--color-neutral-100)", border: "2px solid var(--color-neutral-300)", borderRadius: "999px", padding: "8px 14px", fontSize: "clamp(14px,1.05vw,18px)", fontWeight: 600 }}>
-                  {d.label}<span style={{ fontFamily: "var(--disp)", fontWeight: 700, color: "var(--color-accent-700)" }}>×{d.qty}</span>
+                  {d.label}<span style={{ fontFamily: "var(--font-body)", fontWeight: 700, color: "var(--color-accent-700)" }}>×{d.qty}</span>
                 </span>
               ))}
             </div>
@@ -43,7 +43,7 @@ export default function CapturePage() {
           <button
             type="button"
             onClick={snap}
-            style={{ flex: "0 0 auto", alignSelf: "center", width: "clamp(116px,10.5vw,160px)", height: "clamp(116px,10.5vw,160px)", borderRadius: "999px", border: "8px solid var(--color-accent-200)", background: "var(--color-accent)", color: "var(--color-accent-100)", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, boxShadow: "var(--shadow-lg)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,21px)" }}
+            style={{ flex: "0 0 auto", alignSelf: "center", width: "clamp(116px,10.5vw,160px)", height: "clamp(116px,10.5vw,160px)", borderRadius: "999px", border: "8px solid var(--color-accent-200)", background: "var(--color-accent)", color: "var(--color-accent-100)", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, boxShadow: "var(--shadow-lg)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,21px)" }}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.75} strokeLinecap="round" strokeLinejoin="round" style={{ width: "32%", height: "32%" }}>
               <path d="M4 8.5h3l1.6-2.2h6.8L17 8.5h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z" />
@@ -63,7 +63,7 @@ export default function CapturePage() {
             type="button"
             disabled={captured.length === 0}
             onClick={() => router.push("/food/review")}
-            style={{ flex: "0 0 auto", border: "none", background: captured.length === 0 ? "var(--color-neutral-300)" : "var(--color-accent-2)", color: captured.length === 0 ? "var(--color-neutral-600)" : "var(--color-accent-2-100)", borderRadius: "999px", padding: "clamp(14px,1.25vw,20px) clamp(20px,1.8vw,32px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", cursor: captured.length === 0 ? "default" : "pointer" }}
+            style={{ flex: "0 0 auto", border: "none", background: captured.length === 0 ? "var(--color-neutral-300)" : "var(--color-accent-2)", color: captured.length === 0 ? "var(--color-neutral-600)" : "var(--color-accent-2-100)", borderRadius: "999px", padding: "clamp(14px,1.25vw,20px) clamp(20px,1.8vw,32px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", cursor: captured.length === 0 ? "default" : "pointer" }}
           >
             {reviewLabel}
           </button>

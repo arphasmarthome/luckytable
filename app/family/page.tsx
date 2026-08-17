@@ -64,7 +64,7 @@ export default function FamilyPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <button type="button" onClick={() => setFamWho(p.key)} style={{ flex: "1 1 auto", minWidth: 0, display: "flex", alignItems: "center", gap: "clamp(10px,0.9vw,14px)", border: "none", background: "transparent", padding: 0, fontFamily: "inherit", color: "inherit", cursor: "pointer", textAlign: "left", minHeight: 44 }}>
                     <span style={{ flex: "0 0 auto", width: "clamp(44px,3.4vw,56px)", height: "clamp(44px,3.4vw,56px)", borderRadius: "999px", background: p.tint, color: p.ink, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(18px,1.4vw,24px)" }}>{p.initial}</span>
-                    <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(17px,1.4vw,24px)", lineHeight: 1.15 }}>{name(p.name, p.zh)}</span>
+                    <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(17px,1.4vw,24px)", lineHeight: 1.15 }}>{name(p.name, p.zh)}</span>
                   </button>
                   <button type="button" onClick={() => removeMember(p.key)} aria-label="Remove member" style={{ flex: "0 0 auto", width: 34, height: 34, borderRadius: "999px", border: "none", background: "transparent", color: "var(--color-neutral-500)", fontSize: "1.1em", lineHeight: 1, cursor: "pointer" }}>×</button>
                 </div>
@@ -106,7 +106,7 @@ export default function FamilyPage() {
               placeholder={str.memberPh}
               style={{ border: "2px solid var(--color-neutral-300)", borderRadius: "999px", padding: "8px clamp(14px,1.2vw,20px)", fontFamily: "inherit", fontSize: "clamp(14px,1.05vw,18px)", background: "var(--color-neutral-100)", color: "var(--color-text)", minHeight: 44, minWidth: 0 }}
             />
-            <button type="button" onClick={() => addMember(newMember)} style={{ border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "8px clamp(16px,1.4vw,24px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}>
+            <button type="button" onClick={() => addMember(newMember)} style={{ border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "8px clamp(16px,1.4vw,24px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}>
               {str.addWord}
             </button>
           </div>
@@ -129,7 +129,7 @@ export default function FamilyPage() {
           <div style={{ display: "flex", alignItems: "center", gap: "clamp(11px,1vw,16px)" }}>
             <span style={{ flex: "0 0 auto", width: "clamp(46px,3.6vw,58px)", height: "clamp(46px,3.6vw,58px)", borderRadius: "999px", background: sel.tint, color: sel.ink, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(19px,1.5vw,26px)" }}>{sel.initial}</span>
             <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(19px,1.6vw,27px)", lineHeight: 1.15 }}>{name(sel.name, sel.zh)}</span>
+              <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(19px,1.6vw,27px)", lineHeight: 1.15 }}>{name(sel.name, sel.zh)}</span>
               <span style={{ fontSize: "clamp(13px,1.02vw,17px)", color: "var(--color-neutral-700)" }}>{name(sel.role, sel.roleZh)}</span>
             </span>
           </div>
@@ -181,7 +181,7 @@ export default function FamilyPage() {
                 placeholder={str.prefPh}
                 style={{ flex: "1 1 auto", minWidth: 0, border: "2px solid var(--color-neutral-300)", borderRadius: "999px", padding: "8px clamp(14px,1.2vw,20px)", fontFamily: "inherit", fontSize: "clamp(14px,1.05vw,18px)", background: "var(--color-neutral-100)", color: "var(--color-text)", minHeight: 44 }}
               />
-              <button type="button" onClick={() => { addPref(prefField, prefInput); setPrefInput(""); }} style={{ border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "8px clamp(16px,1.4vw,24px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}>
+              <button type="button" onClick={() => { addPref(prefField, prefInput); setPrefInput(""); }} style={{ border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "8px clamp(16px,1.4vw,24px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer", minHeight: 44 }}>
                 {str.addWord}
               </button>
             </div>
@@ -197,7 +197,7 @@ export default function FamilyPage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "clamp(12px,1.2vw,20px)" }}>
           <section style={{ background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(16px,1.5vw,26px)", display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,15px)" }}>
-            <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(18px,1.5vw,26px)" }}>{str.shared}</span>
+            <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(18px,1.5vw,26px)" }}>{str.shared}</span>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <span style={{ fontSize: "clamp(11px,0.85vw,14px)", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 700, color: "var(--color-accent-2-700)" }}>{str.sharedLikes}</span>
@@ -231,7 +231,7 @@ export default function FamilyPage() {
           </section>
 
           <section style={{ background: "var(--color-accent-2-100)", border: "2px solid var(--color-accent-2-300)", borderRadius: "var(--radius-lg)", padding: "clamp(16px,1.5vw,26px)", display: "flex", flexDirection: "column", gap: 6 }}>
-            <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(16px,1.3vw,22px)", color: "var(--color-accent-2-800)" }}>{str.allergyTitle}</span>
+            <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(16px,1.3vw,22px)", color: "var(--color-accent-2-800)" }}>{str.allergyTitle}</span>
             <span style={{ fontSize: "clamp(13px,1.02vw,17px)", color: "var(--color-accent-2-800)", lineHeight: 1.45 }}>{str.allergyBody}</span>
           </section>
         </div>

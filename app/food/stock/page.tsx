@@ -35,7 +35,7 @@ function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove, locke
       >
         <span style={{ fontWeight: 600 }}>{label}</span>
         <span><span style={{ background: "var(--color-accent-2-200)", color: "var(--color-accent-2-700)", fontSize: "0.75em", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", padding: "5px 12px", borderRadius: "999px" }}>{cat}</span></span>
-        <span style={{ fontFamily: "var(--disp)", fontWeight: 700, textAlign: "center" }}>{qtyLabel ?? row.qty}</span>
+        <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, textAlign: "center" }}>{qtyLabel ?? row.qty}</span>
         <span style={{ color: "var(--color-neutral-700)" }}>{added}</span>
       </div>
     );
@@ -46,7 +46,7 @@ function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove, locke
       <button
         type="button"
         onClick={onRemove}
-        style={{ position: "absolute", inset: "0 0 0 auto", width: 190, border: "none", background: "var(--color-accent-600)", color: "var(--color-accent-100)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+        style={{ position: "absolute", inset: "0 0 0 auto", width: 190, border: "none", background: "var(--color-accent-600)", color: "var(--color-accent-100)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         Remove
       </button>
@@ -83,7 +83,7 @@ function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove, locke
         <span><span style={{ background: "var(--color-accent-2-200)", color: "var(--color-accent-2-700)", fontSize: "0.75em", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", padding: "5px 12px", borderRadius: "999px" }}>{cat}</span></span>
         <span style={{ display: "flex", alignItems: "center", gap: "clamp(8px,0.7vw,12px)" }}>
           <button type="button" onClick={onDec} aria-label="−" style={{ width: "clamp(38px,3vw,46px)", height: "clamp(38px,3vw,46px)", flex: "0 0 auto", borderRadius: "999px", border: "2px solid var(--color-neutral-400)", background: "var(--color-neutral-200)", color: "var(--color-text)", fontSize: "1.1em", fontWeight: 700, lineHeight: 1, cursor: "pointer" }}>−</button>
-          <span style={{ fontFamily: "var(--disp)", fontWeight: 700, minWidth: "1.6ch", textAlign: "center" }}>{row.qty}</span>
+          <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, minWidth: "1.6ch", textAlign: "center" }}>{row.qty}</span>
           <button type="button" onClick={onInc} aria-label="+" style={{ width: "clamp(38px,3vw,46px)", height: "clamp(38px,3vw,46px)", flex: "0 0 auto", borderRadius: "999px", border: "2px solid var(--color-accent-400)", background: "var(--color-accent-200)", color: "var(--color-accent-800)", fontSize: "1.1em", fontWeight: 700, lineHeight: 1, cursor: "pointer" }}>+</button>
         </span>
         <span style={{ color: "var(--color-neutral-700)" }}>{added}</span>

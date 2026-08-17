@@ -65,11 +65,11 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
             <span className="ph" style={{ flex: "0 0 auto", height: "clamp(120px,10.5vw,168px)", position: "relative", display: "block", overflow: "hidden" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img className="washed" src={dish.img} alt="" loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-              <span style={{ position: "absolute", top: 12, right: 12, background: dish.pillBg, color: dish.pillFg, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", padding: "7px 15px", borderRadius: "999px" }}>{dish.matchLabel}</span>
-              <span style={{ position: "absolute", top: "clamp(50px,4.6vw,68px)", right: 12, background: "rgba(30,22,18,0.72)", color: "#fff", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(12px,0.95vw,16px)", padding: "5px 12px", borderRadius: "999px" }}>⏱ {dish.minutes} {str.minLabel}</span>
+              <span style={{ position: "absolute", top: 12, right: 12, background: dish.pillBg, color: dish.pillFg, fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", padding: "7px 15px", borderRadius: "999px" }}>{dish.matchLabel}</span>
+              <span style={{ position: "absolute", top: "clamp(50px,4.6vw,68px)", right: 12, background: "rgba(30,22,18,0.72)", color: "#fff", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(12px,0.95vw,16px)", padding: "5px 12px", borderRadius: "999px" }}>⏱ {dish.minutes} {str.minLabel}</span>
             </span>
             <span style={{ display: "flex", flexDirection: "column", gap: 5, padding: "clamp(14px,1.3vw,22px)" }}>
-              <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(18px,1.5vw,25px)", lineHeight: 1.18 }}>{dish.label}</span>
+              <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(18px,1.5vw,25px)", lineHeight: 1.18 }}>{dish.label}</span>
               <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{dish.note}</span>
             </span>
           </Link>

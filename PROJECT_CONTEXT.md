@@ -251,6 +251,16 @@ unsorted in `lib/dishes.ts`; the page does the sorting.
 - **Never hard-code color, font, spacing, or radius.** Use the Organic CSS variables
   (`--color-accent`, `--color-neutral-300`, `--radius-lg`, `--font-body`, …). The one
   exception is `--page` (white page ground), declared once in `app/globals.css`.
+- **`--disp` (Caprasimo, set in `ContentFrame.tsx`) is for page-level `<h1>` titles and
+  single-character avatar initials only — nothing else.** Caprasimo is loaded at a single
+  weight (400, see `app/organic.css`'s `@import`), so any smaller/functional text set in
+  `--disp` with `fontWeight: 700` forces the browser to synthesize a fake bold, which reads
+  as heavy and blurry at UI sizes — dish-card titles, %/time badges, and buttons were all
+  reported illegible for exactly this reason and moved to `var(--font-body)` (Figtree, real
+  400/600/700 weights) on 2026-08-17. When adding new UI text: if it's a page's main `<h1>`
+  (the `FoodHeader` title, or a page's own `str.xxxTitle` heading) or a lone initial in an
+  avatar circle, use `--disp`; anything else — card titles, list-item labels, buttons,
+  numbers, pills — use `--font-body`, even if it needs to look bold/prominent.
 - Tablet landscape (~1366×768–1920×1080) is the primary target; phone portrait is
   second. Sizes use `clamp()` against viewport width/height — keep that approach for new
   UI rather than fixed px or breakpoint-only values.

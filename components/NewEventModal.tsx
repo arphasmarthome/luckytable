@@ -33,7 +33,7 @@ export default function NewEventModal() {
     >
       <div style={{ width: "min(720px, 94vw)", maxHeight: "90vh", overflow: "auto", background: "var(--page)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", padding: "clamp(22px,2.2vw,36px)", display: "flex", flexDirection: "column", gap: "clamp(14px,1.3vw,22px)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(22px,1.9vw,32px)" }}>{str.newEvent}</span>
+          <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(22px,1.9vw,32px)" }}>{str.newEvent}</span>
           <button type="button" onClick={closeModal} aria-label="Close" style={{ marginLeft: "auto", width: 44, height: 44, flex: "0 0 auto", borderRadius: "999px", border: "2px solid var(--color-neutral-300)", background: "var(--color-neutral-100)", color: "var(--color-text)", fontSize: "1.2em", cursor: "pointer", lineHeight: 1 }}>×</button>
         </div>
 
@@ -100,10 +100,10 @@ export default function NewEventModal() {
         </div>
 
         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-          <button type="button" onClick={closeModal} style={{ border: "2px solid var(--color-neutral-400)", background: "transparent", color: "var(--color-text)", borderRadius: "999px", padding: "clamp(11px,1vw,16px) clamp(20px,1.8vw,30px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", cursor: "pointer", minHeight: 44 }}>
+          <button type="button" onClick={closeModal} style={{ border: "2px solid var(--color-neutral-400)", background: "transparent", color: "var(--color-text)", borderRadius: "999px", padding: "clamp(11px,1vw,16px) clamp(20px,1.8vw,30px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", cursor: "pointer", minHeight: 44 }}>
             {str.cancel}
           </button>
-          <button type="button" onClick={saveEvent} disabled={!canSave} style={{ border: "none", background: canSave ? "var(--color-accent)" : "var(--color-neutral-300)", color: canSave ? "var(--color-accent-100)" : "var(--color-neutral-600)", borderRadius: "999px", padding: "clamp(11px,1vw,16px) clamp(24px,2.2vw,38px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", cursor: "pointer", minHeight: 44 }}>
+          <button type="button" onClick={saveEvent} disabled={!canSave} style={{ border: "none", background: canSave ? "var(--color-accent)" : "var(--color-neutral-300)", color: canSave ? "var(--color-accent-100)" : "var(--color-neutral-600)", borderRadius: "999px", padding: "clamp(11px,1vw,16px) clamp(24px,2.2vw,38px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)", cursor: "pointer", minHeight: 44 }}>
             {str.save}
           </button>
         </div>

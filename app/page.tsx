@@ -106,7 +106,7 @@ export default function HomePage() {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "clamp(9px,0.85vw,14px)" }}>
                 <span style={{ flex: "0 0 auto", width: 8, height: 8, borderRadius: "999px", background: m.dot }} />
-                <span style={{ flex: "1 1 auto", minWidth: 0, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(16px,1.3vw,22px)", lineHeight: 1.2 }}>{m.title}</span>
+                <span style={{ flex: "1 1 auto", minWidth: 0, fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(16px,1.3vw,22px)", lineHeight: 1.2 }}>{m.title}</span>
               </div>
               <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-700)" }}>{m.time} · {m.who}</span>
             </Link>
@@ -117,7 +117,7 @@ export default function HomePage() {
             style={{
               marginTop: "auto", alignSelf: "flex-start", border: "none", background: "var(--color-accent)",
               color: "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(11px,1vw,17px) clamp(20px,1.8vw,32px)",
-              fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,21px)", cursor: "pointer", flex: "0 0 auto"
+              fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,21px)", cursor: "pointer", flex: "0 0 auto"
             }}
           >
             {str.openFood}
