@@ -18,9 +18,12 @@ reference — do not delete), now ported to a real Next.js app living at the rep
 
 The Next.js port is complete and deployed. All screens from the prototype exist as real
 routes. The app is responsive from phone portrait through tablet landscape (the original
-target). Recent work has mostly been mobile-layout bugfixes and a data-consistency fix
-for match percentages — see `git log` for the detailed history, this file only tracks
-things future work needs to know, not a changelog.
+target). `DISHES` now has 134 dishes (6 hand-picked originals + 128 pulled from
+TheMealDB across 14 categories) and the ingredient taxonomy covers ~1,100 fruit/
+vegetable/condiment names. Recent work has mostly been mobile-layout bugfixes, a
+data-consistency fix for match percentages, and this catalog expansion — see `git log`
+for the detailed history, this file only tracks things future work needs to know, not a
+changelog.
 
 Not yet done / still simulated (unchanged from the original prototype, see `HANDOFF.md`):
 camera capture, real image recognition, GPS fridge-vs-store detection, PX Go cart
@@ -117,6 +120,19 @@ Component that calls `fetchDishIngredients(DISHES)` (or `fetchMealDbRecipe()` fo
 dish) and passes the result as a prop into a `"use client"` component that does the
 interactive part. Follow this pattern for any new screen that matches ingredients against
 stock — don't reach for `dish.ing` (the seed list) directly in a client component.
+
+**Adding dishes:** `DISHES` has 134 entries (6 original + 128 pulled from TheMealDB across
+its 14 categories on 2026-08-17). Every dish needs a real `mealId` from TheMealDB so the
+live-fetch/seed-fallback pattern above works — **don't hand-write a dish without one**, and
+don't source dish content (names are fine; ingredient lists/instructions are not) from
+copyrighted recipe sites like AllRecipes. `id` is a slugified version of the English name;
+`cat` is TheMealDB's own category string (`Beef`, `Chicken`, `Dessert`, `Lamb`,
+`Miscellaneous`, `Pasta`, `Pork`, `Seafood`, `Side`, `Starter`, `Vegan`, `Vegetarian`,
+`Breakfast`, `Goat`, plus the original `Stir-fry`/`Rice bowl`) — any new category needs a
+matching entry in `STR.filters` (`lib/i18n.ts`, en *and* zh) and `FILTER_KEYS`
+(`components/BrowseClient.tsx`), or dishes in that category are unreachable by filter.
+`DISH_IMG[id]` needs the real thumbnail filename from TheMealDB's `strMealThumb` (the part
+after the last `/`) or the dish falls back to a generic broccoli placeholder image.
 
 The dish page lets the user manually check/uncheck individual ingredients (independent of
 whether they're actually in stock — this is a deliberate "tick it once you've bought it"
