@@ -93,9 +93,21 @@ Everything lives in `lib/AppState.tsx` (`AppStateProvider`, `useAppState()`), a 
 client Context holding: language, stock, calendar week/events, votes, family members +
 their prefs/cook-days, capture-flow shots/qty, per-dish ingredient checks
 (`checkedByDish`, see below), and the new-event modal's fields. This is **all
-in-memory** — a refresh resets it (except will-cook days, which persist to
-`localStorage["luckytable-cook"]` and reset weekly). Per `HANDOFF.md`, moving this to a
-real database (Supabase / Vercel Postgres) is planned but not started.
+in-memory** — a refresh resets it, with two exceptions that persist to `localStorage` and
+roll over on a time boundary: will-cook days (`"luckytable-cook"`, resets weekly, see
+`cookWeekId()`) and `votes`/`myVotes` (`"luckytable-votes"`, resets daily at midnight, see
+`dayId()` — both a load-time check and a live `setTimeout` scheduled for the next local
+midnight, since the app might be left open across the boundary). Per `HANDOFF.md`, moving
+this to a real database (Supabase / Vercel Postgres) is planned but not started.
+
+**Votes reset daily, everywhere, because there's one shared source.** `votes` (the seeded
+per-dish tally) and `myVotes` (dishes *you've* voted for) both live in `AppState`; every
+screen that shows a vote count — Home's "Everyone's vote" and each dish page's "Family
+vote" — derives it the same way (`votes[dishId] + (myVotes.includes(dishId) ? 1 : 0)`), so
+there's nothing to separately keep in sync: reset the shared state once and every screen
+reflects it. At each midnight boundary both are cleared to `{}`/`[]` — not reset back to
+the `VOTE_SEED` starting numbers, since that seed was only ever a first-load demo baseline,
+not a value to return to daily.
 
 Because it's a single Context mounted once in the root `layout.tsx`, this state survives
 client-side navigation (`<Link>`, `router.back()`) between any pages — it only resets on

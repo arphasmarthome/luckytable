@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, ReactNode } from "react";
 import { FAMILY, FamilyMember, STAPLES_LIST, VOTE_SEED, buildWeek, WeekDay, CalendarEvent } from "./family";
 import { STOCK, StockItem, DISHES } from "./dishes";
 import { Lang } from "./i18n";
@@ -74,6 +74,17 @@ function cookWeekId() {
   return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 }
 
+function dayId() {
+  const d = new Date();
+  return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+}
+
+function msUntilNextMidnight() {
+  const now = new Date();
+  const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 2);
+  return next.getTime() - now.getTime();
+}
+
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>("en");
   const [calWho, setCalWho] = useState("all");
@@ -85,7 +96,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [stock, setStock] = useState<StockItem[]>(STOCK.slice());
   const [week, setWeek] = useState<WeekDay[]>(() => buildWeek());
   const [view, setView] = useState<"week" | "month">("week");
-  const [votes] = useState<Record<string, number>>(Object.assign({}, VOTE_SEED));
+  const [votes, setVotes] = useState<Record<string, number>>(Object.assign({}, VOTE_SEED));
   const [myVotes, setMyVotes] = useState<string[]>([]);
   const [members, setMembers] = useState<FamilyMember[]>(FAMILY.slice());
   const [newMember, setNewMember] = useState("");
@@ -102,6 +113,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [evDish, setEvDish] = useState("");
   const [evCustom, setEvCustom] = useState("");
   const [checkedByDish, setCheckedByDish] = useState<Record<string, boolean[]>>({});
+  const midnightTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     try {
@@ -134,6 +146,53 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
   }
+
+  function saveVotes(day: string, v: Record<string, number>, mv: string[]) {
+    try {
+      localStorage.setItem("luckytable-votes", JSON.stringify({ day, votes: v, myVotes: mv }));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  /* Everyone's vote tally is for "today" only — it's read fresh on load and
+     also rolls over live if the app is left open across midnight, so Home
+     and each dish page (which share this same state) never show a stale
+     count from a previous day. */
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("luckytable-votes");
+      const today = dayId();
+      if (raw) {
+        const j = JSON.parse(raw);
+        if (j.day === today) {
+          setVotes(j.votes || {});
+          setMyVotes(j.myVotes || []);
+        } else {
+          setVotes({});
+          setMyVotes([]);
+          saveVotes(today, {}, []);
+        }
+      } else {
+        saveVotes(today, votes, myVotes);
+      }
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    function reset() {
+      setVotes({});
+      setMyVotes([]);
+      saveVotes(dayId(), {}, []);
+      midnightTimer.current = setTimeout(reset, msUntilNextMidnight());
+    }
+    midnightTimer.current = setTimeout(reset, msUntilNextMidnight());
+    return () => clearTimeout(midnightTimer.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const value = useMemo<Ctx>(
     () => ({
@@ -242,7 +301,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         }),
 
       toggleVote: (dishId) =>
-        setMyVotes((prev) => (prev.indexOf(dishId) !== -1 ? prev.filter((x) => x !== dishId) : prev.concat([dishId]))),
+        setMyVotes((prev) => {
+          const next = prev.indexOf(dishId) !== -1 ? prev.filter((x) => x !== dishId) : prev.concat([dishId]);
+          saveVotes(dayId(), votes, next);
+          return next;
+        }),
 
       openNewEvent: (prefill) => {
         setEvDay(prefill?.evDay ?? 0);
