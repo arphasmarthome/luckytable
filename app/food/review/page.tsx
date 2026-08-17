@@ -52,17 +52,10 @@ export default function ReviewPage() {
           </button>
           <button
             type="button"
-            onClick={() => router.push("/food/results?mode=captured")}
+            onClick={() => router.push("/food/results")}
             style={{ border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(12px,1.1vw,18px) clamp(24px,2.2vw,40px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", cursor: "pointer" }}
           >
-            {str.seeWhatICanMake}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push("/food/results?mode=stock")}
-            style={{ border: "none", background: "var(--color-accent-2)", color: "var(--color-accent-2-100)", borderRadius: "999px", padding: "clamp(12px,1.1vw,18px) clamp(24px,2.2vw,40px)", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", cursor: "pointer" }}
-          >
-            {str.makeAll}
+            {str.letsCook}
           </button>
         </div>
       </div>
