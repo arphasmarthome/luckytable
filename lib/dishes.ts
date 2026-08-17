@@ -25,7 +25,10 @@ export const STOCK: StockItem[] = [
   { name: "Cooking oil", zh: "食用油", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
   { name: "Sesame oil", zh: "香油", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
   { name: "Cornstarch", zh: "太白粉", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
-  { name: "Rice wine", zh: "米酒", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" }
+  { name: "Rice wine", zh: "米酒", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  /* Tap water — unlimited, always on hand. Pinned last in the stock list
+     (not alphabetical) and shown as "∞" instead of a count. */
+  { name: "Water", zh: "水", cat: "Condiment", qty: Infinity, where: "Pantry", added: "Always" }
 ];
 
 /* Category filter keys shared by Browse and Recipes. */

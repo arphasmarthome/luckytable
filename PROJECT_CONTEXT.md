@@ -199,6 +199,21 @@ sesame oil, cornstarch, and rice wine are real `STOCK` rows for exactly this rea
 matching `STOCK` row (or capture the item) for anything that should count, don't add a
 bypass.
 
+**Water is the one deliberate exception.** `hasIng()` special-cases `"water"` to always
+return true (2026-08-17), regardless of `stock`/`captured` — tap water is genuinely
+inexhaustible, unlike a condiment that can run out, so it doesn't need a visible-in-stock
+row to justify being always-checked the way salt/sugar do. It's still a real `STOCK` row
+(`qty: Infinity`) purely so it's visible on the stock page; removing that row would not
+affect matching. If you're ever tempted to add another `hasIng()` special case for a
+different ingredient, don't — that's exactly the pattern that was removed above. Water is
+the one legitimate exception, not a precedent.
+
+**"What's in stock" (`app/food/stock/page.tsx`) pins Water last, exempt from the
+alphabetical sort**, and renders its quantity as "∞" with no +/−/Remove controls
+(`StockRow`'s `locked` prop) since adjusting or removing an unlimited resource that's
+always-checked regardless is meaningless. `sortedStock` filters Water out before sorting,
+then appends it.
+
 **`ALIAS` is for same-product spelling variants only, never for different products.**
 `"ground beef": "beef sirloin"` and `"corn starch": "cornstarch"` are fine — same thing,
 different phrasing. `"spring onions": "green onion"` was removed because spring onion and

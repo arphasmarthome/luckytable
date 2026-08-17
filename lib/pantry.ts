@@ -11,6 +11,9 @@ export function makeHasIng(pantryNames: string[]) {
   const pantry = pantryNames.map((n) => normalize(n.toLowerCase()));
   return function hasIng(name: string): boolean {
     const k = String(name).toLowerCase();
+    /* Tap water is the one ingredient that's genuinely inexhaustible — it's
+       always checked regardless of what's in stock or captured. */
+    if (k === "water") return true;
     const key = normalize(ALIAS[k] || k);
     return pantry.indexOf(key) !== -1;
   };

@@ -7,7 +7,7 @@ import { CAT, WHERE, WHEN, categoryOf } from "@/lib/taxonomy";
 import { StockItem } from "@/lib/dishes";
 import FoodHeader from "@/components/FoodHeader";
 
-function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove }: {
+function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove, locked, qtyLabel }: {
   row: StockItem;
   label: string;
   cat: string;
@@ -16,10 +16,30 @@ function StockRow({ row, label, cat, where, added, onInc, onDec, onRemove }: {
   onInc: () => void;
   onDec: () => void;
   onRemove: () => void;
+  locked?: boolean;
+  qtyLabel?: string;
 }) {
   const [dragging, setDragging] = useState(false);
   const [dx, setDx] = useState(0);
   const [x0, setX0] = useState(0);
+
+  if (locked) {
+    return (
+      <div
+        className="stock-row-grid"
+        style={{
+          flex: "0 0 auto", display: "grid", gridTemplateColumns: "2fr 1fr 1.1fr 1fr", alignItems: "center",
+          gap: "clamp(10px,1vw,18px)", padding: "clamp(13px,1.2vw,20px) clamp(18px,1.6vw,28px)", background: "var(--color-neutral-100)",
+          borderRadius: "999px", fontSize: "clamp(15px,1.2vw,21px)"
+        }}
+      >
+        <span style={{ fontWeight: 600 }}>{label}</span>
+        <span><span style={{ background: "var(--color-accent-2-200)", color: "var(--color-accent-2-700)", fontSize: "0.75em", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", padding: "5px 12px", borderRadius: "999px" }}>{cat}</span></span>
+        <span style={{ fontFamily: "var(--disp)", fontWeight: 700, textAlign: "center" }}>{qtyLabel ?? row.qty}</span>
+        <span style={{ color: "var(--color-neutral-700)" }}>{added}</span>
+      </div>
+    );
+  }
 
   return (
     <div className="stock-row-wrap" style={{ flex: "0 0 auto", position: "relative", borderRadius: "999px", overflow: "hidden", background: "var(--color-accent-600)" }}>
@@ -77,7 +97,12 @@ export default function StockPage() {
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
-  const sortedStock = stock.slice().sort((a, b) => name(a.name, a.zh).localeCompare(name(b.name, b.zh)));
+  const isWater = (n: string) => n.toLowerCase() === "water";
+  const sortedStock = stock
+    .filter((r) => !isWater(r.name))
+    .slice()
+    .sort((a, b) => name(a.name, a.zh).localeCompare(name(b.name, b.zh)))
+    .concat(stock.filter((r) => isWater(r.name)));
 
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
@@ -97,6 +122,8 @@ export default function StockPage() {
             onInc={() => incStock(row.name)}
             onDec={() => decStock(row.name)}
             onRemove={() => removeStock(row.name)}
+            locked={isWater(row.name)}
+            qtyLabel={isWater(row.name) ? "∞" : undefined}
           />
         ))}
         <p style={{ flex: "0 0 auto", margin: "6px 0 0", padding: "0 clamp(18px,1.6vw,28px)", fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{str.swipeHint}</p>
