@@ -164,19 +164,30 @@ which picks `captured` (via `useCaptured()`) or `stock` accordingly before compu
 specific pantry (not full stock), it needs to pass `?match=` too — don't assume the dish
 page's default is always correct.
 
-**Kitchen staples must be visible in `STOCK`, not just assumed by `hasIng`.**
-`lib/pantry.ts`'s `makeHasIng()` treats anything in `ALIAS` mapped to `"*"` (e.g. `salt`,
-`sugar`, `black pepper`, `cornstarch`, `cooking oil`) or listed in `STAPLES` as always
-available, regardless of what pantry list is passed in — this is what lets "What can I
-make" (captured-only mode) count a seasoning as available even though nobody photographs
-salt. That's correct behavior, but until 2026-08-17 those items didn't exist as rows in
-`STOCK`, so "What's in stock" looked like it was missing condiments the match % was quietly
-assuming you had. Fixed by adding the staple condiments (Salt, Sugar, Black pepper, White
-pepper, Cooking oil, Sesame oil, Cornstarch, Rice wine) as real `STOCK` entries in
-`lib/dishes.ts`, and adding their names to `TAXONOMY.Condiment` in `lib/taxonomy.ts` so they
-categorize correctly on the stock page instead of falling back to "Vegetable". **If you add
-a new `ALIAS: "*"` or `STAPLES` entry, add a matching visible `STOCK` row for it too**, or
-the same disconnect comes back.
+**Every ingredient must trace to a real `STOCK` row (or a captured item) — no
+"always available" sentinel.** `lib/pantry.ts`'s `makeHasIng()` used to treat anything in
+`ALIAS` mapped to `"*"`, plus a hard-coded `STAPLES` list, as available no matter what —
+so dishes could show an ingredient as checked (Shaoxing Wine, Chicken Bouillon Powder) that
+never appeared anywhere in "What's in stock". Removed 2026-08-17: there is no `"*"` sentinel
+and no `STAPLES` bypass anymore. `hasIng(name)` only returns true if `name` (after `ALIAS`
+lookup and light plural normalization — trailing "s" stripped, so "green onions" ==
+"green onion") exactly matches an item actually in the pantry list passed in (`stock` or
+`useCaptured()`'s captured items). Salt, sugar, black pepper, white pepper, cooking oil,
+sesame oil, cornstarch, and rice wine are real `STOCK` rows for exactly this reason — add a
+matching `STOCK` row (or capture the item) for anything that should count, don't add a
+bypass.
+
+**`ALIAS` is for same-product spelling variants only, never for different products.**
+`"ground beef": "beef sirloin"` and `"corn starch": "cornstarch"` are fine — same thing,
+different phrasing. `"spring onions": "green onion"` was removed because spring onion and
+green onion are different ingredients; don't re-add aliases that quietly merge two distinct
+things (e.g. don't alias "granulated sugar" to "sugar" — if a dish calls for a specific
+variant, it should show as missing until that exact item is stocked). When in doubt, leave
+it unaliased rather than folding it into an existing stock item.
+
+"What's in stock" (`app/food/stock/page.tsx`) renders sorted alphabetically by display name
+(`sortedStock`, derived from `stock`, not the underlying array order) — keep new stock rows
+unsorted in `lib/dishes.ts`; the page does the sorting.
 
 ## Conventions (hard rules, from CLAUDE.md)
 

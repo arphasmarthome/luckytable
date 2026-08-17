@@ -1,13 +1,18 @@
-import { ALIAS, STAPLES } from "./taxonomy";
+import { ALIAS } from "./taxonomy";
+
+/* Strips a trailing plural "s" so "green onions" == "green onion" without
+   allowing broader substring matches — "granulated sugar" must stay distinct
+   from "sugar", and "spring onion" from "green onion". */
+function normalize(s: string): string {
+  return s.length > 3 && s.endsWith("s") && !s.endsWith("ss") ? s.slice(0, -1) : s;
+}
 
 export function makeHasIng(pantryNames: string[]) {
-  const pantry = pantryNames.map((n) => n.toLowerCase());
+  const pantry = pantryNames.map((n) => normalize(n.toLowerCase()));
   return function hasIng(name: string): boolean {
     const k = String(name).toLowerCase();
-    const a = ALIAS[k];
-    if (a === "*" || STAPLES.indexOf(k) !== -1) return true;
-    const key = a || k;
-    return pantry.indexOf(key) !== -1 || pantry.some((p) => key.indexOf(p) !== -1 || p.indexOf(key) !== -1);
+    const key = normalize(ALIAS[k] || k);
+    return pantry.indexOf(key) !== -1;
   };
 }
 

@@ -77,6 +77,7 @@ export default function StockPage() {
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
+  const sortedStock = stock.slice().sort((a, b) => name(a.name, a.zh).localeCompare(name(b.name, b.zh)));
 
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
@@ -85,7 +86,7 @@ export default function StockPage() {
         <div className="hide-mobile" style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "2fr 1fr 1.1fr 1fr", gap: "clamp(10px,1vw,18px)", padding: "0 clamp(18px,1.6vw,28px)", fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>
           <span>{str.colItem}</span><span>{str.colCat}</span><span>{str.colCount}</span><span>{str.colAdded}</span>
         </div>
-        {stock.map((row) => (
+        {sortedStock.map((row) => (
           <StockRow
             key={row.name}
             row={row}

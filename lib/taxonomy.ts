@@ -45,17 +45,20 @@ export const AMT: Record<string, string> = {
   "to taste": "適量", "3": "3 顆", "4": "4 顆", "1": "1 顆", "2 bowls": "2 碗", "1 sheet": "1 片", "1 cup": "1 杯"
 };
 
-/* API ingredient names → what the pantry calls them; "*" = assumed always on hand. */
+/* API ingredient names → what the pantry calls them. Only genuine same-product
+   spelling/naming variants belong here (e.g. "ground beef" is sold as the same
+   "Beef sirloin" stock item; "corn starch" is just another spelling of "cornstarch").
+   Ingredients that are a *different* product — spring onion vs. green onion,
+   granulated sugar vs. sugar, chicken bouillon powder vs. nothing in stock — must
+   NOT be aliased together. There is no "always available" sentinel: every
+   ingredient is only considered available if it's actually in stock or captured. */
 export const ALIAS: Record<string, string> = {
   "sirloin steak": "beef sirloin", "ground beef": "beef sirloin", "beef": "beef sirloin",
-  "spring onions": "green onion", "plum tomatoes": "tomato", "tomatoes": "tomato",
+  "plum tomatoes": "tomato", "tomatoes": "tomato",
   "jasmine rice": "rice", "white rice": "rice", "egg": "eggs", "garlic clove": "garlic",
   "mung bean sprouts": "bean sprouts", "basil leaves": "thai basil", "carrots": "carrot",
-  "water": "*", "cornstarch": "*", "corn starch": "*", "dry sherry": "*", "shaoxing wine": "*",
-  "vegetable oil": "*", "high heat cooking oil": "*", "sesame seed oil": "*", "olive oil": "*",
-  "chicken stock": "*", "beef stock": "*", "unsalted beef stock": "*", "chicken bouillon powder": "*",
-  "kosher salt": "*", "pepper": "*", "black pepper": "*", "white pepper": "*", "sugar": "*", "salt": "*",
-  "red chilli": "*", "shallots": "*"
+  "corn starch": "cornstarch", "shaoxing wine": "rice wine", "sesame seed oil": "sesame oil",
+  "kosher salt": "salt", "pepper": "black pepper"
 };
 
 export const ING_ZH: Record<string, string> = {
@@ -71,5 +74,3 @@ export const ING_ZH: Record<string, string> = {
   "chicken stock": "雞高湯", "beef stock": "牛高湯", "unsalted beef stock": "牛高湯",
   "chicken bouillon powder": "雞粉", "mung bean sprouts": "豆芽菜", "high heat cooking oil": "食用油"
 };
-
-export const STAPLES = ["salt", "sugar", "salt & pepper", "black pepper", "white pepper", "cooking oil"];
