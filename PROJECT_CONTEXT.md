@@ -129,8 +129,9 @@ copyrighted recipe sites like AllRecipes. `id` is a slugified version of the Eng
 `cat` is TheMealDB's own category string (`Beef`, `Chicken`, `Dessert`, `Lamb`,
 `Miscellaneous`, `Pasta`, `Pork`, `Seafood`, `Side`, `Starter`, `Vegan`, `Vegetarian`,
 `Breakfast`, `Goat`, plus the original `Stir-fry`/`Rice bowl`) — any new category needs a
-matching entry in `STR.filters` (`lib/i18n.ts`, en *and* zh) and `FILTER_KEYS`
-(`components/BrowseClient.tsx`), or dishes in that category are unreachable by filter.
+matching entry in `STR.filters` (`lib/i18n.ts`, en *and* zh) and `DISH_FILTER_KEYS`
+(`lib/dishes.ts`, shared by the category-filter row on both Browse and Recipes), or dishes
+in that category are unreachable by filter.
 `DISH_IMG[id]` needs the real thumbnail filename from TheMealDB's `strMealThumb` (the part
 after the last `/`) or the dish falls back to a generic broccoli placeholder image.
 
@@ -162,6 +163,20 @@ which picks `captured` (via `useCaptured()`) or `stock` accordingly before compu
 `"stock"`. If you add another entry point into the dish page that's meant to represent a
 specific pantry (not full stock), it needs to pass `?match=` too — don't assume the dish
 page's default is always correct.
+
+**Kitchen staples must be visible in `STOCK`, not just assumed by `hasIng`.**
+`lib/pantry.ts`'s `makeHasIng()` treats anything in `ALIAS` mapped to `"*"` (e.g. `salt`,
+`sugar`, `black pepper`, `cornstarch`, `cooking oil`) or listed in `STAPLES` as always
+available, regardless of what pantry list is passed in — this is what lets "What can I
+make" (captured-only mode) count a seasoning as available even though nobody photographs
+salt. That's correct behavior, but until 2026-08-17 those items didn't exist as rows in
+`STOCK`, so "What's in stock" looked like it was missing condiments the match % was quietly
+assuming you had. Fixed by adding the staple condiments (Salt, Sugar, Black pepper, White
+pepper, Cooking oil, Sesame oil, Cornstarch, Rice wine) as real `STOCK` entries in
+`lib/dishes.ts`, and adding their names to `TAXONOMY.Condiment` in `lib/taxonomy.ts` so they
+categorize correctly on the stock page instead of falling back to "Vegetable". **If you add
+a new `ALIAS: "*"` or `STAPLES` entry, add a matching visible `STOCK` row for it too**, or
+the same disconnect comes back.
 
 ## Conventions (hard rules, from CLAUDE.md)
 

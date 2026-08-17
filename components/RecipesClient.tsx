@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useAppState } from "@/lib/AppState";
 import { t, nm } from "@/lib/i18n";
-import { DISHES, dishImg } from "@/lib/dishes";
+import { DISHES, dishImg, DISH_FILTER_KEYS } from "@/lib/dishes";
 import { ING_ZH } from "@/lib/taxonomy";
 import { makeHasIng, computeChecks, matchFromChecks } from "@/lib/pantry";
 
@@ -12,6 +13,7 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
+  const [filter, setFilter] = useState<(typeof DISH_FILTER_KEYS)[number]>("All");
 
   const hasIng = makeHasIng(stock.map((x) => x.name));
 
@@ -21,6 +23,7 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
     const { short, m, full } = matchFromChecks(ing, checks);
     return {
       id: d.id,
+      cat: d.cat,
       label: name(d.name, d.zh),
       img: dishImg(d.id),
       matchLabel: full ? str.ready : m + "%",
@@ -31,7 +34,9 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
         : str.missing + " " + short.length + " · " + short.map((x) => name(x[0], x[1] || ING_ZH[String(x[0]).toLowerCase()] || x[0])).join(zh ? "、" : ", "),
       m
     };
-  }).sort((a, b) => b.m - a.m);
+  });
+
+  const filteredDishes = (filter === "All" ? dishes : dishes.filter((d) => d.cat === filter)).slice().sort((a, b) => b.m - a.m);
 
   return (
     <div style={{ flex: "1 1 auto", minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(14px,1.4vw,22px)", padding: "clamp(24px,2.4vw,42px) clamp(26px,2.6vw,48px)" }}>
@@ -39,8 +44,18 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
         <span style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 700, color: "var(--color-accent-2-700)" }}>{str.recKicker}</span>
         <h1 style={{ margin: 0, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(26px,2.4vw,42px)", lineHeight: 1.05 }}>{str.navRec}</h1>
       </header>
+      <div style={{ flex: "0 0 auto", display: "flex", gap: 12, flexWrap: "wrap" }}>
+        {DISH_FILTER_KEYS.map((key) => {
+          const active = filter === key;
+          return (
+            <button key={key} type="button" onClick={() => setFilter(key)} style={{ border: `2px solid ${active ? "var(--color-accent)" : "var(--color-neutral-300)"}`, background: active ? "var(--color-accent)" : "var(--color-neutral-100)", color: active ? "var(--color-accent-100)" : "var(--color-text)", borderRadius: "999px", padding: "clamp(10px,0.9vw,15px) clamp(18px,1.6vw,28px)", fontFamily: "inherit", fontWeight: 600, fontSize: "clamp(14px,1.1vw,19px)", cursor: "pointer" }}>
+              {str.filters[key]}
+            </button>
+          );
+        })}
+      </div>
       <div style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(clamp(240px,21vw,330px), 1fr))", gridAutoRows: "max-content", gap: "clamp(16px,1.5vw,26px)", alignContent: "start" }}>
-        {dishes.map((dish) => (
+        {filteredDishes.map((dish) => (
           <Link
             key={dish.id}
             href={`/food/dish/${dish.id}`}

@@ -17,8 +17,22 @@ export const STOCK: StockItem[] = [
   { name: "Eggs", zh: "雞蛋", cat: "Protein", qty: 6, where: "Fridge", added: "3 days ago" },
   { name: "Onion", zh: "洋蔥", cat: "Vegetable", qty: 2, where: "Pantry", added: "1 week ago" },
   { name: "Soy sauce", zh: "醬油", cat: "Pantry", qty: 1, where: "Pantry", added: "1 month ago" },
-  { name: "Rice", zh: "白米", cat: "Pantry", qty: 1, where: "Pantry", added: "1 month ago" }
+  { name: "Rice", zh: "白米", cat: "Pantry", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Salt", zh: "鹽", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Sugar", zh: "糖", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Black pepper", zh: "黑胡椒", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "White pepper", zh: "白胡椒", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Cooking oil", zh: "食用油", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Sesame oil", zh: "香油", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Cornstarch", zh: "太白粉", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" },
+  { name: "Rice wine", zh: "米酒", cat: "Condiment", qty: 1, where: "Pantry", added: "1 month ago" }
 ];
+
+/* Category filter keys shared by Browse and Recipes. */
+export const DISH_FILTER_KEYS = [
+  "All", "Stir-fry", "Rice bowl", "Side", "Beef", "Chicken", "Pork", "Lamb", "Goat",
+  "Seafood", "Pasta", "Dessert", "Breakfast", "Starter", "Vegetarian", "Vegan", "Miscellaneous"
+] as const;
 
 /* Each press of Capture reveals the next frame: the items that shot picks up. */
 export const SHOTS: { items: [string, number][]; boxes: [string, string, string, string, string, string][] }[] = [
