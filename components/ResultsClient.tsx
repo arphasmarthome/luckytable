@@ -7,11 +7,11 @@ import { useAppState } from "@/lib/AppState";
 import { useCaptured } from "@/lib/useCaptured";
 import { t, nm } from "@/lib/i18n";
 import { DISHES, dishImg } from "@/lib/dishes";
-import { makeHasIng, matchDish } from "@/lib/pantry";
+import { makeHasIng, computeChecks, matchFromChecks } from "@/lib/pantry";
 import FoodHeader from "@/components/FoodHeader";
 
 function ResultsInner({ ingredientsByDish }: { ingredientsByDish: Record<string, [string, string, string][]> }) {
-  const { lang, stock } = useAppState();
+  const { lang, stock, checkedByDish } = useAppState();
   const { captured } = useCaptured();
   const params = useSearchParams();
   const mode = params.get("mode") === "captured" ? "captured" : "stock";
@@ -28,7 +28,8 @@ function ResultsInner({ ingredientsByDish }: { ingredientsByDish: Record<string,
 
   const dishes = DISHES.map((d) => {
     const ing = ingredientsByDish[d.id] || d.ing;
-    const { m, full, short } = matchDish(ing, hasIng);
+    const checks = computeChecks(ing, hasIng, checkedByDish[d.id]);
+    const { m, full, short } = matchFromChecks(ing, checks);
     return {
       id: d.id,
       label: name(d.name, d.zh),

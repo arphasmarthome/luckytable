@@ -5,11 +5,12 @@ import { useAppState } from "@/lib/AppState";
 import { t, nm } from "@/lib/i18n";
 import { Dish, dishImg, STEPS } from "@/lib/dishes";
 import { MealDbRecipe } from "@/lib/mealdb";
-import { ALIAS, ING_ZH, AMT, STAPLES } from "@/lib/taxonomy";
+import { ING_ZH, AMT } from "@/lib/taxonomy";
+import { makeHasIng, computeChecks } from "@/lib/pantry";
 import FoodHeader from "@/components/FoodHeader";
 
 export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe: MealDbRecipe | null }) {
-  const { lang, stock, votes, myVotes, toggleVote, week, toggleMenuTonight, openNewEvent } = useAppState();
+  const { lang, stock, votes, myVotes, toggleVote, week, toggleMenuTonight, openNewEvent, checkedByDish, toggleDishIngredient } = useAppState();
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
@@ -18,20 +19,8 @@ export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe:
 
   const ingSource = recipe && recipe.ing.length ? recipe.ing : dish.ing;
 
-  const [checked, setChecked] = useState<boolean[]>(() => {
-    const pantry = stock.map((x) => x.name.toLowerCase());
-    const hasIng = (n: string) => {
-      const k = String(n).toLowerCase();
-      const a = ALIAS[k];
-      if (a === "*" || STAPLES.indexOf(k) !== -1) return true;
-      const key = a || k;
-      return pantry.indexOf(key) !== -1 || pantry.some((p) => key.indexOf(p) !== -1 || p.indexOf(key) !== -1);
-    };
-    return ingSource.map(([ingName]) => hasIng(ingName));
-  });
-
-  const toggleIngredient = (ix: number) =>
-    setChecked((prev) => prev.map((v, i) => (i === ix ? !v : v)));
+  const hasIng = makeHasIng(stock.map((x) => x.name));
+  const checked = computeChecks(ingSource, hasIng, checkedByDish[dish.id]);
 
   const ings = ingSource.map(([ingName, zhName, amount], ix) => {
     const zhFallback = zhName || ING_ZH[String(ingName).toLowerCase()] || ingName;
@@ -46,7 +35,7 @@ export default function DishDetailClient({ dish, recipe }: { dish: Dish; recipe:
       border: have ? "var(--color-accent-2-300)" : "var(--color-accent-300)",
       fg: have ? "var(--color-accent-2-800)" : "var(--color-text)",
       have,
-      toggle: () => toggleIngredient(ix)
+      toggle: () => toggleDishIngredient(dish.id, ix, checked)
     };
   });
   const haveCount = ings.filter((i) => i.have).length;

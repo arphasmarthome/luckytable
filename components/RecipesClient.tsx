@@ -5,10 +5,10 @@ import { useAppState } from "@/lib/AppState";
 import { t, nm } from "@/lib/i18n";
 import { DISHES, dishImg } from "@/lib/dishes";
 import { ING_ZH } from "@/lib/taxonomy";
-import { makeHasIng, matchDish } from "@/lib/pantry";
+import { makeHasIng, computeChecks, matchFromChecks } from "@/lib/pantry";
 
 export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish: Record<string, [string, string, string][]> }) {
-  const { lang, stock } = useAppState();
+  const { lang, stock, checkedByDish } = useAppState();
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
@@ -17,7 +17,8 @@ export default function RecipesClient({ ingredientsByDish }: { ingredientsByDish
 
   const dishes = DISHES.map((d) => {
     const ing = ingredientsByDish[d.id] || d.ing;
-    const { short, m, full } = matchDish(ing, hasIng);
+    const checks = computeChecks(ing, hasIng, checkedByDish[d.id]);
+    const { short, m, full } = matchFromChecks(ing, checks);
     return {
       id: d.id,
       label: name(d.name, d.zh),

@@ -29,6 +29,7 @@ type State = {
   evWho: string;
   evDish: string;
   evCustom: string;
+  checkedByDish: Record<string, boolean[]>;
 };
 
 type Ctx = State & {
@@ -62,6 +63,7 @@ type Ctx = State & {
   setEvCustom: (v: string) => void;
   saveEvent: () => void;
   toggleMenuTonight: (dish: { id: string; name: string; zh: string }) => void;
+  toggleDishIngredient: (dishId: string, ix: number, fallback: boolean[]) => void;
 };
 
 const AppContext = createContext<Ctx | null>(null);
@@ -99,6 +101,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [evWho, setEvWho] = useState("dad");
   const [evDish, setEvDish] = useState("");
   const [evCustom, setEvCustom] = useState("");
+  const [checkedByDish, setCheckedByDish] = useState<Record<string, boolean[]>>({});
 
   useEffect(() => {
     try {
@@ -135,7 +138,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const value = useMemo<Ctx>(
     () => ({
       lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes,
-      members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom,
+      members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish,
 
       setLang,
       setCalWho,
@@ -282,9 +285,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             wk[0].items.sort((a, b) => (a[0] < b[0] ? -1 : 1));
           }
           return wk;
+        }),
+
+      toggleDishIngredient: (dishId, ix, fallback) =>
+        setCheckedByDish((prev) => {
+          const current = prev[dishId] || fallback;
+          const next = current.map((v, i) => (i === ix ? !v : v));
+          return Object.assign({}, prev, { [dishId]: next });
         })
     }),
-    [lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom]
+    [lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
