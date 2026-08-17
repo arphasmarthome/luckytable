@@ -18,6 +18,7 @@ type ResultDish = {
   note: string;
   minutes: number;
   m: number;
+  fromPhoto: boolean;
 };
 
 /* Top by % complete, then alphabetical, then least time to make. */
@@ -29,11 +30,11 @@ function sortDishes(list: ResultDish[]): ResultDish[] {
   });
 }
 
-function DishGrid({ dishes, match, minLabel }: { dishes: ResultDish[]; match: "photos" | "captured"; minLabel: string }) {
+function DishGrid({ dishes, minLabel }: { dishes: ResultDish[]; minLabel: string }) {
   return (
     <div style={{ flex: "0 0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(clamp(240px,21vw,330px), 1fr))", gridAutoRows: "max-content", gap: "clamp(16px,1.5vw,26px)" }}>
       {dishes.map((dish) => (
-        <Link key={dish.id} href={`/food/dish/${dish.id}?match=${match}`} style={{ textAlign: "left", fontFamily: "inherit", border: "none", padding: 0, background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer", boxShadow: "var(--shadow-sm)", display: "flex", flexDirection: "column" }}>
+        <Link key={dish.id} href={`/food/dish/${dish.id}?match=captured`} style={{ textAlign: "left", fontFamily: "inherit", border: "none", padding: 0, background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer", boxShadow: "var(--shadow-sm)", display: "flex", flexDirection: "column" }}>
           <span className="ph" style={{ flex: "0 0 auto", height: "clamp(120px,10.5vw,168px)", position: "relative", display: "block", overflow: "hidden" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="washed" src={dish.img} alt="" loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
@@ -59,27 +60,34 @@ export default function ResultsClient({ ingredientsByDish }: { ingredientsByDish
   const capturedList = captured.map((c) => ({ label: c.label, qty: String(c.qty) }));
   const stockList = stock.map((x) => ({ label: name(x.name, x.zh), qty: Number.isFinite(x.qty) ? String(x.qty) : "∞" }));
 
-  function buildDishes(hasIng: (n: string) => boolean): ResultDish[] {
-    return DISHES.map((d) => {
-      const ing = ingredientsByDish[d.id] || d.ing;
-      const checks = computeChecks(ing, hasIng, checkedByDish[d.id]);
-      const { m, full, short } = matchFromChecks(ing, checks);
-      return {
-        id: d.id,
-        label: name(d.name, d.zh),
-        img: dishImg(d.id),
-        matchLabel: full ? str.ready : m + "%",
-        pillBg: full ? "var(--color-accent-2)" : "var(--color-accent)",
-        pillFg: full ? "var(--color-accent-2-100)" : "var(--color-accent-100)",
-        note: full ? str.onHand : str.missing + " " + short.length,
-        minutes: estimateMinutes(ing, d.cat),
-        m
-      };
-    });
-  }
+  /* Every dish's % and checkmarks always count captured photos AND stock —
+     an ingredient you already have in stock should check off even on a dish
+     that also needs something you just photographed. The two sections below
+     don't use different pantries; they split the same combined-pantry
+     ranking by whether the dish touches anything you photographed. */
+  const hasIngPhotosOnly = makeHasIng(captured.map((c) => c.name));
+  const hasIngCombined = makeHasIng(captured.map((c) => c.name).concat(stock.map((x) => x.name)));
 
-  const photoDishes = sortDishes(buildDishes(makeHasIng(captured.map((c) => c.name))));
-  const combinedDishes = sortDishes(buildDishes(makeHasIng(captured.map((c) => c.name).concat(stock.map((x) => x.name)))));
+  const allDishes: ResultDish[] = DISHES.map((d) => {
+    const ing = ingredientsByDish[d.id] || d.ing;
+    const checks = computeChecks(ing, hasIngCombined, checkedByDish[d.id]);
+    const { m, full, short } = matchFromChecks(ing, checks);
+    return {
+      id: d.id,
+      label: name(d.name, d.zh),
+      img: dishImg(d.id),
+      matchLabel: full ? str.ready : m + "%",
+      pillBg: full ? "var(--color-accent-2)" : "var(--color-accent)",
+      pillFg: full ? "var(--color-accent-2-100)" : "var(--color-accent-100)",
+      note: full ? str.onHand : str.missing + " " + short.length,
+      minutes: estimateMinutes(ing, d.cat),
+      m,
+      fromPhoto: ing.some(([ingName]) => hasIngPhotosOnly(ingName))
+    };
+  });
+
+  const photoDishes = sortDishes(allDishes.filter((d) => d.fromPhoto));
+  const restDishes = sortDishes(allDishes.filter((d) => !d.fromPhoto));
 
   return (
     <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
@@ -109,15 +117,15 @@ export default function ResultsClient({ ingredientsByDish }: { ingredientsByDish
           </div>
         </aside>
         <div style={{ overflow: "auto", display: "flex", flexDirection: "column", gap: "clamp(24px,2.2vw,36px)" }}>
-          {capturedList.length > 0 && (
+          {photoDishes.length > 0 && (
             <section style={{ display: "flex", flexDirection: "column", gap: "clamp(12px,1.1vw,18px)" }}>
               <div style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.fromPhotos}</div>
-              <DishGrid dishes={photoDishes} match="photos" minLabel={str.minLabel} />
+              <DishGrid dishes={photoDishes} minLabel={str.minLabel} />
             </section>
           )}
           <section style={{ display: "flex", flexDirection: "column", gap: "clamp(12px,1.1vw,18px)" }}>
             <div style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.fromCombined}</div>
-            <DishGrid dishes={combinedDishes} match="captured" minLabel={str.minLabel} />
+            <DishGrid dishes={restDishes} minLabel={str.minLabel} />
           </section>
         </div>
       </div>

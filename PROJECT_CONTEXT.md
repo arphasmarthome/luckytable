@@ -171,40 +171,39 @@ on top of the stock-based default, then `matchFromChecks(ing, checks)` turns tha
 checks array (so the first toggle on a never-touched dish starts from the right stock-based
 baseline instead of all-false). Don't reintroduce a local `useState` for this.
 
-**`/food/results` ("Using everything I have") shows two ranked sections from two different
-pantries, not one merged list.** Reached via a single "Let's cook" button on the Review
-screen (collapsed from two buttons on 2026-08-17). Section 1, `str.fromPhotos` ("From your
-photos"), ranks dishes using *only* what was captured (`captured.map(c => c.name)`) —
-hidden entirely if nothing's been captured yet. Section 2, `str.fromCombined` ("Photos +
-everything in stock"), ranks the same dishes using `captured ∪ stock`
-(`captured.map(c => c.name).concat(stock.map(x => x.name))`) and is always shown. Both are
-built by the same `buildDishes(hasIng)` helper in `ResultsClient` and sorted with
-`sortDishes()`: **% complete descending, then alphabetical, then least time to make** — in
-that order, so alphabetical only breaks a % tie and time only breaks an alphabetical tie
-(which in practice means the time tiebreak almost never visibly fires, since dish names are
-unique). Don't collapse these back into one sort or one pantry — they intentionally show
-different rankings side by side. The page title stays `str.titleAll` ("Using everything I
-have") regardless. The "Matching from" aside mirrors this: captured-photo chips (hidden if
-empty) followed by a `str.titles.stock`-labeled section listing full `stock`, so both
-inputs feeding the two rankings are visible. Recipes and Browse are unaffected — they still
-match against `stock` only, with no captured items involved.
-
-**Three match modes, not two — `matchMode` is `"photos" | "captured" | "stock"`.** Added
-`"photos"` (captured only, no stock) on 2026-08-17 specifically so results-page Section 1
-links (`?match=photos`) land on a dish page showing the *same* percentage as the list —
-without it, every dish opened from "From your photos" would silently jump to the
-captured+stock percentage instead, repeating the exact bug documented below for `"stock"`.
-Section 2 links carry `?match=captured` (captured ∪ stock, unchanged). Recipes/Browse links
-carry no `match` param and get the `"stock"` default (full stock only).
+**`/food/results` ("Using everything I have") is one pantry, split into two sections by
+relevance, not two different pantries.** Reached via a single "Let's cook" button on the
+Review screen. Every dish's % and checkmarks always come from the *same* combined pantry —
+`captured ∪ stock` (`hasIngCombined` in `ResultsClient`) — so an ingredient already in stock
+checks off even on a dish that also needs something you just photographed (fixed
+2026-08-17: Section 1 used to compute against captured-only, so e.g. "Grits" showed Salt as
+missing even though Salt was in stock — the percentage a user sees should never omit stock
+just because the dish happens to also touch something they photographed). What splits the
+*same* ranking into two sections is `fromPhoto`: a separate captured-only `hasIng` check
+(`hasIngPhotosOnly`) used only to test whether **any** of a dish's ingredients would be
+satisfied by what was photographed, not to compute the displayed %. Section 1,
+`str.fromPhotos` ("From your photos"), is dishes where `fromPhoto` is true — hidden entirely
+if nothing's captured, since nothing can match. Section 2, `str.fromCombined` ("Photos +
+everything in stock"), is everything else. Both sections are sorted with `sortDishes()`:
+**% complete descending, then alphabetical, then least time to make** (alphabetical only
+breaks a % tie; time only breaks an alphabetical tie, which almost never visibly fires since
+dish names are unique). The page title stays `str.titleAll` regardless of section. The
+"Matching from" aside mirrors the same two inputs: captured-photo chips (hidden if empty)
+followed by a `str.titles.stock`-labeled section listing full `stock`. Recipes and Browse
+are unaffected — they still match against `stock` only, with no captured items involved.
 
 **The dish page has to match whichever pantry the list you clicked from used**, or the
 percentage changes the moment you open the dish (this was a real bug, fixed 2026-08-17 —
-the dish page used to always read `stock`, ignoring captured mode entirely). The mechanism:
-`app/food/dish/[id]/page.tsx` reads `?match=` from `searchParams` (so that page is dynamic,
-not static, despite `generateStaticParams`) and passes `matchMode` into `DishDetailClient`,
-which builds the matching pantry (`captured` only / `captured ∪ stock` / plain `stock`,
-per the three modes above) before computing `hasIng`/`checks`. If you add another entry
-point into the dish page that's meant to represent a specific pantry (not full stock), it
+the dish page used to always read `stock`, ignoring captured mode entirely). `matchMode` is
+just `"captured" | "stock"` (a captured-only `"photos"` mode existed briefly earlier the
+same day to back Section 1's old captured-only percentage, then was removed once Section 1
+switched to the combined percentage — both results sections now correctly link
+with `?match=captured`). The mechanism: `app/food/dish/[id]/page.tsx` reads `?match=` from
+`searchParams` (so that page is dynamic, not static, despite `generateStaticParams`) and
+passes `matchMode` into `DishDetailClient`, which builds `captured ∪ stock`
+(`matchMode="captured"`) or plain `stock` (the default) before computing `hasIng`/`checks`.
+Recipes/Browse links carry no `match` param and get the `"stock"` default. If you add
+another entry point into the dish page that's meant to represent a specific pantry, it
 needs to pass `?match=` too — don't assume the dish page's default is always correct.
 
 **Every ingredient must trace to a real `STOCK` row (or a captured item) — no
