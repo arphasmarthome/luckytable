@@ -4,7 +4,10 @@ export const STR = {
   en: {
     tagline: "Good things comes to those who create",
     navHome: "Home", navFood: "Make", navRec: "Recipes", navCal: "Calendar", navFam: "Family",
-    dashTitle: "Good evening", tonight: "Tonight's table",
+    dashTitle: "Good evening", tonight: "Tonight's dishes",
+    tonightLabel: "Tonight", joining: "Joining", notJoining: "Not joining",
+    noOneJoining: "No one joining yet", servesFor: "Serves", enoughFor: "Enough for",
+    needMoreDishes: "Add another dish",
     everyone: "Everyone", calKicker: "This week at home", newEvent: "New event",
     weekDishes: "This week's dishes", votesTitle: "Everyone's vote",
     likes: "Likes", dislikes: "Dislikes", allergies: "Allergies", noAllergy: "None on record",
@@ -68,7 +71,10 @@ export const STR = {
   zh: {
     tagline: "用心創造，好事自然來",
     navHome: "首頁", navFood: "做菜", navRec: "食譜", navCal: "行事曆", navFam: "家人",
-    dashTitle: "晚安", tonight: "今晚的餐桌",
+    dashTitle: "晚安", tonight: "今晚的菜色",
+    tonightLabel: "今晚", joining: "會來", notJoining: "不來",
+    noOneJoining: "還沒有人回覆", servesFor: "可供", enoughFor: "足夠",
+    needMoreDishes: "再加一道菜",
     everyone: "全家", calKicker: "本週家中行程", newEvent: "新增行程",
     weekDishes: "本週菜色", votesTitle: "大家的投票",
     likes: "喜歡", dislikes: "不喜歡", allergies: "過敏", noAllergy: "目前沒有紀錄",

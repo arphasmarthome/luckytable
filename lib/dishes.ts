@@ -48,6 +48,11 @@ const CATEGORY_BASE_MINUTES: Record<string, number> = {
   Breakfast: 20, Dessert: 40, Miscellaneous: 25
 };
 
+/* No source gives a servings count either, so assume a typical family recipe
+   feeds four. Home uses this to sanity-check tonight's dish count against how
+   many people said they're joining. */
+export const SERVINGS_PER_DISH = 4;
+
 export function estimateMinutes(ing: [string, string, string][], cat: string): number {
   const base = CATEGORY_BASE_MINUTES[cat] ?? 25;
   const prep = Math.max(0, ing.length - 4) * 2;

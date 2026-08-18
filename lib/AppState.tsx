@@ -21,6 +21,7 @@ type State = {
   view: "week" | "month";
   votes: Record<string, number>;
   myVotes: string[];
+  joining: string[];
   members: FamilyMember[];
   newMember: string;
   famPrefs: FamPrefs;
@@ -56,6 +57,7 @@ type Ctx = State & {
   addPref: (field: "likes" | "dislikes" | "allergies", en: string, zh?: string) => void;
   removePref: (field: "likes" | "dislikes" | "allergies", key: string, ix: number) => void;
   toggleVote: (dishId: string) => void;
+  setJoining: (key: string, isJoining: boolean) => void;
   openNewEvent: (prefill?: Partial<Pick<State, "evDay" | "evDish" | "evWho" | "evTime">>) => void;
   closeModal: () => void;
   setEvDay: (i: number) => void;
@@ -100,6 +102,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [view, setView] = useState<"week" | "month">("week");
   const [votes, setVotes] = useState<Record<string, number>>(Object.assign({}, VOTE_SEED));
   const [myVotes, setMyVotes] = useState<string[]>([]);
+  const [joining, setJoiningList] = useState<string[]>([]);
   const [members, setMembers] = useState<FamilyMember[]>(FAMILY.slice());
   const [newMember, setNewMember] = useState("");
   const [famPrefs, setFamPrefs] = useState<FamPrefs>(() =>
@@ -157,6 +160,28 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  function saveJoining(day: string, list: string[]) {
+    try {
+      localStorage.setItem("luckytable-joining", JSON.stringify({ day, joining: list }));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  /* Who's at the table tonight — same daily lifecycle as votes: read back only
+     if it was set today, otherwise everyone starts at "not joining" again. */
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("luckytable-joining");
+      if (!raw) return;
+      const j = JSON.parse(raw);
+      if (j.day === dayId()) setJoiningList(j.joining || []);
+      else saveJoining(dayId(), []);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   /* Everyone's vote tally is for "today" only — it's read fresh on load and
      also rolls over live if the app is left open across midnight, so Home
      and each dish page (which share this same state) never show a stale
@@ -188,7 +213,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     function reset() {
       setVotes({});
       setMyVotes([]);
+      setJoiningList([]);
       saveVotes(dayId(), {}, []);
+      saveJoining(dayId(), []);
       midnightTimer.current = setTimeout(reset, msUntilNextMidnight());
     }
     midnightTimer.current = setTimeout(reset, msUntilNextMidnight());
@@ -198,7 +225,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<Ctx>(
     () => ({
-      lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes,
+      lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, joining,
       members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish,
 
       setLang,
@@ -324,6 +351,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           return next;
         }),
 
+      setJoining: (key, isJoining) =>
+        setJoiningList((prev) => {
+          const next = isJoining ? (prev.indexOf(key) !== -1 ? prev : prev.concat([key])) : prev.filter((x) => x !== key);
+          saveJoining(dayId(), next);
+          return next;
+        }),
+
       openNewEvent: (prefill) => {
         setEvDay(prefill?.evDay ?? 0);
         setEvDish(prefill?.evDish ?? "");
@@ -374,7 +408,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           return Object.assign({}, prev, { [dishId]: next });
         })
     }),
-    [lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish]
+    [lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, joining, members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

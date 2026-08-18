@@ -3,11 +3,20 @@
 import Link from "next/link";
 import { useAppState } from "@/lib/AppState";
 import { t, nm } from "@/lib/i18n";
-import { DISHES, dishImg } from "@/lib/dishes";
-import { VOTE_SEED, DAY_FULL, MONTH_EN } from "@/lib/family";
+import { DISHES, dishImg, SERVINGS_PER_DISH } from "@/lib/dishes";
+import { VOTE_SEED, DAY_EN, DAY_ZH, DAY_FULL, MONTH_EN } from "@/lib/family";
+
+function PersonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ width: "52%", height: "52%" }}>
+      <circle cx="12" cy="8.5" r="3.6" />
+      <path d="M4.8 20a7.2 7.2 0 0 1 14.4 0" />
+    </svg>
+  );
+}
 
 export default function HomePage() {
-  const { lang, week, members, votes, myVotes, calWho } = useAppState();
+  const { lang, week, members, votes, myVotes, calWho, joining, setJoining } = useAppState();
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
@@ -58,7 +67,22 @@ export default function HomePage() {
     .sort((a, b) => b.n - a.n);
   const voteTop = Math.max(...voteRows.map((v) => v.n), 1);
 
+  /* Tonight's capacity vs. who's actually coming — dishes only need to cover
+     the people who said "joining", so both halves come from live state. */
+  const joiningCount = members.filter((p) => joining.indexOf(p.key) !== -1).length;
+  const seats = tonight.length * SERVINGS_PER_DISH;
+  const portionNote =
+    joiningCount === 0
+      ? str.noOneJoining
+      : tonight.length === 0
+      ? str.needMoreDishes
+      : seats >= joiningCount
+      ? str.enoughFor + " " + joiningCount
+      : str.needMoreDishes;
+  const portionOk = joiningCount > 0 && tonight.length > 0 && seats >= joiningCount;
+
   const now = new Date();
+  const todayShort = zh ? "週" + DAY_ZH[now.getDay()] : DAY_EN[now.getDay()];
   const dashDate = zh
     ? now.getMonth() + 1 + "月" + now.getDate() + "日 星期" + "日一二三四五六"[now.getDay()]
     : DAY_FULL[now.getDay()] + " " + now.getDate() + " " + MONTH_EN[now.getMonth()];
@@ -77,7 +101,19 @@ export default function HomePage() {
 
       <div className="stack-grid" style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", gridTemplateColumns: "1.15fr 1fr 1fr", gap: "clamp(16px,1.6vw,28px)" }}>
         <section className="grow-on-mobile" style={{ display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)", overflow: "auto" }}>
-          <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.tonight}</div>
+          <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px 12px" }}>
+            <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.tonight}</div>
+            <span
+              style={{
+                marginLeft: "auto", flex: "0 0 auto", borderRadius: "999px", padding: "5px 12px",
+                fontSize: "clamp(11px,0.85vw,14px)", fontWeight: 700, whiteSpace: "nowrap",
+                background: portionOk ? "var(--color-accent-2-100)" : "var(--color-neutral-200)",
+                color: portionOk ? "var(--color-accent-2-800)" : "var(--color-neutral-700)"
+              }}
+            >
+              {portionNote}
+            </span>
+          </div>
 
           {tonight.length === 0 && (
             <div style={{ fontSize: "clamp(14px,1.1vw,19px)", color: "var(--color-neutral-700)" }}>{str.nothingPlanned}</div>
@@ -138,16 +174,49 @@ export default function HomePage() {
 
         <div className="grow-on-mobile" style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,1.4vw,22px)", overflow: "auto" }}>
           <section style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)" }}>
-            <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.navFam}</div>
-            {members.map((p) => (
-              <div key={p.key} style={{ display: "flex", alignItems: "center", gap: "clamp(10px,1vw,16px)" }}>
-                <span style={{ flex: "0 0 auto", width: "clamp(40px,3.2vw,50px)", height: "clamp(40px,3.2vw,50px)", borderRadius: "999px", background: p.tint, color: p.ink, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(15px,1.2vw,20px)" }}>{p.initial}</span>
-                <span style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  <span style={{ fontSize: "clamp(15px,1.15vw,20px)", fontWeight: 600 }}>{name(p.name, p.zh)}</span>
-                  <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{name(p.role, p.roleZh)}</span>
-                </span>
+            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px 12px" }}>
+              <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.navFam}</div>
+              <div style={{ marginLeft: "auto", display: "flex", alignItems: "baseline", gap: 7, whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.tonightLabel}</span>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(13px,1vw,17px)", color: "var(--color-accent-700)" }}>{todayShort}</span>
               </div>
-            ))}
+            </div>
+            {members.map((p) => {
+              const isIn = joining.indexOf(p.key) !== -1;
+              return (
+                <div key={p.key} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px clamp(10px,1vw,16px)" }}>
+                  <span style={{ flex: "0 0 auto", width: "clamp(40px,3.2vw,50px)", height: "clamp(40px,3.2vw,50px)", borderRadius: "999px", background: p.tint, color: p.ink, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <PersonIcon />
+                  </span>
+                  {/* Fixed flex-basis (not content-driven) so the toggle wraps to its
+                      own line at the same width for every member — otherwise a short
+                      role like "Sunday soup" keeps its toggle inline while longer ones
+                      wrap, and the rows stop lining up. */}
+                  <span style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0, flex: "1 1 140px" }}>
+                    <span style={{ fontSize: "clamp(15px,1.15vw,20px)", fontWeight: 600 }}>{name(p.name, p.zh)}</span>
+                    <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{name(p.role, p.roleZh)}</span>
+                  </span>
+                  <span style={{ flex: "0 0 auto", display: "flex", gap: 4, background: "var(--color-neutral-200)", borderRadius: "999px", padding: 3 }}>
+                    <button
+                      type="button"
+                      onClick={() => setJoining(p.key, true)}
+                      aria-pressed={isIn}
+                      style={{ border: "none", cursor: "pointer", borderRadius: "999px", padding: "7px clamp(10px,0.9vw,14px)", fontFamily: "inherit", fontWeight: 700, fontSize: "clamp(11px,0.85vw,14px)", whiteSpace: "nowrap", background: isIn ? "var(--color-accent-2)" : "transparent", color: isIn ? "var(--color-accent-2-100)" : "var(--color-neutral-700)" }}
+                    >
+                      {str.joining}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setJoining(p.key, false)}
+                      aria-pressed={!isIn}
+                      style={{ border: "none", cursor: "pointer", borderRadius: "999px", padding: "7px clamp(10px,0.9vw,14px)", fontFamily: "inherit", fontWeight: 700, fontSize: "clamp(11px,0.85vw,14px)", whiteSpace: "nowrap", background: !isIn ? "var(--color-neutral-100)" : "transparent", color: !isIn ? "var(--color-text)" : "var(--color-neutral-700)" }}
+                    >
+                      {str.notJoining}
+                    </button>
+                  </span>
+                </div>
+              );
+            })}
           </section>
           <section style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: "clamp(9px,0.9vw,15px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)" }}>
             <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.votesTitle}</div>

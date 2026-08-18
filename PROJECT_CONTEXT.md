@@ -98,12 +98,15 @@ Everything lives in `lib/AppState.tsx` (`AppStateProvider`, `useAppState()`), a 
 client Context holding: language, stock, calendar week/events, votes, family members +
 their prefs/cook-days, capture-flow shots/qty, per-dish ingredient checks
 (`checkedByDish`, see below), and the new-event modal's fields. This is **all
-in-memory** — a refresh resets it, with two exceptions that persist to `localStorage` and
+in-memory** — a refresh resets it, with three exceptions that persist to `localStorage` and
 roll over on a time boundary: will-cook days (`"luckytable-cook"`, resets weekly, see
-`cookWeekId()`) and `votes`/`myVotes` (`"luckytable-votes"`, resets daily at midnight, see
-`dayId()` — both a load-time check and a live `setTimeout` scheduled for the next local
-midnight, since the app might be left open across the boundary). Per `HANDOFF.md`, moving
-this to a real database (Supabase / Vercel Postgres) is planned but not started.
+`cookWeekId()`), `votes`/`myVotes` (`"luckytable-votes"`), and `joining`
+(`"luckytable-joining"`). The latter two reset daily at midnight, see `dayId()` — both a
+load-time check and a live `setTimeout` scheduled for the next local midnight, since the app
+might be left open across the boundary. **The midnight `reset()` in the one shared
+`midnightTimer` effect clears all of the daily state at once — add any new
+resets-at-midnight state there rather than scheduling a second timer.** Per `HANDOFF.md`,
+moving this to a real database (Supabase / Vercel Postgres) is planned but not started.
 
 **Votes reset daily, everywhere, because there's one shared source.** `votes` (the seeded
 per-dish tally) and `myVotes` (dishes *you've* voted for) both live in `AppState`; every
@@ -113,6 +116,23 @@ there's nothing to separately keep in sync: reset the shared state once and ever
 reflects it. At each midnight boundary both are cleared to `{}`/`[]` — not reset back to
 the `VOTE_SEED` starting numbers, since that seed was only ever a first-load demo baseline,
 not a value to return to daily.
+
+**Who's at the table tonight** is `joining: string[]` (member keys), set via
+`setJoining(key, isJoining)` and shown as a Joining / Not joining segmented control on each
+Home Family row (added 2026-08-18). Same daily lifecycle as votes — everyone starts at "not
+joining" each day, so an empty list means "nobody has answered yet", not "nobody is coming",
+which is why Home shows `noOneJoining` rather than a zero. Home's "Tonight's dishes" badge
+compares `tonight.length * SERVINGS_PER_DISH` (`lib/dishes.ts`, assumes 4 servings/recipe
+since no source gives a real servings count) against the joining count; with a 4-person
+household and one dish that's usually already "enough", so the warning realistically only
+fires when nothing is planned or the household grows past one dish's worth.
+
+The Family rows give the name/role block a **fixed `flex: "1 1 140px"` basis, deliberately
+not content-driven**: the toggle wraps to its own line below the name on narrow cards, and
+with a content-sized basis it wrapped at a different width per member (a short role like
+"Sunday soup" kept its toggle inline while "Cooks Mon & Thu" pushed its own to the next
+line), so the rows visibly failed to line up. A constant basis makes every row wrap at the
+same width. Keep that in mind before switching it back to `auto`.
 
 Because it's a single Context mounted once in the root `layout.tsx`, this state survives
 client-side navigation (`<Link>`, `router.back()`) between any pages — it only resets on
