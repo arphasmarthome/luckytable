@@ -111,7 +111,7 @@ export default function CalendarPage() {
           </span>
         ))}
         {tonightMeals.length === 0 && <span style={{ fontSize: "clamp(13px,1.05vw,18px)", opacity: 0.85 }}>{str.nothingPlanned}</span>}
-        <Link href="/food" style={{ marginLeft: "auto", border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(9px,0.8vw,13px) clamp(16px,1.5vw,24px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(13px,1.05vw,18px)", cursor: "pointer", minHeight: 44 }}>
+        <Link href="/" style={{ marginLeft: "auto", border: "none", background: "var(--color-accent)", color: "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(9px,0.8vw,13px) clamp(16px,1.5vw,24px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(13px,1.05vw,18px)", cursor: "pointer", minHeight: 44 }}>
           {str.openFood}
         </Link>
       </div>
