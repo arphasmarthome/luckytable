@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useAppState } from "@/lib/AppState";
 import { t, nm } from "@/lib/i18n";
 import { DISHES, dishImg, SERVINGS_PER_DISH } from "@/lib/dishes";
-import { VOTE_SEED, DAY_EN, DAY_ZH, DAY_FULL, MONTH_EN, cookDaysLabel } from "@/lib/family";
+import { VOTE_SEED, DAY_FULL, MONTH_EN, cookDaysLabel } from "@/lib/family";
 
 function PersonIcon() {
   return (
@@ -82,7 +82,6 @@ export default function HomePage() {
   const portionOk = joiningCount > 0 && tonight.length > 0 && seats >= joiningCount;
 
   const now = new Date();
-  const todayShort = zh ? "週" + DAY_ZH[now.getDay()] : DAY_EN[now.getDay()];
   const dashDate = zh
     ? now.getMonth() + 1 + "月" + now.getDate() + "日 星期" + "日一二三四五六"[now.getDay()]
     : DAY_FULL[now.getDay()] + " " + now.getDate() + " " + MONTH_EN[now.getMonth()];
@@ -96,7 +95,7 @@ export default function HomePage() {
     >
       <header style={{ flex: "0 0 auto", display: "flex", alignItems: "baseline", gap: "clamp(14px,1.4vw,24px)" }}>
         <h1 style={{ margin: 0, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(30px,2.8vw,48px)", lineHeight: 1 }}>{str.dashTitle}</h1>
-        <span style={{ fontSize: "clamp(15px,1.2vw,21px)", color: "var(--color-neutral-600)" }}>{dashDate}</span>
+        <span style={{ marginLeft: "auto", fontSize: "clamp(16px,1.35vw,23px)", color: "var(--color-neutral-600)" }}>{dashDate}</span>
       </header>
 
       <div className="stack-grid" style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", gridTemplateColumns: "1.15fr 1fr 1fr", gap: "clamp(16px,1.6vw,28px)" }}>
@@ -176,10 +175,7 @@ export default function HomePage() {
           <section className="fam-card" style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)" }}>
             <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px 12px" }}>
               <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.navFam}</div>
-              <div style={{ marginLeft: "auto", display: "flex", alignItems: "baseline", gap: 7, whiteSpace: "nowrap" }}>
-                <span style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.tonightLabel}</span>
-                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(13px,1vw,17px)", color: "var(--color-accent-700)" }}>{todayShort}</span>
-              </div>
+              <span style={{ marginLeft: "auto", fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700, whiteSpace: "nowrap" }}>{str.tonightLabel}</span>
             </div>
             {members.map((p) => {
               const isIn = joining.indexOf(p.key) !== -1;

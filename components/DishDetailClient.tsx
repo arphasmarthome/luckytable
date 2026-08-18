@@ -83,7 +83,7 @@ export default function DishDetailClient({
 
           <div className="stack-grid" style={{ flex: "0 0 auto", gridTemplateColumns: "1fr 1fr", gap: "clamp(12px,1.2vw,20px)" }}>
             <div style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(14px,1.3vw,22px)", display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 10, minHeight: "clamp(20px,1.7vw,28px)" }}>
                 <span style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.famVote}</span>
                 <span style={{ marginLeft: "auto", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(20px,1.7vw,28px)", color: "var(--color-accent-2-700)" }}>{voteCount}</span>
               </div>
@@ -94,7 +94,7 @@ export default function DishDetailClient({
             </div>
 
             <div style={{ background: "var(--color-surface)", borderRadius: "var(--radius-lg)", padding: "clamp(14px,1.3vw,22px)", display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 10, minHeight: "clamp(20px,1.7vw,28px)" }}>
                 <span style={{ fontSize: "clamp(12px,0.95vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.addMenuTitle}</span>
               </div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
