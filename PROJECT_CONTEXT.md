@@ -127,12 +127,17 @@ since no source gives a real servings count) against the joining count; with a 4
 household and one dish that's usually already "enough", so the warning realistically only
 fires when nothing is planned or the household grows past one dish's worth.
 
-The Family rows give the name/role block a **fixed `flex: "1 1 140px"` basis, deliberately
-not content-driven**: the toggle wraps to its own line below the name on narrow cards, and
-with a content-sized basis it wrapped at a different width per member (a short role like
-"Sunday soup" kept its toggle inline while "Cooks Mon & Thu" pushed its own to the next
-line), so the rows visibly failed to line up. A constant basis makes every row wrap at the
-same width. Keep that in mind before switching it back to `auto`.
+**The Family rows never wrap** — the joining toggle stays on the same line as the name at
+every width. When all three parts (avatar + name/role + toggle) don't fit, the *avatar* is
+what's dropped, via `.fam-avatar` under a **container query** on `.fam-card`
+(`app/globals.css`). It's a container query and not a viewport media query on purpose: the
+card's width comes from its dashboard grid column (~300px at a 1280px desktop, ~460px at
+1920px, full-width on mobile), which no viewport breakpoint could express — at 1280px the
+card is actually *narrower* than it is on a phone-width single-column layout. Note the
+`display: none !important`: the avatar carries an inline `display: flex`, so without it the
+rule silently loses to the inline style (the same trap `.stack-grid` documents above — this
+one cost a debugging round). Below ~230px of card width the longer roles wrap to two lines
+and rows go uneven; that's accepted degradation at 320px-phone width, not a bug to chase.
 
 Because it's a single Context mounted once in the root `layout.tsx`, this state survives
 client-side navigation (`<Link>`, `router.back()`) between any pages — it only resets on

@@ -225,6 +225,24 @@ button:focus-visible,
   }
 }
 
+/* Home's Family card: each row is avatar + name/role + joining toggle, and the
+   toggle stays on the same line as the name at every width. When all three
+   won't fit, the avatar is what gets dropped — it's decorative, the name and
+   the toggle aren't. This is a CONTAINER query, not a viewport media query, on
+   purpose: the card's width comes from its grid column (a third of the
+   dashboard on desktop, full width on mobile), which doesn't track viewport
+   width in any way a breakpoint could express. */
+.fam-card {
+  container-type: inline-size;
+}
+@container (max-width: 340px) {
+  /* !important because the avatar carries an inline display:flex — same
+     inline-style-beats-stylesheet trap as .stack-grid below. */
+  .fam-avatar {
+    display: none !important;
+  }
+}
+
 /* Action bars (e.g. the Review screen's Add to stock / see what I can make
    row): stack full-width on phone instead of wrapping a pill container. */
 @media (max-width: 860px) {

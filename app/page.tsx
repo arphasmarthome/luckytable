@@ -173,7 +173,7 @@ export default function HomePage() {
         </section>
 
         <div className="grow-on-mobile" style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,1.4vw,22px)", overflow: "auto" }}>
-          <section style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)" }}>
+          <section className="fam-card" style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: "clamp(10px,1vw,16px)", background: "var(--color-neutral-100)", borderRadius: "var(--radius-lg)", padding: "clamp(18px,1.7vw,30px)" }}>
             <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px 12px" }}>
               <div style={{ fontSize: "clamp(12px,0.9vw,15px)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-neutral-700)", fontWeight: 700 }}>{str.navFam}</div>
               <div style={{ marginLeft: "auto", display: "flex", alignItems: "baseline", gap: 7, whiteSpace: "nowrap" }}>
@@ -184,15 +184,11 @@ export default function HomePage() {
             {members.map((p) => {
               const isIn = joining.indexOf(p.key) !== -1;
               return (
-                <div key={p.key} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px clamp(10px,1vw,16px)" }}>
-                  <span style={{ flex: "0 0 auto", width: "clamp(40px,3.2vw,50px)", height: "clamp(40px,3.2vw,50px)", borderRadius: "999px", background: p.tint, color: p.ink, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div key={p.key} style={{ display: "flex", alignItems: "center", gap: "clamp(8px,0.9vw,14px)" }}>
+                  <span className="fam-avatar" style={{ flex: "0 0 auto", width: "clamp(40px,3.2vw,50px)", height: "clamp(40px,3.2vw,50px)", borderRadius: "999px", background: p.tint, color: p.ink, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <PersonIcon />
                   </span>
-                  {/* Fixed flex-basis (not content-driven) so the toggle wraps to its
-                      own line at the same width for every member — otherwise a short
-                      role like "Sunday soup" keeps its toggle inline while longer ones
-                      wrap, and the rows stop lining up. */}
-                  <span style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0, flex: "1 1 140px" }}>
+                  <span style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0, flex: "1 1 auto" }}>
                     <span style={{ fontSize: "clamp(15px,1.15vw,20px)", fontWeight: 600 }}>{name(p.name, p.zh)}</span>
                     <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{name(p.role, p.roleZh)}</span>
                   </span>
