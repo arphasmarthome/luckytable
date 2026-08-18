@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useAppState } from "@/lib/AppState";
 import { t, nm } from "@/lib/i18n";
 import { DISHES, dishImg, SERVINGS_PER_DISH } from "@/lib/dishes";
-import { VOTE_SEED, DAY_EN, DAY_ZH, DAY_FULL, MONTH_EN } from "@/lib/family";
+import { VOTE_SEED, DAY_EN, DAY_ZH, DAY_FULL, MONTH_EN, cookDaysLabel } from "@/lib/family";
 
 function PersonIcon() {
   return (
@@ -16,7 +16,7 @@ function PersonIcon() {
 }
 
 export default function HomePage() {
-  const { lang, week, members, votes, myVotes, calWho, joining, setJoining } = useAppState();
+  const { lang, week, members, votes, myVotes, calWho, joining, setJoining, famPrefs } = useAppState();
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
@@ -190,7 +190,7 @@ export default function HomePage() {
                   </span>
                   <span style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0, flex: "1 1 auto" }}>
                     <span style={{ fontSize: "clamp(15px,1.15vw,20px)", fontWeight: 600 }}>{name(p.name, p.zh)}</span>
-                    <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{name(p.role, p.roleZh)}</span>
+                    <span style={{ fontSize: "clamp(13px,1vw,17px)", color: "var(--color-neutral-600)" }}>{cookDaysLabel(famPrefs[p.key]?.cook, zh) ?? name(p.role, p.roleZh)}</span>
                   </span>
                   <span style={{ flex: "0 0 auto", display: "flex", gap: 4, background: "var(--color-neutral-200)", borderRadius: "999px", padding: 3 }}>
                     <button

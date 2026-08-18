@@ -95,6 +95,18 @@ export type WeekDay = {
   items: CalendarEvent[];
 };
 
+export function cookDaysLabel(cook: number[] | undefined, zh: boolean): string | null {
+  const days: string[] = [];
+  (cook || []).forEach((on, i) => {
+    if (on) days.push(zh ? DAY_ZH[(i + 1) % 7] : DAY_EN[(i + 1) % 7]);
+  });
+  if (days.length === 0) return null;
+  if (zh) return days.map((d) => "週" + d).join("、") + "掌廚";
+  if (days.length === 1) return "Cooks " + days[0];
+  if (days.length === 2) return "Cooks " + days[0] + " & " + days[1];
+  return "Cooks " + days.slice(0, -1).join(", ") + " & " + days[days.length - 1];
+}
+
 export function buildWeek(): WeekDay[] {
   const out: WeekDay[] = [];
   const now = new Date();

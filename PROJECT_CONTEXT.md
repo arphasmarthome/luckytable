@@ -118,14 +118,28 @@ the `VOTE_SEED` starting numbers, since that seed was only ever a first-load dem
 not a value to return to daily.
 
 **Who's at the table tonight** is `joining: string[]` (member keys), set via
-`setJoining(key, isJoining)` and shown as a Joining / Not joining segmented control on each
-Home Family row (added 2026-08-18). Same daily lifecycle as votes — everyone starts at "not
-joining" each day, so an empty list means "nobody has answered yet", not "nobody is coming",
-which is why Home shows `noOneJoining` rather than a zero. Home's "Tonight's dishes" badge
-compares `tonight.length * SERVINGS_PER_DISH` (`lib/dishes.ts`, assumes 4 servings/recipe
-since no source gives a real servings count) against the joining count; with a 4-person
-household and one dish that's usually already "enough", so the warning realistically only
-fires when nothing is planned or the household grows past one dish's worth.
+`setJoining(key, isJoining)` and shown as a Yes / No segmented control (`str.joining` /
+`str.notJoining`) on each Home Family row (added 2026-08-18). Same daily lifecycle as votes —
+everyone starts at "not joining" each day, so an empty list means "nobody has answered yet",
+not "nobody is coming", which is why Home shows `noOneJoining` rather than a zero. The card's
+header badge reads "Joining tonight" (`str.tonightLabel`) — not just "Tonight" — since the
+weekday abbreviation next to it names the day, and the label needed to say what the toggle
+below it is asking. Home's "Tonight's dishes" badge compares
+`tonight.length * SERVINGS_PER_DISH` (`lib/dishes.ts`, assumes 4 servings/recipe since no
+source gives a real servings count) against the joining count; with a 4-person household and
+one dish that's usually already "enough", so the warning realistically only fires when
+nothing is planned or the household grows past one dish's worth.
+
+**The subtitle under each Family-row name is not static text** — it's
+`cookDaysLabel(famPrefs[key].cook, zh)` (`lib/family.ts`), derived live from the same
+`cook: number[]` per-member array the Family page's Mon–Sun day toggles write to
+(`toggleCookDay`, persisted under `"luckytable-cook"`, weekly not daily). `FamilyMember.role`/
+`roleZh` in `lib/family.ts` is only the fallback shown when a member has zero cook days set
+(e.g. "Sets the table" for a member who hasn't been given any cooking days) — as soon as any
+day is toggled, the derived "Cooks Mon & Thu" / "週一、週四掌廚" replaces it everywhere the
+role would otherwise show on Home. This was a deliberate fix (2026-08-18): the role text used
+to be frozen seed data that never reflected the Family page's own day picker, so toggling a
+day there had no visible effect anywhere else.
 
 **The Family rows never wrap** — the joining toggle stays on the same line as the name at
 every width. When all three parts (avatar + name/role + toggle) don't fit, the *avatar* is
