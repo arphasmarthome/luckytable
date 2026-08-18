@@ -97,9 +97,9 @@ export default function HomePage() {
       <header style={{ flex: "0 0 auto", display: "flex", alignItems: "baseline", gap: "clamp(14px,1.4vw,24px)" }}>
         <h1 style={{ margin: 0, fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(30px,2.8vw,48px)", lineHeight: 1 }}>{str.dashTitle}</h1>
         <span style={{ marginLeft: "auto", alignSelf: "center", display: "flex" }}>
-          <CartButton size="clamp(40px,3.2vw,50px)" />
+          <CartButton />
         </span>
-        <span style={{ fontSize: "clamp(16px,1.35vw,23px)", color: "var(--color-neutral-600)" }}>{dashDate}</span>
+        <span style={{ fontSize: "clamp(19px,1.6vw,27px)", color: "var(--color-neutral-600)" }}>{dashDate}</span>
       </header>
 
       <div className="stack-grid" style={{ flex: "1 1 auto", minHeight: 0, overflow: "auto", gridTemplateColumns: "1.15fr 1fr 1fr", gap: "clamp(16px,1.6vw,28px)" }}>
