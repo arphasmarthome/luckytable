@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useAppState } from "@/lib/AppState";
 import { useCaptured } from "@/lib/useCaptured";
 import { t, nm } from "@/lib/i18n";
@@ -19,13 +18,11 @@ export default function DishDetailClient({
   recipe: MealDbRecipe | null;
   matchMode?: "captured" | "stock";
 }) {
-  const { lang, stock, votes, myVotes, toggleVote, week, toggleMenuTonight, openNewEvent, checkedByDish, toggleDishIngredient } = useAppState();
+  const { lang, stock, votes, myVotes, toggleVote, week, toggleMenuTonight, openNewEvent, checkedByDish, toggleDishIngredient, cart, addToCart } = useAppState();
   const { captured } = useCaptured();
   const str = t(lang);
   const zh = lang === "zh";
   const name = (en: string, zhName: string) => nm(lang, en, zhName);
-
-  const [carted, setCarted] = useState(false);
 
   const ingSource = recipe && recipe.ing.length ? recipe.ing : dish.ing;
 
@@ -39,6 +36,7 @@ export default function DishDetailClient({
     const have = checked[ix];
     return {
       name: ingName,
+      zh: zhFallback,
       label: name(ingName, zhFallback),
       amount: zh ? AMT[amount] || amount : amount,
       mark: have ? "✓" : "+",
@@ -54,6 +52,9 @@ export default function DishDetailClient({
   const pct = Math.round((haveCount / ings.length) * 100);
   const missing = ings.filter((i) => !i.have);
   const minutes = estimateMinutes(ingSource, dish.cat);
+
+  const dishCartNames = new Set(cart.filter((c) => c.dishId === dish.id).map((c) => c.name.toLowerCase()));
+  const carted = missing.length > 0 && missing.every((i) => dishCartNames.has(String(i.name).toLowerCase()));
 
   const voteCount = (votes[dish.id] || 0) + (myVotes.indexOf(dish.id) !== -1 ? 1 : 0);
   const voted = myVotes.indexOf(dish.id) !== -1;
@@ -174,7 +175,13 @@ export default function DishDetailClient({
             <div style={{ fontSize: "clamp(15px,1.2vw,20px)", color: "var(--color-accent-800)", fontWeight: 600 }}>{missingLine}</div>
             <button
               type="button"
-              onClick={() => { if (missing.length) setCarted(true); }}
+              onClick={() => {
+                if (!missing.length) return;
+                addToCart(
+                  { id: dish.id, name: dish.name, zh: dish.zh },
+                  missing.map((i) => ({ name: String(i.name), zh: i.zh, amount: i.amount }))
+                );
+              }}
               style={{ border: missing.length === 0 ? "2px solid var(--color-neutral-400)" : "2px solid var(--color-accent)", background: missing.length === 0 ? "transparent" : "var(--color-accent)", color: missing.length === 0 ? "var(--color-neutral-600)" : "var(--color-accent-100)", borderRadius: "999px", padding: "clamp(13px,1.2vw,20px) clamp(20px,1.8vw,32px)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}
             >
               {cartLabel}

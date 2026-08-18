@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAppState } from "@/lib/AppState";
 import { t } from "@/lib/i18n";
+import CartButton from "@/components/CartButton";
 
 export default function FoodHeader({ title, extra }: { title: string; extra?: ReactNode }) {
   const { lang } = useAppState();
@@ -35,6 +36,7 @@ export default function FoodHeader({ title, extra }: { title: string; extra?: Re
       </button>
       <h1 style={{ margin: "0 auto 0 0", fontFamily: "var(--disp)", fontWeight: 700, fontSize: "clamp(26px,2.4vw,42px)", lineHeight: 1.05 }}>{title}</h1>
       {extra}
+      <CartButton />
       <Link
         href="/food/stock"
         style={{ display: "flex", alignItems: "center", gap: 9, flex: "0 0 auto", whiteSpace: "nowrap", border: "2px solid var(--color-neutral-300)", background: "var(--color-neutral-100)", color: "var(--color-neutral-800)", borderRadius: "999px", padding: "clamp(9px,0.75vw,14px) clamp(14px,1.25vw,22px)", fontFamily: "inherit", fontWeight: 600, fontSize: "clamp(13px,1vw,18px)", cursor: "pointer" }}

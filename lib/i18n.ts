@@ -55,7 +55,10 @@ export const STR = {
     colItem: "Item", colCat: "Category", colCount: "Count", colAdded: "Updated",
     recipe: "Recipe", allSet: "Everything's here — here's how to make it.", swipeHint: "Swipe a row left to remove it.",
     del: "Remove", stepsNote: "Prototype method — replace with your recipe source.", justAdded: "Just added",
-    titles: { capture: "Capture items", review: "What we found", wantmake: "I want to make", stock: "What's in stock", share: "Share" } as Record<string, string>,
+    cartLabel: "Shopping cart", cartEmpty: "Nothing in your cart yet",
+    cartEmptyBody: "Add missing ingredients from any dish's page to build your shopping list.",
+    cartFor: "For", buyAt: "Buy at shop.pxgo.com.tw",
+    titles: { capture: "Capture items", review: "What we found", wantmake: "I want to make", stock: "What's in stock", share: "Share", cart: "Shopping cart" } as Record<string, string>,
     filters: {
       All: "All", "Stir-fry": "Stir-fry", "Rice bowl": "Rice bowl", Braise: "Braise", Side: "Side",
       Beef: "Beef", Chicken: "Chicken", Pork: "Pork", Lamb: "Lamb", Goat: "Goat", Seafood: "Seafood",
@@ -122,7 +125,10 @@ export const STR = {
     colItem: "品項", colCat: "分類", colCount: "數量", colAdded: "更新",
     recipe: "食譜", allSet: "食材齊全，照著做即可。", swipeHint: "向左滑動可刪除。",
     del: "刪除", stepsNote: "示範作法，之後由食譜資料庫取代。", justAdded: "剛剛加入",
-    titles: { capture: "拍攝食材", review: "辨識結果", wantmake: "我想做", stock: "庫存清單", share: "分享" } as Record<string, string>,
+    cartLabel: "購物車", cartEmpty: "購物車還是空的",
+    cartEmptyBody: "從任一道菜的頁面加入缺少的食材，建立購物清單。",
+    cartFor: "用於", buyAt: "前往 shop.pxgo.com.tw 購買",
+    titles: { capture: "拍攝食材", review: "辨識結果", wantmake: "我想做", stock: "庫存清單", share: "分享", cart: "購物車" } as Record<string, string>,
     filters: {
       All: "全部", "Stir-fry": "快炒", "Rice bowl": "丼飯", Braise: "紅燒", Side: "小菜",
       Beef: "牛肉", Chicken: "雞肉", Pork: "豬肉", Lamb: "羊肉", Goat: "山羊肉", Seafood: "海鮮",

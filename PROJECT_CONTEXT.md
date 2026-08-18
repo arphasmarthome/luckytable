@@ -172,6 +172,29 @@ localized unit ("min" / "分鐘"). If a real time source shows up later (TheMeal
 a different API), replace `estimateMinutes` — don't bolt a second, disagreeing number on
 next to it.
 
+**The shopping cart** (`cart: CartItem[]` in AppState, added 2026-08-18) is a real, shared
+list now — not the local `useState(false)` toggle it used to be. Clicking "Add N to cart" on
+a dish page calls `addToCart({id,name,zh}, items)`, which upserts each of that dish's
+currently-*missing* ingredients into `cart`. Each row's id is `dishId::ingredientName`
+(lowercased) — deliberately **not** just the ingredient name — so the same ingredient missing
+from two different dishes becomes two separate rows, each still tagged with its own dish; this
+is what lets the cart page group by dish and is why "keep track of what item is for what dish"
+falls out for free rather than needing a separate join. A dish's button shows
+"Added ✓" by *deriving* `carted` from whether every currently-missing ingredient's id is
+already in `cart` (not from local state), so the button reflects reality even after
+navigating away and back. `CartButton` (`components/CartButton.tsx`) is the reusable
+icon-with-badge — badge count is `cart.reduce((s,i)=>s+i.qty,0)` — used both left of the date
+on Home and left of "What's in stock" in `FoodHeader` (so it appears on every `/food/*` page,
+matching how "What's in stock" already does). The cart page itself
+(`app/food/cart/page.tsx`) reuses the exact pointer-drag swipe-to-remove pattern from
+`app/food/stock/page.tsx`'s `StockRow` (same 190px reveal, same `-110px` commit threshold) —
+if that pattern changes, update both. Deliberately **not** persisted to `localStorage` like
+`joining`/votes/cook-days are: it follows the same "in-memory, survives navigation, resets on
+hard reload" rule as `stock` and everything else undocumented above, so a fresh session always
+starts with an empty cart. The bottom-right "Buy at shop.pxgo.com.tw" button is a plain
+external link (opens in a new tab) — there's no real checkout integration, so it doesn't clear
+the cart or track order state.
+
 ### Recipe data — one fetch, one source of truth
 
 `DISHES` in `lib/dishes.ts` has a short **seed** ingredient list per dish (used only as

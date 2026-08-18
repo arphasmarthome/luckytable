@@ -8,6 +8,17 @@ import { Lang } from "./i18n";
 
 export type FamPrefs = Record<string, { likes: [string, string][]; dislikes: [string, string][]; allergies: [string, string][]; cook: number[] }>;
 
+export type CartItem = {
+  id: string;
+  name: string;
+  zh: string;
+  amount: string;
+  qty: number;
+  dishId: string;
+  dishName: string;
+  dishZh: string;
+};
+
 type State = {
   lang: Lang;
   calWho: string;
@@ -32,6 +43,7 @@ type State = {
   evDish: string;
   evCustom: string;
   checkedByDish: Record<string, boolean[]>;
+  cart: CartItem[];
 };
 
 type Ctx = State & {
@@ -68,6 +80,10 @@ type Ctx = State & {
   saveEvent: () => void;
   toggleMenuTonight: (dish: { id: string; name: string; zh: string }) => void;
   toggleDishIngredient: (dishId: string, ix: number, fallback: boolean[]) => void;
+  addToCart: (dish: { id: string; name: string; zh: string }, items: { name: string; zh: string; amount: string }[]) => void;
+  incCartItem: (id: string) => void;
+  decCartItem: (id: string) => void;
+  removeCartItem: (id: string) => void;
 };
 
 const AppContext = createContext<Ctx | null>(null);
@@ -118,6 +134,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [evDish, setEvDish] = useState("");
   const [evCustom, setEvCustom] = useState("");
   const [checkedByDish, setCheckedByDish] = useState<Record<string, boolean[]>>({});
+  const [cart, setCart] = useState<CartItem[]>([]);
   const midnightTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
@@ -226,7 +243,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const value = useMemo<Ctx>(
     () => ({
       lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, joining,
-      members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish,
+      members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish, cart,
 
       setLang,
       setCalWho,
@@ -406,9 +423,32 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           const current = prev[dishId] || fallback;
           const next = current.map((v, i) => (i === ix ? !v : v));
           return Object.assign({}, prev, { [dishId]: next });
-        })
+        }),
+
+      addToCart: (dish, items) =>
+        setCart((prev) => {
+          const existingIds = new Set(prev.map((r) => r.id));
+          const additions = items
+            .filter((it) => !existingIds.has(dish.id + "::" + it.name.toLowerCase()))
+            .map((it) => ({
+              id: dish.id + "::" + it.name.toLowerCase(),
+              name: it.name,
+              zh: it.zh || it.name,
+              amount: it.amount,
+              qty: 1,
+              dishId: dish.id,
+              dishName: dish.name,
+              dishZh: dish.zh
+            }));
+          return additions.length ? prev.concat(additions) : prev;
+        }),
+      incCartItem: (id) =>
+        setCart((prev) => prev.map((r) => (r.id === id ? Object.assign({}, r, { qty: r.qty + 1 }) : r))),
+      decCartItem: (id) =>
+        setCart((prev) => prev.map((r) => (r.id === id ? Object.assign({}, r, { qty: Math.max(1, r.qty - 1) }) : r))),
+      removeCartItem: (id) => setCart((prev) => prev.filter((r) => r.id !== id))
     }),
-    [lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, joining, members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish]
+    [lang, calWho, famWho, staples, atStore, shots, qty, stock, week, view, votes, myVotes, joining, members, newMember, famPrefs, modalOpen, evDay, evTime, evWho, evDish, evCustom, checkedByDish, cart]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
