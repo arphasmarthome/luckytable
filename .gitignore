@@ -1,0 +1,10 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Superseded standalone prototypes — not wired into the device shell.
+# prototype/recipe  -> replaced by prototype/make (see prototype/make/README.md)
+# prototype/calendar -> replaced by the device shell's built-in calendar.js/calendar.css
+prototype/recipe/
+prototype/calendar/

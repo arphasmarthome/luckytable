@@ -1,0 +1,218 @@
+html.device-embedded,
+html.device-embedded body {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  --canvas: #f5f7f5;
+  --surface: #fff;
+}
+
+.device-embedded .app-shell {
+  width: 100%;
+  height: 100dvh;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.device-embedded .app-shell > .sidebar,
+.device-embedded .app-shell > .topbar {
+  display: none;
+}
+
+.device-embedded .workspace {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 24px;
+  background: var(--canvas);
+  overscroll-behavior: contain;
+}
+
+.device-embedded .page-heading h1 {
+  font-size: 28px;
+  letter-spacing: 0;
+}
+
+.device-embedded .action-dock {
+  left: 20px;
+  right: 20px;
+  bottom: 12px;
+}
+
+.device-embedded .toast {
+  bottom: 16px;
+}
+
+.device-embedded body.has-action-dock .toast,
+.device-embedded body.has-flow-footer .toast {
+  bottom: 102px;
+}
+
+.device-embedded .phone-upload-dialog footer {
+  flex-wrap: wrap;
+}
+
+.device-embedded .device-demo-upload {
+  gap: 6px;
+}
+
+.device-embedded[data-device-page="photo-frame"] .workspace {
+  padding: 18px 24px 12px;
+}
+
+.device-embedded .frame-page {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+  min-height: 360px;
+}
+
+.device-embedded .frame-page .page-heading {
+  min-height: 58px;
+  margin: 0 0 12px;
+}
+
+.device-embedded .frame-page .eyebrow {
+  display: none;
+}
+
+.device-embedded .frame-page .page-heading h1 {
+  font-size: 25px;
+  max-width: none;
+}
+
+.device-embedded .frame-page .page-status {
+  font-size: 12px;
+  max-width: none;
+}
+
+.device-embedded .frame-layout {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.device-embedded .viewer {
+  height: 100%;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: 0;
+}
+
+.device-embedded .photo-stage {
+  height: 100%;
+  min-height: 230px;
+  aspect-ratio: auto;
+  border-radius: 6px;
+  background: #17261f;
+}
+
+.device-embedded .photo-stage:fullscreen,
+.device-embedded .photo-stage.is-cinema-fallback {
+  height: 100dvh;
+  min-height: 100dvh;
+  border-radius: 0;
+}
+
+.device-embedded .viewer-toolbar {
+  min-height: 48px;
+  padding: 7px 0 0;
+}
+
+.device-embedded .toolbar-copy {
+  max-width: 100%;
+}
+
+.device-embedded .stage-caption strong {
+  overflow-wrap: anywhere;
+}
+
+.device-embedded .device-demo-label {
+  position: absolute;
+  z-index: 4;
+  top: 14px;
+  left: 14px;
+  padding: 4px 7px;
+  color: #fff;
+  background: rgb(15 30 23 / 65%);
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+html.device-inactive *,
+html.device-inactive *::before,
+html.device-inactive *::after {
+  animation-play-state: paused !important;
+}
+
+@media (max-width: 820px) {
+  .device-embedded .workspace,
+  .device-embedded[data-device-page="photo-frame"] .workspace {
+    padding: 16px;
+  }
+
+  .device-embedded .page-heading h1 {
+    font-size: 25px;
+  }
+
+  .device-embedded .action-dock,
+  .device-embedded .flow-footer {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .device-embedded .results-page {
+    padding-bottom: 128px;
+  }
+
+  .device-embedded body.has-cart-dock .results-page {
+    padding-bottom: 182px;
+  }
+
+  .device-embedded body.has-action-dock .toast {
+    bottom: 142px;
+  }
+
+  .device-embedded body.has-cart-dock .toast {
+    bottom: 194px;
+  }
+
+  .device-embedded body.has-flow-footer .toast {
+    bottom: 100px;
+  }
+
+  .device-embedded .frame-page .page-heading h1 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .device-embedded .workspace,
+  .device-embedded[data-device-page="photo-frame"] .workspace {
+    padding: 12px;
+  }
+
+  .device-embedded .frame-page .page-heading {
+    min-height: 56px;
+  }
+
+  .device-embedded .stage-caption {
+    right: 95px;
+  }
+
+  .device-embedded .toolbar-copy strong {
+    font-size: 12px;
+  }
+
+  .device-embedded .toolbar-copy span {
+    font-size: 10px;
+  }
+}

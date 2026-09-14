@@ -1,0 +1,778 @@
+/* LuckyUI reference layout at the device's fixed 1920 x 1080 design size. */
+html.device-embedded {
+  font-family: "Microsoft YaHei", "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  --canvas: #f5f6f6;
+  --surface: #fff;
+  --surface-soft: #f3f4f5;
+  --ink: #262d30;
+  --ink-soft: #697276;
+  --line: #dce1e3;
+  --line-strong: #c7cfd3;
+  --forest: #303b43;
+  --forest-dark: #263139;
+  --forest-soft: #edf0f2;
+  --tomato: #ce542c;
+  --tomato-dark: #b44a28;
+  --tomato-soft: #fff1eb;
+  --blue: #477891;
+  --green: #316f60;
+  --shadow: none;
+}
+
+.device-embedded body { font-family: "Microsoft YaHei", "Noto Sans TC", "PingFang TC", system-ui, sans-serif; font-size: 22px; }
+.device-embedded .workspace { padding: 28px 40px 24px; scrollbar-gutter: auto; background: var(--canvas); }
+.device-embedded .page { max-width: none; }
+.device-embedded svg { width: 26px; height: 26px; }
+.device-embedded button { font-weight: 500; }
+.device-embedded .eyebrow { display: none; }
+.device-embedded .page-heading { min-height: 72px; align-items: center; margin: 0 0 22px; }
+.device-embedded .page-heading h1 { margin: 0 0 12px; font-size: 34px; line-height: 1.3; }
+.device-embedded .page-heading p:last-child { max-width: none; font-size: 22px; line-height: 1.5; }
+.device-embedded .primary-button,
+.device-embedded .secondary-button,
+.device-embedded .tertiary-button { min-height: 66px; gap: 12px; padding: 0 26px; font-size: 21px; border-radius: 8px; box-shadow: none; }
+.device-embedded .primary-button { background: var(--tomato); border-color: var(--tomato); }
+.device-embedded .primary-button:hover { background: var(--tomato-dark); border-color: var(--tomato-dark); }
+.device-embedded .secondary-button { color: var(--ink); background: #f6f7f7; border-color: var(--line-strong); }
+.device-embedded .tertiary-button { color: var(--ink); background: transparent; }
+.device-embedded .text-button { min-height: 52px; gap: 10px; font-size: 19px; color: var(--blue); }
+.device-embedded .back-button { min-height: 52px; gap: 10px; padding: 0 12px; border: 0; font-size: 21px; background: transparent; }
+.device-embedded .icon-button { width: 54px; height: 54px; }
+.device-embedded .safety-badge { padding: 4px 8px; border-radius: 4px; font-size: 16px; background: transparent; color: var(--ink-soft); }
+.device-embedded .chip,
+.device-embedded .filter-chip { border-radius: 7px; font-size: 17px; }
+.device-embedded .filter-chip { min-height: 40px; padding-inline: 18px; }
+.device-embedded button.filter-chip.is-selected { color: #fff; background: var(--forest); border-color: var(--forest); }
+.device-embedded [data-device-diet] { font-size: 15px !important; margin: 6px 0 10px !important; color: var(--ink-soft); }
+.device-embedded [data-device-diet] summary { font-weight: 500 !important; }
+.device-embedded [data-device-diet][open] { position: relative; z-index: 14; padding: 16px; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+.device-embedded [data-device-diet] dl { font-size: 18px; }
+.device-embedded [data-device-diet] dl > div { border-top-color: var(--line) !important; }
+
+.device-embedded .hub-heading { min-height: 112px; margin-bottom: 22px; }
+.device-embedded .hub-heading .tertiary-button { min-width: 240px; background: #fff; }
+.device-embedded .hub-layout { gap: 18px; }
+.device-embedded .path-grid { height: 550px; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 18px; }
+.device-embedded .path-card { border: 2px solid var(--line); box-shadow: none; }
+.device-embedded .path-card:hover { border-color: #a5bcc8; transform: none; }
+.device-embedded .path-card:first-child { grid-template-rows: minmax(0, 1fr) 120px; }
+.device-embedded .path-image::after { display: none; }
+.device-embedded .path-icon { right: 18px; bottom: 18px; width: 54px; height: 54px; background: var(--blue); border-width: 2px; }
+.device-embedded .path-copy { padding: 22px 66px 22px 22px; }
+.device-embedded .path-copy strong { font-size: 29px; font-weight: 500; }
+.device-embedded .path-copy p { margin-top: 14px; font-size: 20px; }
+.device-embedded .path-copy > svg { right: 26px; color: var(--blue); }
+.device-embedded .path-card:last-child .path-copy > svg { color: var(--tomato); }
+.device-embedded .meal-context { position: relative; min-height: 152px; padding: 26px 26px 46px; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.2fr) auto; background: #fafbfb; border: 2px solid var(--line); gap: 28px; }
+.device-embedded .context-intro { gap: 16px; }
+.device-embedded .context-intro > i { width: 34px; height: 34px; color: var(--blue); border: 3px solid var(--blue); background: transparent; }
+.device-embedded .context-intro > i svg { width: 24px; height: 24px; }
+.device-embedded .context-intro strong { font-size: 24px; }
+.device-embedded .context-intro small { margin-top: 10px; font-size: 18px; }
+.device-embedded .context-rules { font-size: 21px; padding-left: 28px; border-left: 1px solid var(--line); }
+.device-embedded .context-pantry { font-size: 20px; display: grid; justify-items: end; padding-left: 28px; }
+.device-embedded .context-pantry svg { width: 25px; height: 25px; color: var(--blue); }
+.device-embedded .meal-context [data-device-diet] { position: absolute; bottom: 8px; left: 27px; right: 26px; margin: 0 !important; }
+.device-embedded .meal-context [data-device-diet][open] { bottom: 10px; left: 0; right: 0; padding: 22px; max-height: 600px; overflow-y: auto; }
+
+.device-embedded .flow-command { min-height: 66px; gap: 24px; margin: 0 0 16px; flex-shrink: 0; }
+.device-embedded .flow-summary { font-size: 19px; }
+.device-embedded .flow-summary span { display: none; }
+.device-embedded .flow-summary strong { font-weight: 500; color: var(--ink-soft); }
+.device-embedded .stepper button { min-height: 56px; gap: 14px; font-size: 20px; }
+.device-embedded .stepper button::before,
+.device-embedded .stepper button::after { width: calc(50% - 80px); }
+.device-embedded .stepper i { width: 42px; height: 42px; font-size: 20px; background: #e9edef; border: 0; }
+.device-embedded .stepper button.is-current i,
+.device-embedded .stepper button.is-complete i { background: var(--forest); }
+.device-embedded .stepper button.is-complete::after,
+.device-embedded .stepper button.is-complete + button::before { background: var(--line); }
+.device-embedded .flow-panel { border: 0; border-radius: 0; box-shadow: none; }
+.device-embedded .step-intro h1 { font-size: 34px; }
+.device-embedded .step-intro p:last-child { font-size: 19px; }
+.device-embedded .flow-footer { min-height: 90px; padding: 12px 0 0; background: var(--canvas); border-top: 0; }
+.device-embedded .flow-footer-copy strong { font-size: 21px; }
+.device-embedded .flow-footer-copy span { font-size: 16px; }
+.device-embedded .flow-footer .primary-button { min-width: 250px; }
+.device-embedded .capture-stage { padding: 30px; }
+.device-embedded .capture-actions { padding: 30px; }
+.device-embedded .capture-action-list button { min-height: 92px; grid-template-columns: 48px 1fr 24px; }
+.device-embedded .capture-action-list button strong { font-size: 22px; }
+.device-embedded .capture-action-list button small { margin-top: 8px; font-size: 16px; }
+.device-embedded .sync-callout { min-height: 64px; font-size: 18px; }
+.device-embedded .tips h2 { font-size: 22px; }
+.device-embedded .tips li { font-size: 17px; }
+.device-embedded .privacy-note { font-size: 15px; }
+.device-embedded .scanning-state { padding: 30px; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 18px; }
+.device-embedded .scanning-state h1 { font-size: 34px; }
+.device-embedded .scanning-state > div:first-child p { margin: 0; font-size: 20px; }
+.device-embedded .scanning-state .scan-frame { width: 100%; height: 100%; aspect-ratio: auto; background: #f2f4f4; }
+.device-embedded .scanning-state img { object-fit: contain; }
+.device-embedded .scan-line { left: 32%; right: 32%; background: #dfb941; box-shadow: 0 0 6px #dfb941; }
+.device-embedded .scan-progress { height: 5px; }
+.device-embedded .scanning-state > strong { font-size: 22px; font-weight: 500; }
+.device-embedded .ingredients-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.device-embedded .recognition-image { background: #f1f3f4; }
+.device-embedded .recognition-figure { padding: 24px; }
+.device-embedded .recognition-figure figcaption,
+.device-embedded .recognition-figure figcaption strong { font-size: 16px; }
+.device-embedded .recognition-figure .status-badge { font-size: 14px; }
+.device-embedded .ingredient-editor { background: #fff; padding: 28px 26px 0; }
+.device-embedded .ingredient-editor h2 { font-size: 28px; }
+.device-embedded .ingredient-editor header p { font-size: 17px; }
+.device-embedded .ingredient-row { min-height: 70px; padding: 9px 12px; gap: 12px; grid-template-columns: 36px minmax(120px, 1fr) auto auto 44px; }
+.device-embedded .ingredient-name strong { font-size: 21px; }
+.device-embedded .ingredient-name small { font-size: 14px; }
+.device-embedded .ingredient-unit { font-size: 19px; }
+.device-embedded .quantity-stepper { font-size: 21px; }
+.device-embedded .quantity-stepper button { width: 44px; height: 44px; }
+.device-embedded .inline-add input { font-size: 19px; min-height: 60px; }
+.device-embedded .detection-box b { font-size: 13px; }
+.device-embedded .conditions-layout { grid-template-columns: 480px minmax(0, 1fr); }
+.device-embedded .condition-summary { display: flex; flex-direction: column; padding: 30px 28px; color: var(--ink); background: #fff; border-right: 1px solid var(--line-strong); }
+.device-embedded .condition-summary h2 { margin: 0 0 28px; font-size: 28px; }
+.device-embedded .lucky-ingredient-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.device-embedded .lucky-ingredient-chips span { display: grid; place-items: center; min-height: 64px; padding: 12px; background: #f2f3f5; border-radius: 7px; font-size: 22px; }
+.device-embedded .condition-summary .safety-row { margin-top: auto; padding: 26px 0 12px; font-size: 18px; color: var(--ink-soft); background: transparent; border: 0; border-top: 1px solid var(--line); }
+.device-embedded .condition-summary [data-device-diet] { margin: 0 !important; }
+.device-embedded .condition-summary [data-device-diet][open] { max-height: 350px; overflow-y: auto; flex-shrink: 0; }
+.device-embedded .condition-form { padding: 32px 50px; }
+.device-embedded .condition-form .step-intro { margin-bottom: 34px; }
+.device-embedded .condition-group { padding: 18px 0; border: 0; }
+.device-embedded .condition-group legend { font-size: 24px; font-weight: 500; }
+.device-embedded .option-grid { margin-top: 14px; gap: 12px; }
+.device-embedded .option-button { min-height: 70px; padding: 10px 14px; font-size: 23px; font-weight: 500; }
+.device-embedded .option-button.is-selected { color: #fff; background: var(--forest); border-color: var(--forest); box-shadow: none; }
+.device-embedded .lucky-member-group { position: relative; padding-top: 12px; }
+.device-embedded .member-selector { gap: 12px; padding-top: 16px; }
+.device-embedded .member-selector button { min-height: 68px; padding: 12px 18px; font-size: 20px; border-radius: 8px; }
+.device-embedded .member-selector button i { display: none; }
+.device-embedded .member-selector button.is-selected { color: #fff; background: var(--forest); border-color: var(--forest); }
+.device-embedded .member-selector button.is-selected svg { order: -1; width: 21px; }
+.device-embedded .guest-stepper { grid-template-columns: 52px 134px 52px; margin-top: 0; }
+.device-embedded .guest-stepper button { height: 64px; }
+.device-embedded .guest-stepper span { font-size: 20px; font-weight: 500; }
+.device-embedded .lucky-member-group .guest-stepper { position: absolute; right: 0; top: -36px; }
+
+.device-embedded .results-page { display: flex; min-height: 100%; height: auto; padding-bottom: 100px; }
+.device-embedded .results-page .page-heading { min-height: 66px; margin-bottom: 12px; }
+.device-embedded .results-page .page-heading h1 { margin-bottom: 6px; }
+.device-embedded .results-page .page-heading p:last-child { font-size: 18px; }
+.device-embedded .results-page .page-heading-actions .tertiary-button { min-height: 48px; font-size: 18px; }
+.device-embedded .results-toolbar { min-height: 42px; margin-bottom: 8px; }
+.device-embedded .results-page [data-device-diet] { margin-bottom: 10px !important; }
+.device-embedded .recipe-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.device-embedded .recipe-card { border: 2px solid #d0d6da; box-shadow: none; }
+.device-embedded .recipe-card.is-selected { border-color: var(--tomato); box-shadow: inset 0 0 0 1px var(--tomato); }
+.device-embedded .recipe-card > button { height: 100%; }
+.device-embedded .recipe-image { height: 210px; background: #eff1f3; }
+.device-embedded .recipe-image img { object-fit: contain; }
+.device-embedded .recipe-card-copy { position: relative; padding: 20px 20px 18px; }
+.device-embedded .recipe-card-copy h2 { margin: 0 0 14px; color: var(--ink); font-size: 24px; line-height: 1.35; font-weight: 500; white-space: normal; }
+.device-embedded .recipe-facts { gap: 10px; margin: 0; }
+.device-embedded .recipe-facts span { font-size: 18px; }
+.device-embedded .recipe-facts svg { width: 20px; height: 20px; color: var(--ink-soft); }
+.device-embedded .results-page .recipe-card { height: 180px; }
+.device-embedded .results-page .recipe-card > button { display: grid; grid-template-columns: 40% minmax(0, 1fr); }
+.device-embedded .results-page .recipe-image { height: 100%; }
+.device-embedded .results-page .recipe-image img { object-fit: cover; }
+.device-embedded .results-page .recipe-card-copy { display: flex; flex-direction: column; justify-content: center; padding: 16px; }
+.device-embedded .results-page .recipe-card-copy h2 { font-size: 22px; font-weight: 600; margin-bottom: 16px; }
+.device-embedded .results-page .recipe-facts { flex-direction: column; gap: 7px; }
+.device-embedded .results-page .recipe-facts span { font-size: 16px; }
+.device-embedded .ingredient-status { display: flex; align-items: center; gap: 8px; margin: 9px 0 0; min-height: 26px; font-size: 17px; color: var(--ink); }
+.device-embedded .ingredient-status svg { width: 20px; height: 20px; }
+.device-embedded .ingredient-status.is-missing { color: #9c752f; }
+.device-embedded .match-badge { top: 9px; left: 9px; padding: 8px 16px; font-size: 20px; font-weight: 600; border-radius: 5px; background: var(--forest); }
+.device-embedded .match-badge.is-missing { background: #b38324; }
+.device-embedded .recipe-card.is-selected .match-badge::before { display: none; }
+.device-embedded .action-dock { left: 40px; right: 40px; bottom: 0; min-height: 98px; grid-template-columns: auto auto minmax(0, 1fr) auto auto; padding: 14px 0; gap: 14px; border: 0; border-top: 1px solid var(--line-strong); border-radius: 0; box-shadow: none; backdrop-filter: none; background: var(--canvas); }
+.device-embedded .action-dock.has-cart { grid-template-columns: auto auto minmax(0, 1fr) auto auto auto; }
+.device-embedded .action-dock button { min-height: 70px; padding: 0 24px; font-size: 20px; }
+.device-embedded .dock-selection { display: grid; gap: 6px; padding-left: 12px; }
+.device-embedded .dock-selection strong { font-size: 18px; font-weight: 500; }
+.device-embedded .dock-selection span { font-size: 16px; }
+.device-embedded .dock-start { min-width: 235px; }
+
+.device-embedded .catalog-page { padding-bottom: 0; }
+.device-embedded .lucky-back-heading { display: flex; align-items: center; gap: 20px; }
+.device-embedded .lucky-back-heading h1 { margin-bottom: 0; }
+.device-embedded .catalog-toolbar { margin-bottom: 12px; }
+.device-embedded .search-box { width: 880px; }
+.device-embedded .search-box input { min-height: 80px; padding-left: 76px; font-size: 22px; border-width: 2px; }
+.device-embedded .search-box svg { left: 28px; width: 29px; height: 29px; }
+.device-embedded .catalog-count { font-size: 19px; margin: 0; }
+.device-embedded .category-list { gap: 14px; padding: 0; margin-bottom: 24px; }
+.device-embedded .category-list button { min-height: 58px; padding: 0 25px; font-size: 21px; border-radius: 8px; border-width: 2px; }
+.device-embedded .catalog-page .recipe-grid { gap: 20px; }
+.device-embedded .catalog-page .recipe-card { height: 275px; }
+.device-embedded .catalog-page .recipe-image { height: 163px; }
+.device-embedded .catalog-page .recipe-card-copy { padding: 20px 55px 18px 20px; }
+.device-embedded .catalog-page .recipe-card-copy h2 { margin-bottom: 12px; font-size: 23px; }
+.device-embedded .catalog-page .recipe-facts { gap: 8px; }
+.device-embedded .catalog-page .recipe-facts span { font-size: 17px; }
+.device-embedded .catalog-page .recipe-facts span:first-child { order: 1; }
+.device-embedded .catalog-page .recipe-facts svg { display: none; }
+.device-embedded .lucky-card-arrow { position: absolute; right: 23px; top: 24px; color: var(--tomato); }
+.device-embedded .lucky-pagination { min-height: 65px; display: flex; align-items: center; justify-content: space-between; color: var(--ink-soft); font-size: 21px; }
+.device-embedded .lucky-pagination > div { display: flex; align-items: center; gap: 26px; }
+.device-embedded .lucky-pagination .icon-button { border: 0; background: transparent; }
+
+.device-embedded .lucky-fortune-back { padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
+.device-embedded .lucky-fortune-back .back-button { font-size: 28px; font-weight: 600; }
+.device-embedded .fortune-page .page-heading { margin-bottom: 12px; }
+.device-embedded .fortune-page .page-heading h1 { margin-bottom: 6px; }
+.device-embedded .fortune-page .page-heading p:last-child { font-size: 18px; }
+.device-embedded .fortune-page .page-heading .secondary-button { min-height: 54px; font-size: 18px; }
+.device-embedded .lucky-fortune-tabs { display: flex; gap: 0; overflow: hidden; border: 1px solid var(--line-strong); border-radius: 8px; }
+.device-embedded .lucky-fortune-tabs button { min-height: 54px; padding: 0 20px; font-size: 19px; background: #fff; border: 0; color: var(--ink-soft); }
+.device-embedded .lucky-fortune-tabs button[aria-selected="true"] { background: #f8e7f2; color: #b14191; }
+.device-embedded .fortune-theme { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; min-height: 230px; margin-bottom: 18px; border-radius: 0; color: var(--ink); background: transparent; }
+.device-embedded .fortune-copy { padding: 26px; color: #fff; background: #e36e5a; border: 0; border-radius: 8px; }
+.device-embedded .fortune-copy h2 { font-size: 32px; margin-bottom: 14px; }
+.device-embedded .fortune-copy > p { color: #fff; font-size: 20px; line-height: 1.55; }
+.device-embedded .fortune-copy .chip { font-size: 16px; }
+.device-embedded .fortune-boosts { gap: 12px; padding: 18px; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+.device-embedded .fortune-boosts > strong { color: var(--ink); font-size: 25px; }
+.device-embedded .boost-row { grid-template-columns: 34px minmax(0, 1fr); padding: 9px; background: #fff4ef; border-radius: 6px; }
+.device-embedded .boost-row i { width: 30px; height: 30px; background: #ec9270; color: #fff; font-size: 19px; }
+.device-embedded .boost-row strong { font-size: 21px; }
+.device-embedded .boost-row small { color: var(--ink-soft); font-size: 16px; }
+.device-embedded .fortune-recipe-heading { min-height: 60px; }
+.device-embedded .fortune-recipe-heading h2 { font-size: 31px; }
+.device-embedded .audience-tags span { padding: 12px 18px; border: 1px solid #da9a79; border-radius: 8px; font-size: 19px; background: #fff; }
+.device-embedded .audience-tags span:last-child { border-color: #b986c6; background: #fff; color: #9c65ac; }
+.device-embedded .fortune-page .recipe-image { height: 300px; }
+.device-embedded .fortune-page .recipe-image img { object-fit: cover; }
+.device-embedded .fortune-page .recipe-card-copy { min-height: 112px; }
+.device-embedded .fortune-page .recipe-facts { font-size: 19px; }
+.device-embedded .lucky-zodiac { min-height: 235px; margin-bottom: 18px; display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.55fr); gap: 24px; padding: 22px; border: 1px solid #efc8d5; border-radius: 8px; background: #fff1ee; }
+.device-embedded .lucky-zodiac h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; color: #c54aaa; font-size: 23px; }
+.device-embedded .lucky-zodiac p { margin: 4px 0 8px; font-size: 18px; color: var(--ink-soft); }
+.device-embedded .lucky-zodiac h3 { margin: 12px 0 4px; font-size: 30px; }
+.device-embedded .lucky-zodiac h3 span { margin-right: 12px; color: #dc7659; }
+.device-embedded .lucky-zodiac strong { color: #ce714d; font-size: 20px; }
+.device-embedded .lucky-zodiac small { color: #858085; font-size: 14px; }
+.device-embedded .lucky-zodiac-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+.device-embedded .lucky-zodiac-grid button { display: grid; justify-items: center; align-content: center; gap: 3px; border: 1px solid #ecc8d5; background: #fff; color: var(--ink); border-radius: 8px; font-size: 17px; }
+.device-embedded .lucky-zodiac-grid button span { color: #db9550; font-size: 25px; line-height: 1; }
+.device-embedded .lucky-zodiac-grid button.is-selected { color: #fff; background: #d94fbb; }
+.device-embedded .lucky-zodiac-grid button.is-selected span { color: #fff; }
+
+.device-embedded .detail-page { height: 100%; padding-bottom: 0; display: flex; flex-direction: column; }
+.device-embedded .detail-top { margin-bottom: 6px; }
+.device-embedded .detail-layout { flex: 1; min-height: 0; border: 0; border-radius: 0; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+.device-embedded .detail-visual { min-height: 0; background: #eef1f2; }
+.device-embedded .detail-visual img { object-fit: contain; }
+.device-embedded .detail-visual .recipe-facts { background: #fff; border: 1px solid var(--line); }
+.device-embedded .detail-visual .recipe-facts span { color: var(--ink); font-size: 18px; }
+.device-embedded .detail-copy { min-height: 0; padding: 30px; }
+.device-embedded .detail-copy h1 { font-size: 34px; }
+.device-embedded .detail-description { font-size: 19px; }
+.device-embedded .serving-row strong { font-size: 22px; }
+.device-embedded .serving-row small { font-size: 16px; }
+.device-embedded .detail-section h2 { font-size: 25px; }
+.device-embedded .detail-section li { font-size: 18px; line-height: 1.55; }
+.device-embedded .detail-section ul,
+.device-embedded .detail-section ol { gap: 16px; }
+.device-embedded .detail-section li > i { width: 28px; height: 28px; font-size: 15px; flex-basis: 28px; }
+.device-embedded .detail-actions { flex-wrap: wrap; }
+.device-embedded .missing-note { font-size: 17px; }
+
+.device-embedded .cooking-page { grid-template-rows: 90px minmax(0, 1fr) 90px; }
+.device-embedded .cooking-header { margin-bottom: 16px; gap: 24px; }
+.device-embedded .cooking-header > .back-button { width: 52px; height: 52px; overflow: hidden; font-size: 0; gap: 0; padding: 0; justify-content: center; }
+.device-embedded .cooking-title h1 { font-size: 32px; }
+.device-embedded .cooking-title p { font-size: 18px; }
+.device-embedded .cooking-progress { width: 230px; }
+.device-embedded .cooking-progress > span { font-size: 16px; }
+.device-embedded .toggle-control { font-size: 18px; }
+.device-embedded .cooking-layout { grid-template-columns: 270px minmax(0, 1fr) 300px; border: 0; border-top: 4px solid #d7dfe2; border-radius: 0; background: var(--canvas); }
+.device-embedded .cooking-steps { padding: 24px 14px 18px 0; background: transparent; border: 0; }
+.device-embedded .cooking-steps h2 { font-size: 21px; color: var(--ink-soft); font-weight: 500; }
+.device-embedded .cooking-step-list { gap: 14px; }
+.device-embedded .cooking-step-list button { min-height: 78px; grid-template-columns: 42px minmax(0, 1fr); gap: 12px; padding: 10px 14px; border: 0; }
+.device-embedded .cooking-step-list button > svg { display: none; }
+.device-embedded .cooking-step-list strong { font-size: 20px; font-weight: 500; }
+.device-embedded .step-number { width: 40px; height: 40px; font-size: 20px; border: 0; }
+.device-embedded .cooking-step-list button.is-current { background: var(--forest); color: #fff; }
+.device-embedded .cooking-step-list button.is-current .step-number { background: var(--tomato); }
+.device-embedded .voice-button { min-height: 58px; margin-top: auto; font-size: 19px; }
+.device-embedded .current-step { padding: 22px 22px 16px 12px; }
+.device-embedded .step-media { background: #eaf0f2; }
+.device-embedded .step-media img { object-fit: contain; }
+.device-embedded .step-copy { min-height: 150px; padding-top: 24px; }
+.device-embedded .step-copy h2 { font-size: 28px; margin-bottom: 16px; }
+.device-embedded .step-copy p { font-size: 21px; line-height: 1.65; margin: 0; }
+.device-embedded .timer-panel { padding: 26px 24px; margin: 22px 0; background: transparent; }
+.device-embedded .timer-panel h2 { font-size: 25px; margin-bottom: 44px; }
+.device-embedded .timer-ring { width: 244px; height: 244px; border: 9px solid var(--tomato); background: transparent; margin: 0 0 30px; }
+.device-embedded .timer-ring strong { font-size: 47px; }
+.device-embedded .timer-ring span { font-size: 19px; max-width: 160px; text-align: center; }
+.device-embedded .timer-actions { gap: 12px; }
+.device-embedded .timer-actions button { min-height: 65px; font-size: 19px; padding: 0 10px; }
+.device-embedded .timer-primary { background: var(--forest); border-color: var(--forest); }
+.device-embedded .timer-reset { min-height: 52px; padding: 0 10px; font-size: 19px; }
+.device-embedded .lucky-cooking-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
+.device-embedded .lucky-cooking-footer > div { display: flex; gap: 18px; }
+.device-embedded .lucky-cooking-footer .primary-button { min-width: 265px; }
+.device-embedded .lucky-cooking-footer .tertiary-button { min-width: 210px; }
+
+.device-embedded dialog { font-size: 21px; }
+.device-embedded dialog::backdrop { background: rgb(0 0 0 / 58%); backdrop-filter: none; }
+.device-embedded dialog h2 { font-size: 29px; }
+.device-embedded dialog p { font-size: 19px; line-height: 1.55; }
+.device-embedded .phone-upload-dialog { width: 690px; padding: 30px; }
+.device-embedded .phone-upload-copy h3 { font-size: 26px; }
+.device-embedded .phone-upload-copy p { font-size: 19px; }
+.device-embedded .phone-upload-session { font-size: 18px; }
+.device-embedded .phone-upload-session strong { font-size: 29px; }
+.device-embedded .phone-upload-dialog footer { gap: 12px; }
+.device-embedded .side-dialog { width: 630px; max-height: 900px; padding: 30px; }
+.device-embedded .filter-dialog { width: 730px; padding: 30px; }
+.device-embedded .filter-dialog legend { font-size: 21px; }
+.device-embedded .inventory-row,
+.device-embedded .cart-row { min-height: 88px; }
+.device-embedded .inventory-row strong,
+.device-embedded .cart-row strong { font-size: 22px; }
+.device-embedded .inventory-row small,
+.device-embedded .cart-row small { font-size: 16px; }
+.device-embedded .lucky-missing-dialog { width: 700px; padding: 30px; }
+.device-embedded .lucky-missing-heading { display: grid; justify-items: center; text-align: center; }
+.device-embedded .lucky-missing-heading > svg { width: 32px; height: 32px; margin-bottom: 22px; }
+.device-embedded .lucky-missing-heading h2 { margin: 0 0 12px; }
+.device-embedded .lucky-missing-heading p { color: var(--ink-soft); }
+.device-embedded .lucky-missing-items { display: grid; gap: 12px; margin: 10px 0 28px; }
+.device-embedded .lucky-missing-items label { display: flex; align-items: center; gap: 18px; min-height: 64px; padding: 12px 18px; border: 1px solid var(--line-strong); border-radius: 7px; background: #f1f3f5; cursor: pointer; }
+.device-embedded .lucky-missing-items input { width: 25px; height: 25px; accent-color: var(--forest); }
+.device-embedded .lucky-missing-items small { margin-left: auto; color: var(--ink-soft); font-size: 18px; }
+.device-embedded .lucky-missing-dialog footer { display: flex; justify-content: flex-end; gap: 20px; }
+.device-embedded .toast { max-width: 900px; padding: 18px 26px; font-size: 21px; }
+.device-embedded body.has-action-dock .toast { bottom: 116px; }
+.device-embedded:has(.cooking-page) .toast { bottom: 116px; }
+
+.device-embedded[data-device-page="photo-frame"] .workspace { padding: 32px 38px 28px; background: #f7fafa; }
+.device-embedded .frame-page { min-height: 0; }
+.device-embedded .frame-page .page-heading { min-height: 98px; margin-bottom: 10px; }
+.device-embedded .frame-page .page-heading h1 { font-size: 34px; margin-bottom: 12px; }
+.device-embedded .frame-page .page-status { font-size: 21px !important; color: #6e7875; }
+.device-embedded .frame-page .photo-stage { border-radius: 8px; background: #eff1f3; min-height: 0; }
+.device-embedded .stage-backdrop,
+.device-embedded .stage-shade,
+.device-embedded .stage-caption,
+.device-embedded .stage-controls { display: none; }
+.device-embedded .frame-page .viewer { grid-template-rows: minmax(0, 1fr) 100px 104px; }
+.device-embedded .stage-main-image,
+.device-embedded .stage-video { object-fit: contain; background: transparent; }
+.device-embedded .viewer-toolbar { min-height: 100px; padding: 14px 0 0; align-items: center; }
+.device-embedded .toolbar-copy strong { font-size: 28px; font-weight: 600; }
+.device-embedded .toolbar-copy span { margin-top: 9px; font-size: 18px; }
+.device-embedded .lucky-photo-controls { display: flex; align-items: center; gap: 12px; }
+.device-embedded .lucky-photo-controls button { display: grid; place-items: center; width: 62px; height: 62px; padding: 0; border: 0; border-radius: 50%; background: #edf0f2; color: #39464b; }
+.device-embedded .lucky-photo-state { display: inline-flex; align-items: center; gap: 12px; min-height: 60px; margin-left: 6px; padding: 0 20px; border-radius: 8px; background: #eef1f2; color: #5d676d; font-size: 21px; }
+.device-embedded .lucky-filmstrip { display: flex; align-items: center; gap: 14px; overflow-x: auto; padding-top: 8px; }
+.device-embedded .lucky-filmstrip button { position: relative; flex: 0 0 156px; height: 94px; overflow: hidden; padding: 0; border: 3px solid transparent; border-radius: 8px; background: #e8ecef; }
+.device-embedded .lucky-filmstrip button.is-selected { border-color: var(--tomato); }
+.device-embedded .lucky-filmstrip img { width: 100%; height: 100%; object-fit: cover; }
+.device-embedded .lucky-filmstrip button > svg { position: absolute; right: 6px; bottom: 6px; width: 22px; height: 22px; color: #fff; filter: drop-shadow(0 1px 3px #333); }
+.device-embedded .ai-button.stage-ai-action { width: 44px; height: 44px; min-height: 44px; top: 18px; right: 18px; background: #fff; color: #637470; border: 1px solid #d4dede; opacity: .66; box-shadow: none; }
+.device-embedded .ai-button.stage-ai-action svg { width: 22px; height: 22px; }
+.device-embedded .device-demo-label { top: 18px; left: 18px; font-size: 15px; background: rgb(61 75 79 / 65%); }
+.device-embedded .frame-page .photo-stage:fullscreen .stage-controls,
+.device-embedded .frame-page .photo-stage.is-cinema-fallback .stage-controls { display: flex; }
+.device-embedded .settings-dialog { width: 780px; max-width: 90%; }
+.device-embedded .settings-section-heading strong { font-size: 24px; }
+.device-embedded .settings-section-heading small { font-size: 18px; }
+.device-embedded .settings-action,
+.device-embedded .settings-fieldset legend,
+.device-embedded .settings-label { font-size: 21px; }
+.device-embedded .settings-segmented button,
+.device-embedded .settings-weather button,
+.device-embedded .settings-actions-grid button,
+.device-embedded .settings-select { min-height: 58px; font-size: 20px; }
+
+/* Refined device surface: one 1712 x 992 workspace with stable action regions. */
+html.device-embedded {
+  --canvas: #f6f7f6;
+  --surface-soft: #f0f3f1;
+  --ink: #27362e;
+  --ink-soft: #6f7a73;
+  --line: #e0e6e2;
+  --line-strong: #cbd5ce;
+  --forest: #28684f;
+  --forest-dark: #1c523d;
+  --forest-soft: #eaf2ed;
+  --tomato: #b98247;
+  --tomato-dark: #946533;
+  --tomato-soft: #fbf3e9;
+  --blue: #55726a;
+}
+.device-embedded body { font-size: 20px; }
+.device-embedded .workspace { padding: 24px 32px; overflow: hidden; }
+.device-embedded .page { width: 100%; height: 100%; min-height: 0; overflow: hidden; }
+.device-embedded svg { width: 23px; height: 23px; }
+.device-embedded .page-heading { min-height: 68px; flex-shrink: 0; margin-bottom: 20px; gap: 20px; }
+.device-embedded .page-heading h1 { font-size: 30px; line-height: 1.3; margin-bottom: 8px; font-weight: 600; }
+.device-embedded .page-heading p:last-child { font-size: 18px; line-height: 1.5; color: var(--ink-soft); }
+.device-embedded .page-heading-actions { gap: 12px; }
+.device-embedded .primary-button,
+.device-embedded .secondary-button,
+.device-embedded .tertiary-button { min-height: 56px; gap: 10px; padding: 0 22px; border-radius: 6px; font-size: 19px; font-weight: 500; }
+.device-embedded .primary-button { background: var(--forest); border-color: var(--forest); color: #fff; }
+.device-embedded .primary-button:hover { background: var(--forest-dark); border-color: var(--forest-dark); }
+.device-embedded .secondary-button { color: var(--forest); background: var(--forest-soft); border-color: transparent; }
+.device-embedded .tertiary-button { color: var(--ink); border-color: var(--line-strong); background: #fff; }
+.device-embedded .text-button { color: var(--ink-soft); min-height: 48px; padding: 0 12px; font-size: 18px; }
+.device-embedded .text-button:hover { color: var(--forest); background: var(--forest-soft); }
+.device-embedded .back-button { min-height: 48px; font-size: 18px; padding: 0 10px; }
+.device-embedded .icon-button { width: 48px; height: 48px; min-height: 48px; border-radius: 6px; }
+.device-embedded button:focus-visible,
+.device-embedded input:focus-visible { outline: 3px solid #96b9a6; outline-offset: 2px; }
+.device-embedded .device-diet-button { display: inline-flex; align-items: center; gap: 9px; flex-shrink: 0; min-height: 48px; padding: 0 14px; color: var(--ink-soft); background: transparent; border: 0; border-radius: 6px; font-size: 17px; }
+.device-embedded .device-diet-button:hover { background: var(--forest-soft); color: var(--forest); }
+.device-embedded .device-diet-button span { color: #a5763e; font-size: 14px; }
+.device-embedded .device-diet-button svg { width: 21px; height: 21px; }
+.device-embedded .device-diet-dialog { width: 680px; max-height: 850px; padding: 28px; }
+.device-embedded .device-diet-dialog .dialog-heading h2 { margin: 0; }
+.device-embedded .device-diet-notice { padding: 14px 16px; color: #8d6637; background: #fbf5ec; border-radius: 5px; }
+.device-embedded .device-diet-dialog dl { margin: 0; }
+.device-embedded .device-diet-dialog dl > div { padding: 20px 0; border-bottom: 1px solid var(--line); }
+.device-embedded .device-diet-dialog dt { margin-bottom: 12px; font-size: 21px; font-weight: 600; }
+.device-embedded .device-diet-dialog dd { display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 12px; margin: 7px 0 0; color: var(--ink-soft); font-size: 18px; overflow-wrap: anywhere; }
+.device-embedded .device-diet-dialog dd strong { color: var(--ink); font-weight: 500; }
+.device-embedded .device-diet-dialog footer { display: flex; justify-content: flex-end; padding-top: 24px; }
+
+.device-embedded .hub-page { display: flex; flex-direction: column; }
+.device-embedded .hub-heading { min-height: 78px; margin-bottom: 26px; }
+.device-embedded .hub-heading .tertiary-button { min-width: 0; }
+.device-embedded .hub-layout { flex: 1; min-height: 0; grid-template-rows: minmax(0,1fr) 108px; gap: 28px; padding-bottom: 24px; }
+.device-embedded .path-grid { height: 100%; min-height: 0; grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); gap: 20px; }
+.device-embedded .path-card { border: 1px solid var(--line); border-radius: 7px; background: #fff; }
+.device-embedded .path-card:hover { border-color: #9cb6a7; box-shadow: 0 2px 6px #253a2810; }
+.device-embedded .path-card:first-child { grid-template-rows: minmax(0,1fr) 112px; }
+.device-embedded .path-card:not(:first-child) { grid-template-columns: 44% minmax(0,1fr); }
+.device-embedded .path-copy { padding: 22px 54px 22px 24px; }
+.device-embedded .path-copy strong { font-size: 26px; font-weight: 500; }
+.device-embedded .path-copy p { font-size: 18px; margin-top: 10px; }
+.device-embedded .path-copy > svg { right: 22px; color: var(--forest); }
+.device-embedded .path-icon { width: 44px; height: 44px; right: 16px; bottom: 16px; border: 0; color: var(--forest); background: #ffffffeb; }
+.device-embedded .path-card:nth-child(2) .path-icon,
+.device-embedded .path-card:nth-child(3) .path-icon { color: var(--forest); background: #ffffffeb; }
+.device-embedded .meal-context { min-height: 108px; padding: 20px 8px; grid-template-columns: minmax(0,1fr) auto auto; gap: 32px; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; }
+.device-embedded .context-intro > i { width: 36px; height: 36px; border: 0; color: var(--forest); background: var(--forest-soft); }
+.device-embedded .context-intro strong { font-size: 20px; font-weight: 600; }
+.device-embedded .context-intro small { font-size: 17px; margin-top: 6px; }
+.device-embedded .context-rules { padding: 0; border: 0; }
+.device-embedded .context-pantry { display: flex; gap: 20px; padding-left: 28px; border-color: var(--line); font-size: 17px; }
+.device-embedded .context-pantry svg { width: 22px; height: 22px; }
+
+.device-embedded .flow-command { min-height: 56px; gap: 24px; margin: 0 0 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.device-embedded .flow-summary { font-size: 16px; }
+.device-embedded .stepper button { min-height: 48px; gap: 10px; font-size: 17px; }
+.device-embedded .stepper i { width: 32px; height: 32px; font-size: 16px; }
+.device-embedded .stepper button.is-complete i { color: var(--forest); background: #e7f0e9; }
+.device-embedded .stepper button.is-current i { color: #fff; background: var(--forest); }
+.device-embedded .stepper button::before,
+.device-embedded .stepper button::after { width: calc(50% - 65px); }
+.device-embedded .flow-panel { background: transparent; }
+.device-embedded .step-intro h1 { font-size: 28px; margin-bottom: 8px; }
+.device-embedded .step-intro p:last-child { font-size: 17px; }
+.device-embedded .flow-footer { min-height: 86px; padding: 18px 0 0; border-top: 1px solid var(--line); background: var(--canvas); }
+.device-embedded .flow-footer-copy strong { font-size: 18px; font-weight: 500; }
+.device-embedded .flow-footer-copy span { font-size: 15px; }
+.device-embedded .flow-footer .primary-button { min-width: 210px; }
+.device-embedded .flow-footer-actions { gap: 12px; }
+.device-embedded .capture-stage { padding: 12px 30px 24px 0; border-right-color: var(--line); }
+.device-embedded .capture-actions { padding: 12px 0 24px 30px; background: transparent; }
+.device-embedded .capture-action-list button { min-height: 84px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; }
+.device-embedded .capture-action-list button:hover { background: var(--forest-soft); }
+.device-embedded .capture-action-list button strong { font-size: 20px; }
+.device-embedded .capture-action-list button small { font-size: 16px; margin-top: 5px; }
+.device-embedded .sync-callout { min-height: 48px; margin-bottom: 10px; padding: 8px 0; background: transparent; font-size: 16px; }
+.device-embedded .capture-actions .tips { margin-top: 24px; }
+.device-embedded .tips h2 { font-size: 19px; }
+.device-embedded .tips li { font-size: 16px; }
+.device-embedded .privacy-note { font-size: 14px; }
+.device-embedded .scanning-state { padding: 12px 0; }
+.device-embedded .scanning-state h1 { font-size: 28px; margin-bottom: 10px; }
+.device-embedded .scanning-state > div:first-child p,
+.device-embedded .scanning-state > strong { font-size: 17px; }
+.device-embedded .ingredients-layout { grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); }
+.device-embedded .recognition-figure { padding: 0 28px 22px 0; }
+.device-embedded .recognition-figure figcaption { flex-wrap: wrap; gap: 8px; font-size: 14px; }
+.device-embedded .recognition-figure figcaption strong { font-size: 16px; }
+.device-embedded .ingredient-editor { background: transparent; padding: 0 0 0 28px; }
+.device-embedded .ingredient-editor h2 { font-size: 26px; }
+.device-embedded .ingredient-editor header p { font-size: 16px; }
+.device-embedded .ingredient-list { gap: 0; padding-bottom: 12px; }
+.device-embedded .ingredient-row { min-height: 62px; padding: 9px 8px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; }
+.device-embedded .ingredient-name strong { font-size: 19px; font-weight: 500; }
+.device-embedded .ingredient-name small { font-size: 13px; }
+.device-embedded .quantity-stepper button { width: 48px; height: 44px; }
+.device-embedded .ingredient-toggle { width: 34px; height: 34px; border-radius: 5px; }
+.device-embedded .inline-add input { min-height: 56px; font-size: 18px; }
+.device-embedded .conditions-layout { grid-template-columns: 360px minmax(0,1fr); }
+.device-embedded .condition-summary { padding: 10px 28px 26px 0; background: transparent; border-color: var(--line); }
+.device-embedded .condition-summary h2 { font-size: 23px; margin-bottom: 20px; }
+.device-embedded .lucky-ingredient-chips { grid-template-columns: 1fr; gap: 0; }
+.device-embedded .lucky-ingredient-chips span { display: flex; align-items: center; min-height: 44px; padding: 8px 0; background: transparent; border-bottom: 1px solid var(--line); border-radius: 0; font-size: 18px; }
+.device-embedded .condition-summary .safety-row { padding: 20px 0 0; border: 0; }
+.device-embedded .condition-form { padding: 10px 30px 20px 40px; }
+.device-embedded .condition-form .step-intro { margin-bottom: 32px; }
+.device-embedded .condition-group { padding: 18px 0 22px; }
+.device-embedded .condition-group legend { font-size: 21px; }
+.device-embedded .option-grid { gap: 12px; margin-top: 14px; }
+.device-embedded .option-button { min-height: 62px; padding: 10px 16px; font-size: 20px; border-radius: 6px; background: #fff; }
+.device-embedded .option-button.is-selected { color: var(--forest); background: #eaf2ed; border-color: #77a28b; }
+.device-embedded .member-selector { padding-top: 10px; gap: 12px; }
+.device-embedded .member-selector button { min-height: 56px; padding: 10px 18px; border-radius: 6px; font-size: 19px; }
+.device-embedded .member-selector button.is-selected { color: var(--forest); border-color: #77a28b; background: #eaf2ed; }
+.device-embedded .guest-stepper { grid-template-columns: 48px 124px 48px; border-radius: 6px; background: #fff; }
+.device-embedded .guest-stepper button { height: 54px; background: transparent; }
+.device-embedded .guest-stepper span { font-size: 18px; }
+.device-embedded .lucky-member-group .guest-stepper { top: -32px; }
+
+.device-embedded .results-page { display: flex; flex-direction: column; height: 100%; min-height: 0; padding-bottom: 0; }
+.device-embedded .results-page .page-heading { min-height: 62px; margin-bottom: 12px; }
+.device-embedded .results-page .page-heading h1 { font-size: 28px; margin-bottom: 6px; }
+.device-embedded .results-page .page-heading p:last-child { font-size: 17px; }
+.device-embedded .results-toolbar { min-height: 48px; flex-shrink: 0; gap: 20px; margin-bottom: 18px; }
+.device-embedded .results-toolbar .chip-row { flex: 1; gap: 8px; }
+.device-embedded .filter-chip { min-height: 48px; padding-inline: 17px; font-size: 17px; border-radius: 5px; border-color: transparent; background: transparent; }
+.device-embedded button.filter-chip.is-selected { color: var(--forest); border-color: transparent; background: var(--forest-soft); }
+.device-embedded .results-toolbar .safety-badge { padding: 0; color: var(--ink-soft); font-size: 15px; }
+.device-embedded .recipe-grid { gap: 16px; }
+.device-embedded .recipe-card { border: 1px solid var(--line); border-radius: 7px; background: #fff; }
+.device-embedded .recipe-card:hover { border-color: #a4bbae; }
+.device-embedded .recipe-card.is-selected { border-color: var(--forest); box-shadow: inset 0 0 0 1px var(--forest); }
+.device-embedded .recipe-card-copy h2 { font-size: 22px; line-height: 1.4; font-weight: 500; }
+.device-embedded .recipe-facts span { font-size: 16px; }
+.device-embedded .recipe-image { background: #edf0ed; }
+.device-embedded .results-page .recipe-grid { flex: 1; min-height: 0; grid-auto-rows: minmax(0,1fr); overflow-y: auto; padding: 2px; }
+.device-embedded .results-page .recipe-card { height: auto; min-height: 155px; }
+.device-embedded .results-page .recipe-card > button { grid-template-columns: 36% minmax(0,1fr); }
+.device-embedded .results-page .recipe-card-copy { padding: 14px 18px; }
+.device-embedded .results-page .recipe-card-copy h2 { font-size: 21px; font-weight: 500; margin-bottom: 10px; }
+.device-embedded .results-page .recipe-facts { gap: 5px; }
+.device-embedded .results-page .recipe-facts span { font-size: 15px; }
+.device-embedded .ingredient-status { font-size: 16px; line-height: 1.4; margin-top: 8px; min-height: 23px; }
+.device-embedded .ingredient-status.is-missing { color: #a27336; }
+.device-embedded .match-badge { top: 8px; left: 8px; padding: 5px 10px; font-size: 16px; border-radius: 4px; background: #ffffffed; color: var(--forest); }
+.device-embedded .match-badge.is-missing { background: #fff9efed; color: #996f33; }
+.device-embedded .lucky-card-selected { position: absolute; right: 9px; top: 8px; display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; background: var(--forest); color: white; }
+.device-embedded .lucky-card-selected svg { width: 17px; height: 17px; }
+.device-embedded .action-dock,
+.device-embedded .action-dock.has-cart { position: static; display: flex; align-items: center; flex-shrink: 0; min-height: 86px; gap: 18px; margin-top: 18px; padding: 16px 0 0; border: 0; border-top: 1px solid var(--line); background: transparent; }
+.device-embedded .action-dock button { min-height: 56px; padding: 0 20px; font-size: 18px; }
+.device-embedded .action-dock .dock-edit { padding-left: 0; }
+.device-embedded .dock-selection { flex: 1; min-width: 100px; padding-left: 18px; border-left: 1px solid var(--line); gap: 5px; }
+.device-embedded .dock-selection span { font-size: 14px; }
+.device-embedded .dock-selection strong { font-size: 19px; color: var(--ink); font-weight: 500; }
+.device-embedded .dock-actions { display: flex; align-items: center; gap: 12px; }
+.device-embedded .dock-start { min-width: 180px; }
+
+.device-embedded .catalog-page { display: flex; flex-direction: column; }
+.device-embedded .lucky-back-heading { gap: 12px; }
+.device-embedded .lucky-back-heading h1 { margin-bottom: 0; }
+.device-embedded .catalog-toolbar { min-height: 60px; margin-bottom: 16px; gap: 22px; flex-shrink: 0; }
+.device-embedded .search-box { flex: 1; width: auto; max-width: 780px; margin-right: auto; }
+.device-embedded .search-box input { min-height: 60px; padding-left: 54px; font-size: 19px; border-width: 1px; border-radius: 6px; }
+.device-embedded .search-box svg { width: 23px; height: 23px; left: 19px; }
+.device-embedded .catalog-count { font-size: 16px; white-space: nowrap; }
+.device-embedded .category-list { flex-shrink: 0; margin-bottom: 20px; gap: 8px; }
+.device-embedded .category-list button { min-height: 48px; padding: 0 20px; border: 0; border-radius: 5px; font-size: 18px; background: transparent; }
+.device-embedded .category-list button.is-selected { color: var(--forest); background: var(--forest-soft); }
+.device-embedded .catalog-page .recipe-grid { flex: 1; min-height: 0; grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(3,minmax(0,1fr)); gap: 20px; }
+.device-embedded .catalog-page .recipe-card { min-height: 0; height: 100%; }
+.device-embedded .catalog-page .recipe-card > button { display: flex; align-items: stretch; }
+.device-embedded .catalog-page .recipe-image { flex: 0 0 auto; width: auto; height: 100%; min-height: 0; aspect-ratio: 4 / 3; }
+.device-embedded .catalog-page .recipe-image img { object-fit: cover; }
+.device-embedded .catalog-page .recipe-card-copy { display: flex; flex: 1; flex-direction: column; justify-content: center; min-width: 0; padding: 24px 48px 24px 24px; }
+.device-embedded .catalog-page .recipe-card-copy h2 { font-size: 22px; margin-bottom: 12px; overflow-wrap: anywhere; }
+.device-embedded .catalog-page .lucky-card-arrow { top: 50%; transform: translateY(-50%); }
+.device-embedded .catalog-page .empty-state { grid-column: 1 / -1; grid-row: 1 / -1; }
+.device-embedded .catalog-page .recipe-facts span { font-size: 16px; }
+.device-embedded .lucky-card-arrow { top: 21px; right: 18px; color: #7a9384; }
+.device-embedded .lucky-pagination { min-height: 64px; flex-shrink: 0; font-size: 17px; }
+.device-embedded .lucky-pagination > div { gap: 16px; }
+
+.device-embedded .fortune-page { display: flex; flex-direction: column; overflow-y: auto; padding-bottom: 0; }
+.device-embedded .lucky-fortune-back { min-height: 48px; margin: 0 0 16px; padding: 0; border: 0; }
+.device-embedded .lucky-fortune-back .back-button { font-size: 18px; font-weight: 500; }
+.device-embedded .fortune-page .page-heading { margin-bottom: 20px; }
+.device-embedded .fortune-page .page-heading h1 { font-size: 28px; }
+.device-embedded .fortune-page .page-heading p:last-child { font-size: 16px; }
+.device-embedded .lucky-fortune-tabs { border: 0; border-radius: 6px; background: #eaf0ec; padding: 4px; }
+.device-embedded .lucky-fortune-tabs button { min-height: 44px; padding: 0 18px; background: transparent; font-size: 17px; border-radius: 4px; }
+.device-embedded .lucky-fortune-tabs button[aria-selected="true"] { color: var(--forest); background: white; box-shadow: 0 1px 3px #213c2514; }
+.device-embedded .fortune-theme { min-height: 212px; flex-shrink: 0; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 32px; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+.device-embedded .fortune-copy { padding: 6px 32px 6px 22px; color: var(--ink); background: transparent; border: 0; border-left: 4px solid #aac6b5; border-radius: 0; }
+.device-embedded .fortune-copy h2 { font-size: 27px; margin-bottom: 14px; }
+.device-embedded .fortune-copy > p { color: var(--ink-soft); font-size: 17px; max-width: 740px; }
+.device-embedded .fortune-copy .chip { color: var(--ink-soft); font-size: 15px; background: transparent; border: 0; padding: 0 16px 0 0; min-height: 24px; }
+.device-embedded .fortune-boosts { align-content: start; padding: 6px 0; border: 0; background: transparent; gap: 14px; }
+.device-embedded .fortune-boosts > strong { color: var(--ink); font-size: 20px; font-weight: 500; }
+.device-embedded .boost-row { background: transparent; padding: 0; gap: 12px; }
+.device-embedded .boost-row i { width: 28px; height: 28px; font-size: 16px; color: #94703c; background: #f3ecdf; }
+.device-embedded .boost-row strong { font-size: 18px; font-weight: 500; }
+.device-embedded .boost-row small { font-size: 16px; }
+.device-embedded .fortune-recipe-heading { min-height: 48px; flex-shrink: 0; margin-bottom: 18px; }
+.device-embedded .fortune-recipe-heading h2 { font-size: 23px; font-weight: 500; }
+.device-embedded .audience-tags { gap: 20px; }
+.device-embedded .audience-tags span,
+.device-embedded .audience-tags span:last-child { border: 0; padding: 0; font-size: 16px; color: var(--ink-soft); background: transparent; }
+.device-embedded .fortune-page .recipe-grid { grid-template-columns: repeat(5,minmax(0,1fr)); gap: 16px; min-height: 310px; }
+.device-embedded .fortune-page .recipe-image { height: 220px; }
+.device-embedded .fortune-page .recipe-image img { object-fit: cover; }
+.device-embedded .fortune-page .recipe-card-copy { padding: 16px 16px 18px; min-height: 112px; }
+.device-embedded .fortune-page .recipe-card-copy h2 { font-size: 20px; padding-right: 14px; margin-bottom: 9px; }
+.device-embedded .fortune-page .recipe-facts { display: grid; gap: 6px; }
+.device-embedded .fortune-page .recipe-facts span { font-size: 15px; }
+.device-embedded .fortune-page .lucky-card-arrow { right: 10px; top: 21px; }
+.device-embedded .fortune-page .lucky-card-arrow svg { width: 18px; }
+.device-embedded .lucky-zodiac { min-height: 220px; margin-bottom: 20px; padding: 22px 0; border: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; }
+.device-embedded .lucky-zodiac h2 { color: var(--forest); font-size: 21px; }
+.device-embedded .lucky-zodiac p { font-size: 16px; }
+.device-embedded .lucky-zodiac h3 { font-size: 27px; }
+.device-embedded .lucky-zodiac h3 span,
+.device-embedded .lucky-zodiac strong { color: #a1804d; }
+.device-embedded .lucky-zodiac small { font-size: 13px; }
+.device-embedded .lucky-zodiac-grid { gap: 8px; }
+.device-embedded .lucky-zodiac-grid button { min-height: 52px; border-color: var(--line); background: #fff; border-radius: 5px; font-size: 16px; }
+.device-embedded .lucky-zodiac-grid button span { font-size: 23px; }
+.device-embedded .lucky-zodiac-grid button.is-selected { background: #eaf2ed; color: var(--forest); border-color: #77a28b; }
+.device-embedded .lucky-zodiac-grid button.is-selected span { color: var(--forest); }
+
+.device-embedded .detail-top { min-height: 52px; flex-shrink: 0; margin-bottom: 20px; gap: 20px; }
+.device-embedded .detail-top .safety-badge { margin-left: auto; font-size: 15px; }
+.device-embedded .detail-layout { flex: 1; min-height: 0; grid-template-columns: minmax(0,.86fr) minmax(0,1.14fr); gap: 34px; background: transparent; }
+.device-embedded .detail-visual { border-radius: 6px; }
+.device-embedded .detail-visual .recipe-facts { padding: 16px; border: 0; background: #fffffff0; }
+.device-embedded .detail-visual .recipe-facts span { font-size: 16px; }
+.device-embedded .detail-copy { min-height: 0; padding: 4px 0 0; grid-template-rows: auto auto minmax(0,1fr); }
+.device-embedded .detail-copy h1 { font-size: 29px; margin-bottom: 12px; }
+.device-embedded .detail-description { font-size: 17px; margin-bottom: 20px; max-width: 720px; }
+.device-embedded .serving-row { padding: 16px 0; }
+.device-embedded .serving-row strong { font-size: 20px; }
+.device-embedded .serving-row small { font-size: 15px; }
+.device-embedded .detail-sections { gap: 28px; padding: 24px 0; }
+.device-embedded .detail-section h2 { font-size: 21px; margin-bottom: 20px; font-weight: 500; }
+.device-embedded .detail-section li { font-size: 17px; }
+.device-embedded .detail-section ul,
+.device-embedded .detail-section ol { gap: 18px; }
+.device-embedded .detail-section li > i { width: 24px; height: 24px; flex-basis: 24px; font-size: 14px; }
+.device-embedded .lucky-detail-footer { min-height: 88px; flex-shrink: 0; flex-wrap: nowrap; gap: 28px; padding-top: 18px; margin-top: 20px; border-top: 1px solid var(--line); }
+.device-embedded .lucky-detail-footer .missing-note { max-width: 490px; font-size: 16px; }
+.device-embedded .lucky-detail-footer .page-heading-actions { margin-left: auto; gap: 12px; }
+
+.device-embedded .cooking-page { grid-template-rows: 76px minmax(0,1fr) 88px; }
+.device-embedded .cooking-header { grid-template-columns: minmax(0,1fr) auto; gap: 24px; margin-bottom: 18px; }
+.device-embedded .cooking-title h1 { font-size: 28px; }
+.device-embedded .cooking-title p { font-size: 16px; }
+.device-embedded .cooking-progress { width: 200px; }
+.device-embedded .cooking-progress > span { font-size: 14px; }
+.device-embedded .toggle-control { font-size: 16px; }
+.device-embedded .cooking-layout { grid-template-columns: 246px minmax(0,1fr) 268px; border-top: 1px solid var(--line); }
+.device-embedded .cooking-steps { padding: 24px 16px 22px 0; }
+.device-embedded .cooking-steps h2 { font-size: 17px; margin-bottom: 18px; }
+.device-embedded .cooking-step-list { gap: 10px; }
+.device-embedded .cooking-step-list button { min-height: 68px; gap: 10px; grid-template-columns: 32px minmax(0,1fr); padding: 10px; border-radius: 5px; }
+.device-embedded .cooking-step-list strong { font-size: 18px; }
+.device-embedded .step-number { width: 30px; height: 30px; font-size: 16px; font-style: normal; }
+.device-embedded .cooking-step-list button.is-current { color: var(--forest); background: var(--forest-soft); }
+.device-embedded .cooking-step-list button.is-current .step-number { color: #fff; background: var(--forest); }
+.device-embedded .voice-button { min-height: 52px; font-size: 17px; }
+.device-embedded .current-step { padding: 24px 28px 22px 16px; }
+.device-embedded .step-media { background: #edf0ed; border-radius: 6px; }
+.device-embedded .step-copy { min-height: 146px; padding-top: 24px; }
+.device-embedded .step-copy h2 { font-size: 26px; margin-bottom: 14px; }
+.device-embedded .step-copy p { font-size: 20px; line-height: 1.6; }
+.device-embedded .timer-panel { padding: 6px 0 0 24px; margin: 24px 0; border-color: var(--line); }
+.device-embedded .timer-panel h2 { font-size: 21px; margin-bottom: 32px; font-weight: 500; }
+.device-embedded .timer-ring { width: 218px; height: 218px; border: 6px solid #d6e7dc; border-top-color: #7aab90; background: #fff; margin-bottom: 26px; }
+.device-embedded .timer-ring strong { font-size: 44px; font-weight: 500; }
+.device-embedded .timer-ring span { font-size: 16px; margin-top: 6px; }
+.device-embedded .timer-actions { gap: 12px; }
+.device-embedded .timer-actions button { min-height: 52px; font-size: 17px; padding: 0 10px; }
+.device-embedded .timer-reset { min-height: 48px; padding: 0 10px; border: 0; background: transparent; font-size: 16px; color: var(--ink-soft); }
+.device-embedded .lucky-cooking-footer { padding-top: 16px; }
+.device-embedded .lucky-cooking-footer > div { gap: 12px; }
+.device-embedded .lucky-cooking-footer .primary-button { min-width: 210px; }
+.device-embedded .lucky-cooking-footer .tertiary-button { min-width: 160px; }
+
+.device-embedded dialog { font-size: 19px; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 20px 70px #20382926; }
+.device-embedded dialog::backdrop { background: #1c28256b; }
+.device-embedded dialog h2 { font-size: 26px; }
+.device-embedded dialog p { font-size: 17px; }
+.device-embedded .phone-upload-dialog { width: 680px; padding: 28px; }
+.device-embedded .phone-upload-stage { border: 0; background: #f4f7f4; padding: 30px; }
+.device-embedded .phone-upload-copy h3 { font-size: 24px; }
+.device-embedded .phone-upload-copy p { font-size: 17px; }
+.device-embedded .phone-upload-session { padding: 20px 0; border-radius: 0; background: transparent; }
+.device-embedded .phone-upload-session strong { font-size: 22px; }
+.device-embedded .phone-upload-privacy { font-size: 14px; }
+.device-embedded .phone-upload-dialog footer { gap: 10px; flex-wrap: nowrap; }
+.device-embedded .phone-upload-dialog footer button { min-height: 54px; padding: 0 16px; font-size: 17px; }
+.device-embedded .side-dialog { width: 640px; max-height: 910px; padding: 28px; }
+.device-embedded .inventory-row,
+.device-embedded .cart-row { min-height: 76px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; }
+.device-embedded .inventory-row strong,
+.device-embedded .cart-row strong { font-size: 20px; }
+.device-embedded .inventory-row small,
+.device-embedded .cart-row small { font-size: 15px; }
+.device-embedded .filter-dialog { width: 700px; padding: 28px; }
+.device-embedded .filter-dialog legend { font-size: 19px; }
+.device-embedded .filter-dialog .option-button { min-height: 56px; font-size: 18px; }
+.device-embedded .lucky-missing-dialog { width: 680px; padding: 28px; }
+.device-embedded .lucky-missing-dialog .dialog-heading { align-items: flex-start; }
+.device-embedded .lucky-missing-dialog h2 { margin: 0 0 12px; }
+.device-embedded .lucky-missing-dialog p { margin: 0; color: var(--ink-soft); }
+.device-embedded .lucky-missing-items { margin: 24px 0; gap: 0; }
+.device-embedded .lucky-missing-items label { min-height: 70px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 16px 0; background: transparent; }
+.device-embedded .lucky-missing-items input { width: 24px; height: 24px; }
+.device-embedded .lucky-missing-items small { font-size: 17px; }
+.device-embedded .lucky-missing-dialog footer { gap: 16px; padding-top: 8px; }
+.device-embedded .toast { font-size: 18px; padding: 16px 22px; max-width: 720px; background: #294b3d; }
+.device-embedded body.has-action-dock .toast,
+.device-embedded body.has-flow-footer .toast,
+.device-embedded:has(.cooking-page) .toast,
+.device-embedded:has(.detail-page) .toast { bottom: 115px; }
+
+.device-embedded[data-device-page="photo-frame"] .workspace { padding: 24px 32px 22px; background: #f6f7f6; }
+.device-embedded .frame-page .page-heading { min-height: 58px; margin-bottom: 18px; }
+.device-embedded .frame-page .page-heading > div { display: flex; align-items: baseline; gap: 20px; }
+.device-embedded .frame-page .page-heading h1 { font-size: 28px; margin: 0; }
+.device-embedded .frame-page .page-status { font-size: 16px !important; }
+.device-embedded .frame-page .viewer { grid-template-rows: minmax(0,1fr) 72px 82px; }
+.device-embedded .frame-page .photo-stage { border-radius: 5px; background: #e9ecea; }
+.device-embedded .viewer-toolbar { min-height: 72px; padding: 10px 0 0; gap: 20px; }
+.device-embedded .toolbar-copy { display: flex; align-items: baseline; gap: 18px; }
+.device-embedded .toolbar-copy strong { font-size: 22px; font-weight: 500; }
+.device-embedded .toolbar-copy span { font-size: 15px; margin: 0; }
+.device-embedded .lucky-photo-controls { gap: 8px; }
+.device-embedded .lucky-photo-controls button { width: 48px; height: 48px; background: transparent; color: #65716a; border-radius: 5px; }
+.device-embedded .lucky-photo-controls button:hover { background: #e9efeb; color: var(--forest); }
+.device-embedded .lucky-photo-state { background: transparent; padding: 0 8px 0 14px; min-height: 48px; color: #7b857f; gap: 9px; margin-left: 10px; font-size: 15px; border-left: 1px solid var(--line); border-radius: 0; }
+.device-embedded .lucky-photo-state svg { width: 19px; height: 19px; }
+.device-embedded .lucky-filmstrip { gap: 10px; padding: 6px 0; }
+.device-embedded .lucky-filmstrip button { flex-basis: 118px; height: 68px; border-width: 2px; border-radius: 5px; }
+.device-embedded .lucky-filmstrip button:not(.is-selected) { opacity: .75; }
+.device-embedded .lucky-filmstrip button:hover { opacity: 1; }
+.device-embedded .lucky-filmstrip button.is-selected { border-color: var(--forest); }
+.device-embedded .lucky-filmstrip button > svg { width: 17px; height: 17px; }
+.device-embedded .ai-button.stage-ai-action { width: 48px; height: 48px; min-height: 48px; top: 16px; right: 16px; opacity: .56; background: #ffffffbc; border: 0; color: #566f60; border-radius: 6px; }
+.device-embedded .ai-button.stage-ai-action svg { width: 21px; height: 21px; }
+.device-embedded .device-demo-label { top: 16px; left: 16px; font-size: 13px; background: #42574b94; }
+.device-embedded .settings-dialog { width: 720px; }
+.device-embedded .settings-section-heading strong { font-size: 21px; }
+.device-embedded .settings-section-heading small { font-size: 16px; }
+.device-embedded .settings-action,
+.device-embedded .settings-fieldset legend,
+.device-embedded .settings-label { font-size: 18px; }
+.device-embedded .settings-segmented button,
+.device-embedded .settings-weather button,
+.device-embedded .settings-actions-grid button,
+.device-embedded .settings-select { min-height: 54px; font-size: 18px; }
+
+/* Keep the diet-info button in its grid column so it never overlaps the diner list (longer in Latin locales). */
+.device-embedded .meal-context [data-device-diet] { position: static; }

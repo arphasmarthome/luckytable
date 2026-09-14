@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lucky-table-static",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".claude/serve.mjs"],
+      "port": 8765
+    }
+  ]
+}

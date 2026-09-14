@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Lucky Table 日曆機整機互動原型">
+  <title data-i18n="Lucky Table · 日曆機互動原型">Lucky Table · 日曆機互動原型</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lucky-ui.css?v=i18n-1">
+  <link rel="stylesheet" href="calendar.css">
+  <link rel="stylesheet" href="family-health.css">
+  <link rel="stylesheet" href="review-mode.css">
+</head>
+<body>
+  <div class="device-canvas" id="deviceCanvas">
+  <div class="device-shell">
+    <aside class="device-nav" aria-label="主要導覽" data-i18n-aria="主要導覽">
+      <a class="device-brand" href="#home"><span>Lucky Table</span><small data-i18n="阿發之家">阿發之家</small></a>
+      <nav id="mainNav"></nav>
+      <div id="reviewModeSlot" hidden>
+        <div class="review-mode-control" id="reviewModeControl" role="group" aria-label="原型模式" data-i18n-aria="原型模式" hidden>
+          <button type="button" data-review-mode="interact" aria-pressed="true" title="交互模式" data-i18n-title="交互模式"><span data-review-icon="MousePointer2"></span><span data-i18n="交互">交互</span></button>
+          <button type="button" data-review-mode="comment" aria-pressed="false" title="評論模式" data-i18n-title="評論模式"><span data-review-icon="MessageSquare"></span><span data-i18n="評論">評論</span></button>
+        </div>
+      </div>
+      <div class="nav-device"><span class="device-status-dot"></span>LT-15<span data-i18n="本機原型">本機原型</span></div>
+    </aside>
+    <header class="device-topbar">
+      <h1 class="navigation-title" id="navigationTitle">首頁</h1>
+      <button class="home-task-shortcut" data-action="home-tasks" title="今日家庭任務" data-i18n-title="今日家庭任務"><span id="homeTaskGlyph"></span><span data-i18n="今日任務">今日任務</span><span id="homeTaskCount"></span></button>
+      <button class="header-sync" data-action="sync-device" title="家庭同步 · 演示" data-i18n-title="家庭同步 · 演示" aria-label="家庭同步" data-i18n-aria="家庭同步"><span id="syncGlyph"></span></button>
+      <div class="topbar-weather" id="weatherDisplay"></div>
+      <div class="topbar-end"><button class="connection-button" id="connectionButton" title="網路狀態" aria-label="網路狀態" data-i18n-aria="網路狀態"></button><time id="systemClock"></time><time id="systemDate"></time><button class="header-account" id="accountButton" title="家庭成員" data-i18n-title="家庭成員" aria-label="家庭成員" data-i18n-aria="家庭成員"></button></div>
+    </header>
+    <main class="device-main" id="appMain" tabindex="-1">
+      <div id="localView"></div>
+      <div id="embeddedViews">
+        <iframe id="makeFrame" title="做菜" data-i18n-title="做菜" src="../make/index.html?device=1" allow="fullscreen; autoplay" hidden></iframe>
+        <iframe id="photoFrame" title="相框" data-i18n-title="相框" src="../photo-frame/index.html?device=1" allow="fullscreen; autoplay" hidden></iframe>
+      </div>
+      <div class="review-layer" id="reviewLayer" aria-label="評論選取區域" data-i18n-aria="評論選取區域" hidden></div>
+    </main>
+  </div>
+  <div class="prototype-switcher" id="variantSwitcher" aria-label="首頁方案比較" data-i18n-aria="首頁方案比較"></div>
+  <dialog id="appDialog" class="app-dialog"></dialog>
+  <div id="toastRegion" class="toast-region" role="status" aria-live="polite"></div>
+  </div>
+  <script src="vendor/lucide.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="i18n.en.js"></script>
+  <script src="i18n.de.js"></script>
+  <script src="i18n.es.js"></script>
+  <script src="calendar.js"></script>
+  <script src="family-health.js"></script>
+  <script src="app.js"></script>
+  <script src="review-mode.js"></script>
+</body>
+</html>
