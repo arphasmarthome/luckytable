@@ -82,19 +82,19 @@ export const space = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24, 8: 32, 10: 40 } a
    These match the on-screen sizes of the 1920x1080 prototype once its canvas was scaled to fit
    an ordinary window (the "40 % larger" type the web prototype settled on). */
 export const typeBase = {
-  hero: 40,
-  page: 30,
-  h1: 30,
-  section: 24,
-  h2: 22,
-  h3: 19,
-  card: 20,
-  body: 17,
-  control: 17,
-  nav: 18,
-  meta: 15,
-  caption: 13,
-  timer: 56,
+  hero: 32,
+  page: 26,
+  h1: 26,
+  section: 21,
+  h2: 20,
+  h3: 17,
+  card: 18,
+  body: 16,
+  control: 16,
+  nav: 17,
+  meta: 14,
+  caption: 12,
+  timer: 48,
 } as const;
 
 /** Blend a hex colour towards white, e.g. tint('#38829b', 0.13) → the light avatar background. */

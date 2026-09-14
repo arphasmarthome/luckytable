@@ -114,9 +114,9 @@ export default function DishScreen() {
         <Bar pct={pct} />
         <MTxt muted>{pct === 100 ? t.allReady : zh ? `${have}／${ings.length} ${t.ingReady}` : `${have} ${t.ofReady} ${ings.length} ${t.ingReady}`}</MTxt>
         <Kicker>{t.ingredients}</Kicker>
-        {ings.map((i) => (
+        {ings.map((i, index) => (
           <Pressable
-            key={i.name}
+            key={`${i.name}-${index}`}
             accessibilityRole="checkbox"
             accessibilityState={{ checked: i.have }}
             accessibilityLabel={i.label}

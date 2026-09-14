@@ -52,15 +52,10 @@ function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
   const width = compact ? 96 : 208;
   return (
     <View style={{ width, paddingTop: insets.top, paddingBottom: Math.max(insets.bottom, 16), backgroundColor: "#fff", borderRightWidth: 1, borderRightColor: shell.line }}>
-      <View style={{ height: compact ? 96 : 112, justifyContent: "center", paddingHorizontal: compact ? 0 : 28, alignItems: compact ? "center" : "flex-start", gap: 4 }}>
-        <Txt variant={compact ? "h3" : "h2"} weight="700" color={shell.green}>
+      <View style={{ height: compact ? 88 : 96, justifyContent: "center", paddingHorizontal: compact ? 0 : 24, alignItems: compact ? "center" : "flex-start" }}>
+        <Txt variant={compact ? "h3" : "card"} weight="700" color={shell.green} numberOfLines={1} adjustsFontSizeToFit>
           {compact ? "LT" : "Lucky Table"}
         </Txt>
-        {compact ? null : (
-          <Txt variant="meta" muted>
-            {t("阿發之家")}
-          </Txt>
-        )}
       </View>
       <ScrollView contentContainerStyle={{ paddingHorizontal: compact ? 10 : 16, gap: 8, flexGrow: 1 }}>
         {ROUTES.map((route) => {
@@ -80,12 +75,12 @@ function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
                 flexDirection: compact ? "column" : "row",
                 alignItems: "center",
                 justifyContent: compact ? "center" : "flex-start",
-                gap: compact ? 4 : 16,
+                gap: compact ? 4 : 12,
                 marginTop: last ? "auto" : 0,
                 backgroundColor: active ? shell.greenSoft : pressed ? shell.surfaceMuted : "transparent",
               })}>
               <Icon name={route.icon} size={compact ? 24 : 24} color={active ? shell.green : shell.navText} />
-              <Txt variant={compact ? "caption" : "nav"} weight={active ? "700" : "500"} color={active ? shell.green : shell.navText} numberOfLines={1}>
+              <Txt variant={compact ? "caption" : "control"} weight={active ? "700" : "500"} color={active ? shell.green : shell.navText} numberOfLines={1} style={{ flexShrink: 1 }}>
                 {t(route.label)}
               </Txt>
             </Pressable>
@@ -95,7 +90,7 @@ function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
       {compact ? null : (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 28, paddingTop: 16 }}>
           <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: shell.statusDot }} />
-          <Txt variant="caption" muted>
+          <Txt variant="caption" muted numberOfLines={1} style={{ flexShrink: 1 }}>
             LT-15 · {t("本機演示裝置")}
           </Txt>
         </View>

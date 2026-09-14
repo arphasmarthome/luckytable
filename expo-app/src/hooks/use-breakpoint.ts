@@ -8,7 +8,7 @@ export type TypeKey = keyof typeof typeBase;
 export function useBreakpoint() {
   const { width, height } = useWindowDimensions();
   const bp: Breakpoint = width < 768 ? "phone" : width < 1200 ? "tablet" : "desktop";
-  const mult = bp === "phone" ? 1 : bp === "tablet" ? 1.08 : 1.2;
+  const mult = bp === "phone" ? 1 : bp === "tablet" ? 1 : 1.05;
   const fs = (key: TypeKey) => Math.round(typeBase[key] * mult);
   return {
     width,
@@ -22,6 +22,6 @@ export function useBreakpoint() {
     mult,
     fs,
     /** page inset used by local modules */
-    inset: bp === "phone" ? 16 : bp === "tablet" ? 24 : 32,
+    inset: bp === "phone" ? 16 : 24,
   };
 }

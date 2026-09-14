@@ -225,7 +225,7 @@ const en: Dictionary = {
   "資料僅保留在本次頁面，重新整理會重置。不會更改既有獨立頁面的服務設定。": "Data only lives in this page session and resets on refresh. Service settings of the standalone pages are not changed.",
   "設定已更新 · 本次操作有效": "Setting updated · applies to this session",
   "食譜": "Recipes",
-  "做菜": "Make",
+  "做菜": "Cook",
   "料理中": "Cooking",
   "今晚菜單：{title}": "Tonight's menu: {title}",
   "{date}，{n}個行程": "{date}, {n} events",

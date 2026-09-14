@@ -1,6 +1,7 @@
 /* Make home: tonight's table strip (dishes, diners, estimated time, Start cooking) and the three
  * entry tiles — What can I make? / I want to make… / Share. */
 import { useMemo } from "react";
+import { Image } from "expo-image";
 import { Pressable, ScrollView, View } from "react-native";
 import { Button, Icon, Page } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
@@ -15,7 +16,9 @@ import { usePantrySlice } from "@/features/make/hooks";
 import { dishDone, planSeconds, readiness, totalRemaining, useMakeStore } from "@/features/make/store";
 import { useMakeStrings } from "@/features/make/strings";
 
-function Tile({ icon, title, body, tone, onPress }: { icon: string; title: string; body: string; tone: "primary" | "green" | "plain"; onPress: () => void }) {
+const TILE_IMAGES = { fridge: require("@/assets/images/lucky/tile-fridge.webp"), dish: require("@/assets/images/lucky/tile-dish.webp") } as const;
+
+function Tile({ icon, title, body, tone, image, onPress }: { icon: string; title: string; body: string; tone: "primary" | "green" | "plain"; image?: keyof typeof TILE_IMAGES; onPress: () => void }) {
   const { isPhone } = useBreakpoint();
   const bg = tone === "primary" ? make.primary : tone === "green" ? make.green : make.surface;
   const fg = tone === "plain" ? make.foreground : "#fff";
@@ -26,15 +29,16 @@ function Tile({ icon, title, body, tone, onPress }: { icon: string; title: strin
       accessibilityRole="button"
       accessibilityLabel={title}
       onPress={onPress}
-      style={({ pressed }) => ({ backgroundColor: bg, borderWidth: 1, borderColor: tone === "plain" ? make.border : bg, borderRadius: radius.xl, padding: isPhone ? 22 : 32, gap: 20, minHeight: isPhone ? 0 : 320, justifyContent: "space-between", opacity: pressed ? 0.85 : 1, flexDirection: isPhone ? "row" : "column", alignItems: isPhone ? "center" : "flex-start" })}>
-      <View style={{ width: isPhone ? 72 : 104, height: isPhone ? 72 : 104, borderRadius: 52, backgroundColor: ringBg, alignItems: "center", justifyContent: "center", alignSelf: isPhone ? "center" : "center" }}>
-        <Icon name={icon} size={isPhone ? 34 : 50} color={ringFg} strokeWidth={2.2} />
+      style={({ pressed }) => ({ flex: isPhone ? undefined : 1, overflow: "hidden", backgroundColor: bg, borderWidth: 1, borderColor: tone === "plain" ? make.border : bg, borderRadius: radius.xl, padding: isPhone ? 20 : 24, gap: 16, minHeight: isPhone ? 0 : 200, justifyContent: "space-between", opacity: pressed ? 0.85 : 1, flexDirection: isPhone ? "row" : "column", alignItems: isPhone ? "center" : "flex-start" })}>
+      {image ? <Image source={TILE_IMAGES[image]} contentFit="cover" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.32 }} /> : null}
+      <View style={{ width: isPhone ? 64 : 80, height: isPhone ? 64 : 80, borderRadius: 40, backgroundColor: ringBg, alignItems: "center", justifyContent: "center", alignSelf: "center" }}>
+        <Icon name={icon} size={isPhone ? 30 : 38} color={ringFg} strokeWidth={2.2} />
       </View>
-      <View style={{ flex: 1, gap: 8 }}>
-        <MTxt variant={isPhone ? "section" : "hero"} weight="700" color={fg}>
+      <View style={{ flex: isPhone ? 1 : undefined, gap: 6 }}>
+        <MTxt variant="section" weight="700" color={fg}>
           {title}
         </MTxt>
-        <MTxt variant={isPhone ? "body" : "card"} color={tone === "plain" ? make.muted : "#ffffffe6"}>
+        <MTxt variant="body" color={tone === "plain" ? make.muted : "#ffffffe6"}>
           {body}
         </MTxt>
       </View>
@@ -73,7 +77,7 @@ export default function MakeHomeScreen() {
   };
 
   return (
-    <Page background={make.background} gap={20}>
+    <Page background={make.background} gap={16} scroll={isPhone}>
       <MakeHeader brand />
       <MCard background={make.surface2} padding={isPhone ? 16 : 20} gap={14}>
         <View>
@@ -129,9 +133,9 @@ export default function MakeHomeScreen() {
           <Button size="lg" variant="primary" accent={make.primary} icon="flame" label={cook ? t.continueCook : t.cookNow} disabled={!canCook} accessibilityLabel={canCook ? undefined : t.needAll} onPress={onCook} />
         </View>
       </MCard>
-      <Grid cols={isPhone ? 1 : 3} gap={isPhone ? 14 : 24}>
-        <Tile icon="camera" tone="primary" title={t.tile1} body={t.tile1Body} onPress={() => nav.go("/make/capture")} />
-        <Tile icon="cooking-pot" tone="green" title={t.tile2} body={t.tile2Body} onPress={() => nav.go("/make/wantmake")} />
+      <Grid cols={isPhone ? 1 : 3} gap={isPhone ? 14 : 20} style={isPhone ? undefined : { flex: 1, minHeight: 0, alignContent: "stretch" }}>
+        <Tile icon="camera" tone="primary" image="fridge" title={t.tile1} body={t.tile1Body} onPress={() => nav.go("/make/capture")} />
+        <Tile icon="cooking-pot" tone="green" image="dish" title={t.tile2} body={t.tile2Body} onPress={() => nav.go("/make/wantmake")} />
         <Tile icon="share-2" tone="plain" title={t.tile3} body={t.tile3Body} onPress={() => nav.go("/make/share")} />
       </Grid>
     </Page>
