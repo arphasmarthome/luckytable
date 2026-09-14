@@ -39,7 +39,7 @@ export function MemberBar({ view, date, horizontal }: { view: CalView; date: Dat
   }
   return (
     <View accessibilityLabel={t("篩選家庭成員")} style={{ gap: 6 }}>
-      <Txt variant="control" weight="600" color="#75857a" style={{ paddingHorizontal: 10, paddingBottom: 6 }}>
+      <Txt variant="control" weight="600" color="#75857a" style={{ paddingHorizontal: 10, paddingBottom: 2 }}>
         {t("家庭成員")}
       </Txt>
       {people.map((person) => {
@@ -51,8 +51,8 @@ export function MemberBar({ view, date, horizontal }: { view: CalView; date: Dat
             accessibilityLabel={person.name}
             accessibilityState={{ selected: active }}
             onPress={() => setMember(person.id)}
-            style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 64, paddingVertical: 8, paddingHorizontal: 11, borderRadius: 7, borderWidth: 1, borderColor: active ? cal.activePersonBorder : "transparent", backgroundColor: active ? cal.activePerson : pressed ? "#eff4ef" : "transparent" })}>
-            <View style={{ width: 39, height: 39, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor: active ? "#fff" : tint(person.color, 0.1) }}>
+            style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 10, minHeight: 46, paddingVertical: 4, paddingHorizontal: 10, borderRadius: 7, borderWidth: 1, borderColor: active ? cal.activePersonBorder : "transparent", backgroundColor: active ? cal.activePerson : pressed ? "#eff4ef" : "transparent" })}>
+            <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: "center", justifyContent: "center", backgroundColor: active ? "#fff" : tint(person.color, 0.1) }}>
               {person.id === "all" ? <Icon name="users" size={22} color={active ? cal.green : person.color} /> : <Txt variant="card" weight="600" color={active ? cal.green : person.color}>{person.initial}</Txt>}
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
@@ -78,19 +78,19 @@ export function Upcoming({ date, events }: { date: Date; events: CalEvent[] }) {
   const from = dateKey(date);
   const upcoming = filterEvents(events, "all").filter((event) => event.date >= from).slice(0, 3);
   return (
-    <View style={{ paddingTop: 18, paddingHorizontal: 4 }}>
-      <Txt variant="h3" color="#728477" style={{ marginBottom: 10 }}>
+    <View style={{ paddingTop: 6, paddingHorizontal: 4 }}>
+      <Txt variant="h3" color="#728477" style={{ marginBottom: 4 }}>
         {t("接下來")}
       </Txt>
       {upcoming.length ? (
         upcoming.map((event) => (
-          <Pressable key={event.id} accessibilityRole="button" accessibilityLabel={t(event.title)} onPress={() => openEventDetail(event.id)} style={{ flexDirection: "row", alignItems: "flex-start", gap: 10, minHeight: 56, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: "#e7ece6" }}>
+          <Pressable key={event.id} accessibilityRole="button" accessibilityLabel={t(event.title)} onPress={() => openEventDetail(event.id)} style={{ flexDirection: "row", alignItems: "flex-start", gap: 10, minHeight: 44, paddingVertical: 7, borderBottomWidth: 1, borderBottomColor: "#e7ece6" }}>
             <Txt variant="meta" weight="600" color="#74917d" style={{ width: 52, paddingTop: 3 }}>
               {event.time || t("全天")}
             </Txt>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <Txt variant="body">{t(event.title)}</Txt>
-              <Txt variant="meta" color="#86938b" style={{ marginTop: 4 }}>
+              <Txt variant="body" numberOfLines={1}>{t(event.title)}</Txt>
+              <Txt variant="meta" color="#86938b" style={{ marginTop: 2 }}>
                 {shortDate(event.date)} · {memberById(event.memberId, members).name}
               </Txt>
             </View>
@@ -109,10 +109,10 @@ export function Weather() {
   const { t } = useI18n();
   const city = useDeviceStore((s) => s.settings.city);
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 14, borderTopWidth: 1, borderTopColor: cal.line, paddingTop: 16, paddingHorizontal: 4, marginTop: "auto" }}>
-      <Icon name="cloud-sun" size={33} color={cal.weather} />
-      <View style={{ flex: 1, flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-        <Txt variant="h1" color="#738678">
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, borderTopWidth: 1, borderTopColor: cal.line, paddingTop: 10, paddingHorizontal: 4, marginTop: "auto" }}>
+      <Icon name="cloud-sun" size={26} color={cal.weather} />
+      <View style={{ flex: 1, flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+        <Txt variant="h3" color="#738678">
           24°
         </Txt>
         <Txt variant="meta" color="#75867b" numberOfLines={2} style={{ flexShrink: 1 }}>

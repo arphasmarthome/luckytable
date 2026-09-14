@@ -110,7 +110,7 @@ export function HealthProfile({ person }: { person: Member }) {
             </Txt>
           ))}
         </View>
-        <View accessibilityRole="image" accessibilityLabel={t("成人 BMI {bmi}，{label}", { bmi: estimate.bmi.toFixed(1), label: estimate.label })} style={{ flexDirection: "row", height: 6, marginBottom: 12 }}>
+        <View accessibilityRole="image" accessibilityLabel={t("成人 BMI {bmi}，{label}", { bmi: estimate.bmi.toFixed(1), label: estimate.label })} style={{ flexDirection: "row", height: 6, marginBottom: 6 }}>
           <View style={{ flex: 6.5, backgroundColor: "#afcad0" }} />
           <View style={{ flex: 6.5, backgroundColor: "#a6bc97" }} />
           <View style={{ flex: 5, backgroundColor: "#dfcb87" }} />
@@ -137,7 +137,7 @@ export function HealthProfile({ person }: { person: Member }) {
   return (
     <View style={{ flexDirection: isWide ? "row" : "column", gap: isWide ? 32 : 24 }}>
       {basics}
-      <View style={{ flex: 1, minWidth: 0, gap: 20 }}>
+      <View style={{ flex: 1, minWidth: 0, gap: 12 }}>
         <Txt variant="h2">{t("健康摘要")}</Txt>
         {summary}
         {estimate ? (
@@ -145,7 +145,7 @@ export function HealthProfile({ person }: { person: Member }) {
             {t("成人參考區間 18.5-24.9；估算僅供參考，不用於醫療診斷。")}
           </Txt>
         ) : null}
-        <View style={{ paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: fh.line, gap: 14 }}>
+        <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: fh.line, gap: 10 }}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
             <Txt variant="h3">{t("餐盤搭配")}</Txt>
             <Txt variant="meta" muted>
@@ -169,8 +169,8 @@ export function HealthProfile({ person }: { person: Member }) {
           </View>
         </View>
         <Txt variant="h3">{t("料理推薦")}</Txt>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 18, paddingBottom: 20, borderBottomWidth: 1, borderBottomColor: fh.line }}>
-          <Image source={recipeImage} accessibilityLabel={t("豆腐、蔬菜與均衡搭配的家庭料理")} contentFit="cover" style={{ width: 118, height: 118, borderRadius: radius.sm }} />
+        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: fh.line }}>
+          <Image source={recipeImage} accessibilityLabel={t("豆腐、蔬菜與均衡搭配的家庭料理")} contentFit="cover" style={{ width: 96, height: 96, borderRadius: radius.sm }} />
           <View style={{ flex: 1, minWidth: 180, gap: 6 }}>
             <Txt variant="h3">{t("均衡家常料理")}</Txt>
             <Txt variant="meta" muted>

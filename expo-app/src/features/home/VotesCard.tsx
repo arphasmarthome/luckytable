@@ -13,18 +13,18 @@ export function VotesCard() {
   return (
     <HomeCard title={t("大家的投票")} style={{ flex: 1 }}>
       {votes.length ? (
-        <View style={{ gap: 16 }}>
+        <View style={{ gap: 12 }}>
           {votes.map((v, i) => (
-            <View key={v.id} style={{ gap: 8 }}>
+            <View key={v.id} style={{ gap: 6 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
-                <Txt variant="card" weight="600" style={{ flexShrink: 1 }}>
+                <Txt variant="body" weight="600" style={{ flexShrink: 1 }} numberOfLines={1}>
                   {v.label}
                 </Txt>
                 <Txt variant="meta" muted>
                   {t("{n} 票", { n: v.n })}
                 </Txt>
               </View>
-              <View style={{ height: 12, borderRadius: radius.pill, backgroundColor: "#e7ebe8", overflow: "hidden" }}>
+              <View style={{ height: 10, borderRadius: radius.pill, backgroundColor: "#e7ebe8", overflow: "hidden" }}>
                 <View style={{ height: "100%", width: `${Math.round((v.n / top) * 100)}%`, borderRadius: radius.pill, backgroundColor: i === 0 ? shell.coral : "#8fb4a2" }} />
               </View>
             </View>

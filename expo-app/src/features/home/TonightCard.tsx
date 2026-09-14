@@ -14,22 +14,22 @@ function DishRow({ dish, meta }: { dish: TonightDish; meta: string }) {
   const router = useRouter();
   const { t } = useI18n();
   const { isPhone } = useBreakpoint();
-  const thumb = isPhone ? { width: 88, height: 64 } : { width: 116, height: 84 };
+  const thumb = isPhone ? { width: 88, height: 64 } : { width: 92, height: 66 };
   const badge = dish.cooked ? t("已完成") : dish.ready ? t("食材齊全") : t("缺 {n} 項", { n: dish.missing });
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={dish.name}
       onPress={() => router.navigate(`/make/dish/${dish.id}` as never)}
-      style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: isPhone ? 12 : 18, padding: 8, paddingRight: 14, borderWidth: 1, borderColor: pressed ? "#a7c4b5" : shell.line, borderRadius: radius.md, backgroundColor: pressed ? "#f7faf8" : "#fff" })}>
+      style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: isPhone ? 12 : 14, padding: 6, paddingRight: 12, borderWidth: 1, borderColor: pressed ? "#a7c4b5" : shell.line, borderRadius: radius.md, backgroundColor: pressed ? "#f7faf8" : "#fff" })}>
       <View style={{ ...thumb, borderRadius: radius.sm, overflow: "hidden", backgroundColor: "#edf1ee", alignItems: "center", justifyContent: "center" }}>
         {dish.img ? <Image source={{ uri: dish.img }} style={{ width: "100%", height: "100%" }} contentFit="cover" accessibilityLabel="" /> : <Icon name="utensils" size={28} color={shell.muted} />}
       </View>
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Txt variant="card" weight="600" numberOfLines={1}>
+        <Txt variant="body" weight="600" numberOfLines={1}>
           {dish.name}
         </Txt>
-        <Txt variant="meta" muted numberOfLines={2}>
+        <Txt variant="meta" muted numberOfLines={1}>
           {meta}
         </Txt>
       </View>

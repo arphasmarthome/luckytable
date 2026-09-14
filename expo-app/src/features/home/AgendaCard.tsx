@@ -37,13 +37,13 @@ export function AgendaCard() {
                 accessibilityRole="button"
                 accessibilityLabel={t(event.title)}
                 onPress={() => router.navigate(`/calendar?view=day&date=${todayKey}&eventId=${event.id}` as never)}
-                style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 72, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: shell.line, opacity: pressed ? 0.7 : 1 })}>
+                style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 46, paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: shell.line, opacity: pressed ? 0.7 : 1 })}>
                 <Txt variant="body" muted style={{ width: isPhone ? 52 : 60, fontVariant: ["tabular-nums"] }}>
                   {!event.time ? t("全天") : event.time}
                 </Txt>
-                <View style={{ width: 3, height: 36, borderRadius: 2, backgroundColor: person.color }} />
+                <View style={{ width: 3, height: 30, borderRadius: 2, backgroundColor: person.color }} />
                 <View style={{ flex: 1, minWidth: 0 }}>
-                  <Txt variant="card" weight="600">
+                  <Txt variant="body" weight="600" numberOfLines={1}>
                     {t(event.title)}
                   </Txt>
                   <Txt variant="meta" muted>

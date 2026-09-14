@@ -75,7 +75,7 @@ export function FhTabs<T extends string>({ tabs, value, onChange, accessibilityL
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}
             onPress={() => onChange(tab.id)}
-            style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 8, minHeight: 52, paddingHorizontal: 16, borderBottomWidth: 3, borderBottomColor: active ? fh.green : "transparent", backgroundColor: pressed ? "#f0f5f1" : "transparent" })}>
+            style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 8, minHeight: 44, paddingHorizontal: 14, borderBottomWidth: 3, borderBottomColor: active ? fh.green : "transparent", backgroundColor: pressed ? "#f0f5f1" : "transparent" })}>
             <Icon name={tab.icon} size={18} color={color} />
             <Txt variant="control" weight={active ? "700" : "500"} color={color}>
               {t(tab.label)}
@@ -100,7 +100,7 @@ export function PageHeading({ title, children }: { title: string; children?: Rea
 /** White content board (.fh-family-board / .fh-health-layout). */
 export function Board({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
   const { isPhone } = useBreakpoint();
-  return <View style={[{ backgroundColor: "#fff", borderRadius: radius.md, borderWidth: 1, borderColor: fh.line, padding: isPhone ? 16 : 24, gap: 20 }, style]}>{children}</View>;
+  return <View style={[{ backgroundColor: "#fff", borderRadius: radius.md, borderWidth: 1, borderColor: fh.line, padding: isPhone ? 16 : 18, gap: 14 }, style]}>{children}</View>;
 }
 
 /** Centered empty state (.empty-state): icon, heading, optional note and primary action. */

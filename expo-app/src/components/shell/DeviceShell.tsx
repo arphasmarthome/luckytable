@@ -6,8 +6,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Avatar, Button, DemoNotice, Icon, Txt } from "@/components/ui";
-import { TodayTasksList } from "@/components/shell/TodayTasks";
-import { todayKey } from "@/lib/date";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { today } from "@/lib/date";
@@ -136,11 +134,9 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
   const city = useDeviceStore((s) => s.settings.city);
   const wifi = useDeviceStore((s) => s.settings.wifi);
   const network = useDeviceStore((s) => s.settings.network);
-  const openTasks = useDeviceStore((s) => s.tasks.filter((task) => !task.completions.includes(todayKey)).length);
   const eventCount = useDeviceStore((s) => s.events.length);
   const taskCount = useDeviceStore((s) => s.tasks.length);
   const photoCount = useDeviceStore((s) => s.photoCount);
-  const openTodayTasks = () => dialog.show({ title: t("今日家庭任務"), body: () => <TodayTasksList /> });
   const openSync = () =>
     dialog.show({
       title: t("家庭同步"),
@@ -189,15 +185,6 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
           </Txt>
         </View>
       ) : null}
-      {routeId === "home" ? (
-        <Button variant="text" size="sm" icon="list-checks" label={isWide ? t("今日任務") : undefined} accessibilityLabel={t("今日任務")} onPress={openTodayTasks}>
-          <View style={{ backgroundColor: shell.greenSoft, borderRadius: 4, paddingHorizontal: 6, paddingVertical: 2, minWidth: 26, alignItems: "center" }}>
-            <Txt variant="meta" weight="600" color={shell.green}>
-              {String(openTasks)}
-            </Txt>
-          </View>
-        </Button>
-      ) : null}
       <View style={{ flex: 1 }} />
       {isWide ? (
         <Pressable accessibilityRole="button" accessibilityLabel={t("家庭同步")} onPress={openSync} style={{ width: 48, height: 48, alignItems: "center", justifyContent: "center" }}>
@@ -209,13 +196,13 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
           <Icon name={wifi ? "wifi" : "wifi-off"} size={24} color={shell.green} />
         </Pressable>
       ) : null}
-      <View style={{ alignItems: "flex-end" }}>
+      <View style={{ flexDirection: "row", alignItems: "baseline", gap: 12 }}>
         <Txt variant={isWide ? "h1" : "h3"} weight="600" style={{ fontVariant: ["tabular-nums"] }}>
           {formatTime(now)}
         </Txt>
         {isWide ? (
-          <Txt variant="meta" muted numberOfLines={1}>
-            {routeId === "home" ? formatDate(today, { year: "numeric", month: "long", day: "numeric" }) : formatDate(today, { month: "short", day: "numeric", weekday: "short" })}
+          <Txt variant="body" muted numberOfLines={1}>
+            {formatDate(today, { year: "numeric", month: "long", day: "numeric" })}
           </Txt>
         ) : null}
       </View>

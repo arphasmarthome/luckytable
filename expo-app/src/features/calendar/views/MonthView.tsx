@@ -17,7 +17,7 @@ export function MonthView({ date, events, compact, cellHeight }: { date: Date; e
   const first = new Date(date.getFullYear(), date.getMonth(), 1, 12);
   const start = weekStart(first);
   const rows = monthRows(date);
-  const visibleCount = rows > 5 ? 1 : 2;
+  const visibleCount = rows > 5 || cellHeight < 104 ? 1 : 2;
   return (
     <View accessibilityLabel={monthYear(date)}>
       <View style={{ flexDirection: "row", height: HEADER_HEIGHT, backgroundColor: cal.soft }}>
@@ -39,8 +39,8 @@ export function MonthView({ date, events, compact, cellHeight }: { date: Date; e
             const isToday = key === todayKey;
             const label = t("{date}，{n}個行程", { date: monthDay(day), n: dayEvents.length });
             const number = (
-              <View style={{ width: 38, height: 38, borderRadius: 19, alignItems: "center", justifyContent: "center", backgroundColor: isToday ? cal.orange : "transparent" }}>
-                <Txt variant="card" weight={isToday ? "600" : "400"} color={isToday ? "#fff" : outside ? "#b7c0c1" : "#26342f"}>
+              <View style={{ width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center", backgroundColor: isToday ? cal.orange : "transparent" }}>
+                <Txt variant="body" weight={isToday ? "600" : "400"} color={isToday ? "#fff" : outside ? "#b7c0c1" : "#26342f"}>
                   {String(day.getDate())}
                 </Txt>
               </View>
@@ -48,8 +48,9 @@ export function MonthView({ date, events, compact, cellHeight }: { date: Date; e
             const cellStyle = {
               flex: 1,
               minWidth: 0,
-              minHeight: cellHeight,
-              paddingVertical: 6,
+              height: cellHeight,
+              overflow: "hidden",
+              paddingVertical: 4,
               paddingHorizontal: compact ? 2 : 8,
               borderTopWidth: 1,
               borderTopColor: cal.cellLine,
@@ -78,7 +79,7 @@ export function MonthView({ date, events, compact, cellHeight }: { date: Date; e
             }
             return (
               <View key={key} style={cellStyle}>
-                <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={() => openDate(key)} hitSlop={4} style={{ alignSelf: "flex-end", marginBottom: 4 }}>
+                <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={() => openDate(key)} hitSlop={4} style={{ alignSelf: "flex-end", marginBottom: 2 }}>
                   {number}
                 </Pressable>
                 <View style={{ gap: 5 }}>
@@ -87,7 +88,7 @@ export function MonthView({ date, events, compact, cellHeight }: { date: Date; e
                   ))}
                 </View>
                 {dayEvents.length > visibleCount ? (
-                  <Pressable accessibilityRole="button" onPress={() => openDate(key)} style={{ minHeight: 32, justifyContent: "center", paddingHorizontal: 3 }}>
+                  <Pressable accessibilityRole="button" onPress={() => openDate(key)} style={{ minHeight: 24, justifyContent: "center", paddingHorizontal: 3 }}>
                     <Txt variant="meta" color="#567762">
                       {t("還有 {n} 個行程", { n: dayEvents.length - visibleCount })}
                     </Txt>

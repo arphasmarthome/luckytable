@@ -20,21 +20,21 @@ export default function HomeScreen() {
     );
   }
   return (
-    <Page gap={28}>
-      <View style={{ flexDirection: "row", gap: 28, alignItems: "stretch" }}>
+    <Page gap={16} scroll={false}>
+      <View style={{ flex: 1, minHeight: 0, flexDirection: "row", gap: 16, alignItems: "stretch" }}>
         <View style={{ flex: 1.2, minWidth: 0 }}>
-          <TonightCard />
+          <AgendaCard />
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>
           <FamilyCard />
         </View>
       </View>
-      <View style={{ flexDirection: "row", gap: 28, alignItems: "stretch" }}>
+      <View style={{ flex: 1, minHeight: 0, flexDirection: "row", gap: 16, alignItems: "stretch" }}>
         <View style={{ flex: 1.2, minWidth: 0 }}>
-          <VotesCard />
+          <TonightCard />
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>
-          <AgendaCard />
+          <VotesCard />
         </View>
       </View>
     </Page>

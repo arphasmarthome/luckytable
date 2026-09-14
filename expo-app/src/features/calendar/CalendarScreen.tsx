@@ -66,7 +66,7 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
 
   const cellWidth = content.width / 7;
   const compactMonth = cellWidth > 0 && cellWidth < 96;
-  const cellHeight = Math.max(compactMonth ? 64 : 112, Math.floor((content.height - 46) / monthRows(date)));
+  const cellHeight = Math.max(compactMonth ? 64 : 80, Math.floor((content.height - 44) / monthRows(date)));
 
   const viewOptions = VIEWS.map((option) => ({ value: option.value, label: t(option.label) }));
   const body =
@@ -100,7 +100,7 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
   return (
     <Page scroll={false} gap={0}>
       <View accessibilityLabel={t("行事曆")} style={{ flex: 1, minHeight: 0 }}>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12, paddingBottom: isPhone ? 12 : 16, marginBottom: isPhone ? 12 : 20, borderBottomWidth: 1, borderBottomColor: cal.line }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12, paddingBottom: isPhone ? 12 : 10, marginBottom: isPhone ? 12 : 12, borderBottomWidth: 1, borderBottomColor: cal.line }}>
           <View style={{ flexDirection: "row", alignItems: "baseline", flexWrap: "wrap", gap: isPhone ? 8 : 18, flexShrink: 1, minWidth: 0 }}>
             {isPhone ? null : <Txt variant="page">{t("家庭行事曆")}</Txt>}
             <Txt variant={isPhone ? "body" : "card"} color={cal.muted} numberOfLines={1}>
@@ -112,7 +112,7 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
         <View style={{ flex: 1, minHeight: 0, flexDirection: "row", gap: 24 }}>
           {isWide ? (
             <View style={{ width: isTablet ? 220 : 248, borderRightWidth: 1, borderRightColor: cal.line, paddingRight: 20, minHeight: 0 }}>
-              <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 18, flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+              <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 10, flexGrow: 1 }} showsVerticalScrollIndicator={false}>
                 <MemberBar view={view} date={date} />
                 {view === "week" ? (
                   <View style={{ borderTopWidth: 1, borderTopColor: cal.line, paddingTop: 12 }}>

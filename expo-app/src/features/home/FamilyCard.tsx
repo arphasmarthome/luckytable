@@ -39,10 +39,10 @@ export function FamilyCard() {
         {members.map((m) => {
           const on = dinnerMembers.includes(m.id);
           return (
-            <View key={m.id} style={{ flexDirection: "row", alignItems: "center", gap: 14, paddingVertical: 11, borderBottomWidth: 1, borderBottomColor: shell.line }}>
-              <Avatar color={m.color} initials={m.initials || m.name.slice(0, 1)} />
+            <View key={m.id} style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: shell.line }}>
+              <Avatar color={m.color} initials={m.initials || m.name.slice(0, 1)} size={32} />
               <View style={{ flex: 1, minWidth: 0 }}>
-                <Txt variant="card" weight="600">
+                <Txt variant="body" weight="600">
                   {m.name}
                 </Txt>
                 <Txt variant="meta" muted numberOfLines={1}>

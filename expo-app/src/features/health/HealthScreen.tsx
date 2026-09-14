@@ -29,7 +29,7 @@ export function HealthScreen() {
   if (!person) return null;
   const family = tab === "family";
   return (
-    <Page gap={16}>
+    <Page gap={12}>
       <PageHeading title={t("家庭健康")}>
         <LocalLabel>{t("僅存本機")}</LocalLabel>
         <Button variant="primary" icon={family ? "watch" : "pencil"} label={family ? t("連線手環") : t("編輯資料")} onPress={() => (family ? openWearableDialog() : openHealthForm(person.id))} />
