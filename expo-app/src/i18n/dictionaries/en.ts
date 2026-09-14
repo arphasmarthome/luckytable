@@ -1300,6 +1300,16 @@ const en: Dictionary = {
   "家庭人物": "Family members",
   "人物與背景分層": "People and background layered",
   "自然景深": "Natural depth of field",
+  /* Universal search (2026-09-15) */
+  "頁面": "Page",
+  "輸入菜名、行程、家人或頁面名稱。": "Type a dish, an event, a family member or a page.",
+  "找不到「{q}」。": "Nothing found for “{q}”.",
+  "此瀏覽器不支援語音輸入（示範）": "Voice input isn't available in this browser (demo)",
+  "搜尋菜色、行程、家人…": "Search dishes, events, family…",
+  "清除": "Clear",
+  "語音搜尋": "Voice search",
+  "聆聽中…再按一次停止。": "Listening… tap again to stop.",
+  "搜尋": "Search",
 };
 
 export default en;

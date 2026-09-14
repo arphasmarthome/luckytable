@@ -139,7 +139,22 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
     <View onLayout={onLayout} style={[styles.stage, cinema ? styles.cinema : fill ? styles.fill : { aspectRatio: 16 / 9, minHeight: isPhone ? 200 : 320 }]}>
       <StageMedia photo={photo} motion={motion} playing={playing} size={size} />
       <Shade />
-      <View pointerEvents="none" style={{ position: "absolute", left: edge, right: edge + 100, bottom: footer ? edge + 64 : edge, gap: 4 }}>
+      {footer ? (
+        <View style={{ position: "absolute", left: edge, right: edge, bottom: edge, flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <View pointerEvents="none" style={{ flex: 1, minWidth: 0, gap: 2 }}>
+            <Txt variant="meta" color="rgba(255,255,255,0.78)" weight="600" numberOfLines={1}>
+              {t(photo.capturedAt)}・{t(photo.owner)}
+            </Txt>
+            <Txt variant={isPhone ? "h3" : "h1"} color="#fff" numberOfLines={1}>
+              {t(photo.title)}
+            </Txt>
+          </View>
+          <RoundButton icon="chevron-left" label={t("上一張照片")} onPress={onPrevious} />
+          {footer}
+          <RoundButton icon="chevron-right" label={t("下一張照片")} onPress={onNext} />
+        </View>
+      ) : null}
+      <View pointerEvents="none" style={{ position: "absolute", left: edge, right: edge + 100, bottom: edge, gap: 4, display: footer ? "none" : "flex" }}>
         {motion ? (
           <View style={{ alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 9, paddingVertical: 4, borderRadius: radius.pill, borderWidth: 1, borderColor: "rgba(255,255,255,0.4)", backgroundColor: "rgba(18,107,85,0.84)", marginBottom: 2 }}>
             <Icon name={motionIcon(motion)} size={13} color="#fff" strokeWidth={2.2} />
@@ -155,15 +170,17 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
           {t(photo.title)}
         </Txt>
       </View>
-      <View style={{ position: "absolute", right: edge, bottom: footer ? edge + 64 : edge, flexDirection: "row", gap: 7 }}>
-        <RoundButton icon="chevron-left" label={t("上一張照片")} onPress={onPrevious} />
-        <RoundButton icon="chevron-right" label={t("下一張照片")} onPress={onNext} />
-      </View>
+      {footer ? null : (
+        <View style={{ position: "absolute", right: edge, bottom: edge, flexDirection: "row", gap: 7 }}>
+          <RoundButton icon="chevron-left" label={t("上一張照片")} onPress={onPrevious} />
+          <RoundButton icon="chevron-right" label={t("下一張照片")} onPress={onNext} />
+        </View>
+      )}
       <View style={{ position: "absolute", top: cinema || fill ? edge : 14, right: cinema || fill ? edge : 14, flexDirection: "row", gap: 8 }}>
         {toolbar}
         <RoundButton light icon="wand-sparkles" label={aiLabel} onPress={() => onAi(photo.id)} />
       </View>
-      {footer ? <View style={{ position: "absolute", left: 0, right: 0, bottom: edge - 6, alignItems: "center" }}>{footer}</View> : null}
+
       {cinema && onExitCinema ? <RoundButton icon="minimize" label={t("離開全螢幕")} onPress={onExitCinema} style={{ position: "absolute", top: edge, left: edge }} /> : null}
       {motion ? <PlaybackProgress playing={playing} /> : null}
     </View>

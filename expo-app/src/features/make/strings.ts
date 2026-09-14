@@ -10,7 +10,7 @@ export type ShareOption = { num: string; title: string; body: string; cta: strin
 
 const en = {
   brand: "Lucky Table", brandSub: "家味開運桌", navMake: "Make", navRec: "Recipes",
-  recKicker: "Matched against what's in stock", stockBtn: "What's in stock", cartBtn: "Cart",
+  recKicker: "Matched against what's in stock", stockBtn: "What's in stock", cartBtn: "Cart", inCart: "Added",
   tonight: "Tonight's table", tonightNone: "Nothing on tonight's menu yet — pick a dish from Recipes.",
   eating: "eating", dishesN: "dishes", dishN: "dish", left: "left", cookNow: "Start cooking", continueCook: "Continue cooking", addDish: "Add dish", removeDish: "Remove from tonight",
   notReady: "not ready", readyAll: "all ingredients on hand", needAll: "Buy the missing ingredients first — Start cooking unlocks at 100%.", stepsLater: "The step-by-step recipe with timers appears when you start cooking.",
@@ -51,7 +51,7 @@ export type MakeStrings = typeof en;
 
 const zh: MakeStrings = {
   brand: "家味開運桌", brandSub: "LUCKY TABLE", navMake: "做菜", navRec: "食譜",
-  recKicker: "依照庫存比對", stockBtn: "庫存清單", cartBtn: "購物車",
+  recKicker: "依照庫存比對", stockBtn: "庫存清單", cartBtn: "購物車", inCart: "已加入",
   tonight: "今晚的餐桌", tonightNone: "今晚還沒有菜單，先從食譜選一道菜。",
   eating: "人用餐", dishesN: "道菜", dishN: "道菜", left: "剩餘", cookNow: "開始料理", continueCook: "繼續料理", addDish: "新增料理", removeDish: "從今晚移除",
   notReady: "道未備齊", readyAll: "食材全部齊全", needAll: "先補齊缺少的食材，備料 100% 才能開始料理。", stepsLater: "逐步作法與計時會在開始料理後顯示。",

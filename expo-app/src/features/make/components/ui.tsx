@@ -1,8 +1,8 @@
 /* Small Make-themed building blocks shared by the Make screens (photo boxes, measured grids,
  * kickers, progress bars, steppers) — layout intent from prototype/make/styles.css. */
 import { Image } from "expo-image";
-import { Children, useState, type ReactNode } from "react";
-import { Pressable, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from "react-native";
+import { Children, useEffect, useRef, useState, type ReactNode } from "react";
+import { Animated, Pressable, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from "react-native";
 import { Txt } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { make, radius } from "@/theme";
@@ -59,10 +59,17 @@ export function useGridCols(min = 300) {
   return 3;
 }
 
+/** Progress bar that eases to its new value whenever `pct` changes. */
 export function Bar({ pct, color = make.green, height = 16, track = make.border }: { pct: number; color?: string; height?: number; track?: string }) {
+  const clamped = Math.max(0, Math.min(100, pct));
+  const anim = useRef(new Animated.Value(clamped)).current;
+  useEffect(() => {
+    Animated.timing(anim, { toValue: clamped, duration: 550, useNativeDriver: false }).start();
+  }, [anim, clamped]);
+  const width = anim.interpolate({ inputRange: [0, 100], outputRange: ["0%", "100%"] });
   return (
     <View style={{ height, borderRadius: radius.pill, backgroundColor: track, overflow: "hidden", width: "100%" }} accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: 100, now: Math.round(pct) }}>
-      <View style={{ height: "100%", width: `${Math.max(0, Math.min(100, pct))}%`, backgroundColor: color, borderRadius: radius.pill }} />
+      <Animated.View style={{ height: "100%", width, backgroundColor: color, borderRadius: radius.pill }} />
     </View>
   );
 }

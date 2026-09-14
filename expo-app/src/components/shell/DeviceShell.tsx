@@ -6,6 +6,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Avatar, Button, DemoNotice, Icon, Txt } from "@/components/ui";
+import { SearchBar } from "@/components/shell/SearchBar";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { today } from "@/lib/date";
@@ -186,6 +187,7 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
         </View>
       ) : null}
       <View style={{ flex: 1 }} />
+      <SearchBar compact={!isWide} />
       {isWide ? (
         <Pressable accessibilityRole="button" accessibilityLabel={t("家庭同步")} onPress={openSync} style={{ width: 48, height: 48, alignItems: "center", justifyContent: "center" }}>
           <Icon name="cloud-check" size={24} color={shell.muted} />

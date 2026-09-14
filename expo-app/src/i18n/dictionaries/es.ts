@@ -1300,6 +1300,16 @@ const es: Dictionary = {
   "家庭人物": "Miembros de la familia",
   "人物與背景分層": "Personas y fondo en capas",
   "自然景深": "Profundidad de campo natural",
+  /* Universal search (2026-09-15) */
+  "頁面": "Página",
+  "輸入菜名、行程、家人或頁面名稱。": "Escribe un plato, un evento, un familiar o una página.",
+  "找不到「{q}」。": "No se encontró «{q}».",
+  "此瀏覽器不支援語音輸入（示範）": "La entrada por voz no está disponible en este navegador (demo)",
+  "搜尋菜色、行程、家人…": "Buscar platos, eventos, familia…",
+  "清除": "Borrar",
+  "語音搜尋": "Búsqueda por voz",
+  "聆聽中…再按一次停止。": "Escuchando… toca de nuevo para detener.",
+  "搜尋": "Buscar",
 };
 
 export default es;

@@ -46,6 +46,7 @@ export default function DishScreen() {
   const inTonight = tonight.includes(d.id);
   const rec = slice.recipes[d.id];
   const carted = cart.some((c) => c.dishId === d.id);
+  const cartedNames = new Set(cart.filter((c) => c.dishId === d.id).map((c) => c.name));
   const canCook = pct === 100;
 
   const onCook = () => {
@@ -104,44 +105,61 @@ export default function DishScreen() {
 
   const aside = (
     <View style={{ width: isWide ? (isDesktop ? 460 : 380) : undefined, gap: 16, minHeight: 0 }}>
-      <MCard style={isWide ? { flex: 1, minHeight: 0 } : undefined}>
+      <MCard padding={14} gap={8} style={isWide ? { flex: 1, minHeight: 0 } : undefined}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
           <MTxt variant="h3">{t.readyToCook}</MTxt>
-          <MTxt variant="hero" weight="700" color={pct === 100 ? make.green : make.primaryPressed} style={{ marginLeft: "auto" }}>
+          <MTxt variant="section" weight="700" color={pct === 100 ? make.green : make.primaryPressed} style={{ marginLeft: "auto" }}>
             {pct}%
           </MTxt>
         </View>
-        <Bar pct={pct} />
-        <MTxt muted>{pct === 100 ? t.allReady : zh ? `${have}／${ings.length} ${t.ingReady}` : `${have} ${t.ofReady} ${ings.length} ${t.ingReady}`}</MTxt>
-        <Kicker>{t.ingredients}</Kicker>
-        <ScrollView style={isWide ? { flex: 1, minHeight: 0 } : undefined} contentContainerStyle={{ gap: 10 }} scrollEnabled={isWide} showsVerticalScrollIndicator>
-        {ings.map((i, index) => (
+        <Bar pct={pct} height={10} />
+        <MTxt variant="meta" muted numberOfLines={2}>
+          {pct === 100 ? t.allReady : zh ? `${have}／${ings.length} ${t.ingReady}` : `${have} ${t.ofReady} ${ings.length} ${t.ingReady}`}
+        </MTxt>
+        <ScrollView style={isWide ? { flex: 1, minHeight: 0 } : undefined} contentContainerStyle={{ gap: 6 }} scrollEnabled={isWide} showsVerticalScrollIndicator>
+        {ings.map((i, index) => {
+          const inCart = !i.have && cartedNames.has(i.name);
+          const tone = i.have ? { border: "#cfe3d9", bg: make.greenSoft, dot: make.green } : inCart ? { border: make.selectedBorder, bg: make.primarySoft, dot: make.green } : { border: make.border, bg: make.surface, dot: make.primary };
+          return (
           <Pressable
             key={`${i.name}-${index}`}
             accessibilityRole="checkbox"
-            accessibilityState={{ checked: i.have }}
-            accessibilityLabel={i.label}
+            accessibilityState={{ checked: i.have || inCart }}
+            accessibilityLabel={inCart ? `${i.label} · ${t.inCart}` : i.label}
             onPress={() => toggleAcquired(d.id, i.name)}
-            style={{ flexDirection: "row", alignItems: "center", gap: 14, minHeight: 56, paddingVertical: 6, paddingLeft: 8, paddingRight: 16, borderWidth: 1, borderColor: i.have ? "#cfe3d9" : make.border, borderRadius: radius.pill, backgroundColor: i.have ? make.greenSoft : make.surface }}>
-            <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: i.have ? make.green : make.primary, alignItems: "center", justifyContent: "center" }}>
-              <MTxt weight="700" color="#fff">
-                {i.have ? "✓" : "+"}
-              </MTxt>
+            style={{ flexDirection: "row", alignItems: "center", gap: 10, minHeight: 40, paddingVertical: 3, paddingLeft: 6, paddingRight: 12, borderWidth: 1, borderColor: tone.border, borderRadius: radius.pill, backgroundColor: tone.bg }}>
+            <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: tone.dot, alignItems: "center", justifyContent: "center" }}>
+              {inCart ? <Icon name="check" size={15} color="#fff" strokeWidth={3} /> : (
+                <MTxt variant="meta" weight="700" color="#fff">
+                  {i.have ? "✓" : "+"}
+                </MTxt>
+              )}
             </View>
-            <MTxt weight="500" style={{ flex: 1 }}>
+            <MTxt variant="meta" weight="500" numberOfLines={1} style={{ flex: 1 }}>
               {i.label}
             </MTxt>
-            <MTxt variant="meta" muted>
+            {inCart ? (
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.pill, backgroundColor: make.greenSoft }}>
+                <Icon name="shopping-cart" size={11} color="#2f6a55" />
+                <MTxt variant="caption" weight="600" color="#2f6a55">
+                  {t.inCart}
+                </MTxt>
+              </View>
+            ) : null}
+            <MTxt variant="caption" muted numberOfLines={1} style={{ maxWidth: 110 }}>
               {i.amount}
             </MTxt>
           </Pressable>
-        ))}
+          );
+        })}
         </ScrollView>
       </MCard>
-      <MCard background={make.primarySoft} border={make.selectedBorder}>
-        <MTxt weight="600">{missing.length ? `${t.stillNeed} ${missing.length}: ${missing.map((i) => i.label).join(sep)}` : t.nothingToBuy}</MTxt>
+      <MCard background={make.primarySoft} border={make.selectedBorder} padding={14} gap={8}>
+        <MTxt variant="meta" weight="600" numberOfLines={2}>
+          {missing.length ? `${t.stillNeed} ${missing.length}: ${missing.map((i) => i.label).join(sep)}` : t.nothingToBuy}
+        </MTxt>
         <Button
-          size="lg"
+          size="md"
           icon="shopping-cart"
           variant={missing.length && !carted ? "primary" : "secondary"}
           accent={make.primary}
