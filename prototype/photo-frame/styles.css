@@ -149,7 +149,7 @@ svg {
   border-radius: 8px;
   background: transparent;
   color: inherit;
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 760;
   cursor: pointer;
 }
@@ -197,7 +197,7 @@ svg {
   position: relative;
   width: max-content;
   font-family: Arial, sans-serif;
-  font-size: 25px;
+  font-size: 35px;
   font-weight: 900;
   line-height: 0.9;
 }
@@ -218,7 +218,7 @@ svg {
 }
 
 .brand-subtitle {
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 800;
   text-indent: 35px;
 }
@@ -234,13 +234,13 @@ svg {
 .home-context {
   gap: 8px;
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: 20px;
   white-space: nowrap;
 }
 
 .home-context time {
   color: var(--ink);
-  font-size: 18px;
+  font-size: 25px;
   font-weight: 850;
   font-variant-numeric: tabular-nums;
 }
@@ -249,7 +249,7 @@ svg {
   min-width: 0;
   gap: 8px;
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .weather span {
@@ -275,7 +275,7 @@ svg {
   border-radius: 8px;
   background: #edf7f3;
   color: var(--green);
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -331,13 +331,13 @@ svg {
 .eyebrow {
   margin: 0 0 5px;
   color: var(--coral);
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 900;
 }
 
 .page-heading h1 {
   margin: 0;
-  font-size: clamp(28px, 2.5vw, 42px);
+  font-size: clamp(39px, 3.5vw, 59px);
   line-height: 1.12;
 }
 
@@ -345,7 +345,7 @@ svg {
   min-height: 21px;
   margin: 7px 0 0;
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: 18px;
 }
 
 .heading-actions,
@@ -671,13 +671,13 @@ svg {
 
 .stage-caption small {
   color: rgb(255 255 255 / 78%);
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 750;
 }
 
 .stage-caption strong {
   overflow: hidden;
-  font-size: clamp(18px, 1.8vw, 28px);
+  font-size: clamp(25px, 2.5vw, 39px);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -693,7 +693,7 @@ svg {
   border-radius: 999px;
   background: rgb(18 107 85 / 84%);
   color: #ffffff;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 850;
   backdrop-filter: blur(8px);
 }
@@ -773,12 +773,12 @@ svg {
 
 .empty-stage strong {
   color: var(--ink);
-  font-size: 19px;
+  font-size: 27px;
 }
 
 .empty-stage p {
   margin: 0;
-  font-size: 13px;
+  font-size: 18px;
 }
 
 .viewer-toolbar {
@@ -792,13 +792,13 @@ svg {
   display: grid;
   gap: 2px;
   color: var(--ink-soft);
-  font-size: 11px;
+  font-size: 15px;
 }
 
 .toolbar-copy strong {
   overflow: hidden;
   color: var(--ink);
-  font-size: 13px;
+  font-size: 18px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -852,7 +852,7 @@ svg {
   display: block;
   margin-bottom: 9px;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -870,7 +870,7 @@ svg {
   place-items: center;
   background: var(--green-soft);
   color: var(--green-deep);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -890,7 +890,7 @@ svg {
 .motion-timeline p {
   margin: 9px 0 0;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -898,7 +898,7 @@ svg {
   display: grid;
   grid-template-columns: 78px minmax(0, 1fr);
   gap: 10px;
-  font-size: 11px;
+  font-size: 15px;
 }
 
 .motion-analysis dt {
@@ -921,7 +921,7 @@ svg {
   border: 0;
   background: transparent;
   color: var(--green);
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 800;
   text-align: left;
   cursor: pointer;
@@ -936,7 +936,7 @@ svg {
   display: grid;
   gap: 7px;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -969,7 +969,7 @@ svg {
   border-radius: 7px;
   background: var(--surface);
   color: var(--ink);
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -1005,12 +1005,12 @@ svg {
 
 .photo-library h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 28px;
 }
 
 .photo-library header span {
   color: var(--ink-soft);
-  font-size: 11px;
+  font-size: 15px;
 }
 
 .privacy-state {
@@ -1071,7 +1071,7 @@ svg {
   border-radius: 999px;
   background: rgb(255 255 255 / 92%);
   color: var(--green);
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 900;
   box-shadow: 0 4px 12px rgb(20 36 30 / 16%);
 }
@@ -1104,12 +1104,12 @@ svg {
 }
 
 .photo-card-copy strong {
-  font-size: 12px;
+  font-size: 17px;
 }
 
 .photo-card-copy small {
   color: var(--ink-soft);
-  font-size: 9px;
+  font-size: 13px;
 }
 
 .photo-ai-action {
@@ -1124,7 +1124,7 @@ svg {
   border-radius: 7px;
   background: var(--green-soft);
   color: var(--green);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 850;
   cursor: pointer;
 }
@@ -1188,7 +1188,7 @@ dialog::backdrop {
 
 .dialog-heading h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: 31px;
 }
 
 .icon-button.quiet {
@@ -1234,13 +1234,13 @@ dialog::backdrop {
 }
 
 .settings-section-heading strong {
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .settings-section-heading small {
   overflow: hidden;
   color: var(--ink-soft);
-  font-size: 11px;
+  font-size: 15px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1255,7 +1255,7 @@ dialog::backdrop {
   border-radius: 7px;
   background: var(--surface);
   color: var(--ink);
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -1330,7 +1330,7 @@ dialog::backdrop {
 .settings-label {
   margin-bottom: 8px;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -1363,7 +1363,7 @@ dialog::backdrop {
   border-radius: 7px;
   background: var(--surface);
   color: var(--ink-soft);
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -1441,7 +1441,7 @@ dialog::backdrop {
   border: 0;
   background: transparent;
   color: var(--green);
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -1481,7 +1481,7 @@ dialog::backdrop {
 .ai-complete h3,
 .ai-error h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 28px;
 }
 
 .ai-photo-summary p,
@@ -1489,7 +1489,7 @@ dialog::backdrop {
 .ai-error p {
   margin: 7px 0 0;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: 17px;
   line-height: 1.6;
 }
 
@@ -1503,7 +1503,7 @@ dialog::backdrop {
 .effect-picker legend {
   margin-bottom: 9px;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -1560,11 +1560,11 @@ dialog::backdrop {
 
 .effect-segmented strong {
   color: var(--ink);
-  font-size: 12px;
+  font-size: 17px;
 }
 
 .effect-segmented small {
-  font-size: 9px;
+  font-size: 13px;
 }
 
 .weather-picker {
@@ -1586,7 +1586,7 @@ dialog::backdrop {
   border-radius: 7px;
   background: var(--surface);
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -1626,13 +1626,13 @@ dialog::backdrop {
 }
 
 .ai-duration-plan > div:first-child strong {
-  font-size: 12px;
+  font-size: 17px;
 }
 
 .ai-duration-plan > div:first-child span {
   flex: 0 0 auto;
   color: var(--green);
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 850;
 }
 
@@ -1646,7 +1646,7 @@ dialog::backdrop {
   gap: 7px;
   margin: 13px 0 0;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.55;
 }
 
@@ -1703,12 +1703,12 @@ dialog::backdrop {
 
 .processing-copy h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 25px;
 }
 
 .processing-copy strong {
   color: var(--green);
-  font-size: 16px;
+  font-size: 22px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1742,7 +1742,7 @@ dialog::backdrop {
   display: grid;
   gap: 3px;
   color: var(--ink-soft);
-  font-size: 9px;
+  font-size: 13px;
 }
 
 .phase-list li::before {
@@ -1777,7 +1777,7 @@ dialog::backdrop {
   border-radius: 999px;
   background: var(--amber-soft);
   color: #73520c;
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 850;
 }
 
@@ -1819,7 +1819,7 @@ dialog::backdrop {
   border-radius: 999px;
   background: rgb(12 68 56 / 86%);
   color: #ffffff;
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 850;
 }
 
@@ -1837,7 +1837,7 @@ dialog::backdrop {
   border-radius: 6px;
   background: rgb(18 25 23 / 72%);
   color: rgb(255 255 255 / 86%);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 750;
 }
 
@@ -1869,12 +1869,12 @@ dialog::backdrop {
 
 .analysis-grid small {
   color: var(--ink-soft);
-  font-size: 9px;
+  font-size: 13px;
 }
 
 .analysis-grid strong {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 17px;
 }
 
 .ai-complete h3 {
@@ -1920,13 +1920,13 @@ dialog::backdrop {
 
 .confirm-dialog h2 {
   margin: 15px 0 0;
-  font-size: 21px;
+  font-size: 29px;
 }
 
 .confirm-dialog p {
   margin: 8px 0 0;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: 17px;
   line-height: 1.55;
 }
 
@@ -1956,7 +1956,7 @@ dialog::backdrop {
   border-radius: 8px;
   background: #17201d;
   color: #ffffff;
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 750;
   box-shadow: var(--shadow);
 }
@@ -2084,7 +2084,7 @@ dialog::backdrop {
 
   .nav-item {
     min-height: 61px;
-    font-size: 10px;
+    font-size: 14px;
   }
 
   .nav-item svg {
@@ -2102,7 +2102,7 @@ dialog::backdrop {
   }
 
   .brand-name {
-    font-size: 20px;
+    font-size: 28px;
   }
 
   .brand-subtitle,
@@ -2135,7 +2135,7 @@ dialog::backdrop {
   }
 
   .page-heading h1 {
-    font-size: 29px;
+    font-size: 41px;
   }
 
   .photo-stage {
@@ -2163,7 +2163,7 @@ dialog::backdrop {
 
   .nav-item {
     min-height: 57px;
-    font-size: 9px;
+    font-size: 13px;
   }
 
   .topbar {
@@ -2176,7 +2176,7 @@ dialog::backdrop {
   }
 
   .brand-name {
-    font-size: 17px;
+    font-size: 24px;
   }
 
   .home-context span,
@@ -2200,13 +2200,13 @@ dialog::backdrop {
 
   .page-heading h1 {
     max-width: 240px;
-    font-size: 24px;
+    font-size: 34px;
     overflow-wrap: anywhere;
   }
 
   .page-status {
     max-width: 250px;
-    font-size: 10px;
+    font-size: 14px;
   }
 
   .heading-actions {
@@ -2241,12 +2241,12 @@ dialog::backdrop {
   }
 
   .stage-caption strong {
-    font-size: 16px;
+    font-size: 22px;
   }
 
   .stage-caption small,
   .stage-ai-badge {
-    font-size: 8px;
+    font-size: 11px;
   }
 
   .stage-controls {
@@ -2330,7 +2330,7 @@ dialog::backdrop {
   }
 
   .dialog-heading h2 {
-    font-size: 18px;
+    font-size: 25px;
   }
 
   .ai-intro,
@@ -2346,7 +2346,7 @@ dialog::backdrop {
   }
 
   .ai-photo-summary h3 {
-    font-size: 16px;
+    font-size: 22px;
   }
 
   .effect-segmented button {

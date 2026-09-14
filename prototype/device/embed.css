@@ -32,7 +32,7 @@ html.device-embedded body {
 }
 
 .device-embedded .page-heading h1 {
-  font-size: 28px;
+  font-size: 39px;
   letter-spacing: 0;
 }
 
@@ -80,12 +80,12 @@ html.device-embedded body {
 }
 
 .device-embedded .frame-page .page-heading h1 {
-  font-size: 25px;
+  font-size: 35px;
   max-width: none;
 }
 
 .device-embedded .frame-page .page-status {
-  font-size: 12px;
+  font-size: 17px;
   max-width: none;
 }
 
@@ -141,7 +141,7 @@ html.device-embedded body {
   color: #fff;
   background: rgb(15 30 23 / 65%);
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.4;
   pointer-events: none;
 }
@@ -159,7 +159,7 @@ html.device-inactive *::after {
   }
 
   .device-embedded .page-heading h1 {
-    font-size: 25px;
+    font-size: 35px;
   }
 
   .device-embedded .action-dock,
@@ -190,7 +190,7 @@ html.device-inactive *::after {
   }
 
   .device-embedded .frame-page .page-heading h1 {
-    font-size: 22px;
+    font-size: 31px;
   }
 }
 
@@ -209,10 +209,10 @@ html.device-inactive *::after {
   }
 
   .device-embedded .toolbar-copy strong {
-    font-size: 12px;
+    font-size: 17px;
   }
 
   .device-embedded .toolbar-copy span {
-    font-size: 10px;
+    font-size: 14px;
   }
 }
