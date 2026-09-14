@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "expo-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "expo-app", "run", "web", "--", "--port", "8081"],
+      "port": 8081
+    },
+    {
       "name": "lucky-table-static",
       "runtimeExecutable": "node",
       "runtimeArgs": [".claude/serve.mjs"],

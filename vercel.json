@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "cd expo-app && npm ci",
+  "buildCommand": "cd expo-app && npx expo export --platform web && cp -R ../prototype dist/prototype",
+  "outputDirectory": "expo-app/dist",
+  "rewrites": [{ "source": "/((?!prototype/|_expo/|assets/).*)", "destination": "/index.html" }]
+}

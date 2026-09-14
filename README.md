@@ -2,6 +2,14 @@
 
 版本日期：2026-09-10。画布：1920 × 1080（16:9）。
 
+## Expo 版本（2026-09-14 起）
+
+整套原型已改以 **Expo（React Native + Expo Router）** 重建，程式碼在 `expo-app/`，可在手機與平板 / 桌面瀏覽器以響應式版面操作，並以靜態網頁形式部署到 Vercel：
+
+- 本機執行：`cd expo-app && npm install && npm run web`（http://localhost:8081）。
+- Vercel：專案根目錄的 `vercel.json` 會安裝並建置 `expo-app/`（`npx expo export --platform web`），輸出 `expo-app/dist`；舊的 HTML 原型仍會一併複製，可在 `/prototype/device/index.html` 開啟對照。
+- 說明見 `expo-app/README.md`。以下「打开方式」與功能說明針對舊的 HTML 原型（`prototype/`），仍可直接開啟對照。
+
 ## 打开方式
 
 1. 将整个 ZIP 解压到一个文件夹，不要直接在压缩包内打开 HTML。
