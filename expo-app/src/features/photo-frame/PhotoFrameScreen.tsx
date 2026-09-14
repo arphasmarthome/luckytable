@@ -1,19 +1,20 @@
 /* 相框 — family photo frame (port of prototype/photo-frame). Renders inside the app shell:
- * eyebrow heading, the photo stage, a toolbar, thumbnail navigation and the AI / settings dialogs. */
+ * the photo fills the whole content area (Skylight-style) with the caption, navigation, a small
+ * control cluster and a thumbnail strip overlaid; AI / settings open dialogs. */
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
-import { Modal, Platform, Pressable, ScrollView, View } from "react-native";
+import { Modal, Platform, Pressable, View } from "react-native";
 import { Button, Icon, Page, Txt } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { useDeviceStore } from "@/store/device";
 import { dialog } from "@/store/dialog";
-import { frame as palette, radius, shadow } from "@/theme";
+import { frame as palette, radius } from "@/theme";
 import { openAiDialog } from "./AiDialog";
-import { MOTION_SECONDS, imageSource, motionLabel } from "./data";
+import { imageSource } from "./data";
 import { exitFullscreen, toggleFullscreen, useFullscreenSync } from "./fullscreen";
-import { PhotoStage } from "./PhotoStage";
+import { PhotoStage, RoundButton } from "./PhotoStage";
 import { openSettingsDialog } from "./SettingsDialog";
 import { currentPhoto, frame, useFrameStore } from "./store";
 
@@ -62,33 +63,9 @@ function useKeyboard() {
   }, []);
 }
 
-function ToolbarButton({ icon, label, onPress, disabled, active }: { icon: string; label: string; onPress: () => void; disabled?: boolean; active?: boolean }) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ disabled: Boolean(disabled), selected: Boolean(active) }}
-      disabled={disabled}
-      onPress={onPress}
-      style={({ pressed }) => ({
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        alignItems: "center",
-        justifyContent: "center",
-        borderWidth: 1,
-        borderColor: active ? palette.green : palette.line,
-        backgroundColor: active ? palette.greenSoft : pressed ? palette.surfaceMuted : palette.surface,
-        opacity: disabled ? 0.4 : 1,
-      })}>
-      <Icon name={icon} size={18} color={active ? palette.green : palette.ink} />
-    </Pressable>
-  );
-}
-
 export function PhotoFrameScreen() {
   const { t } = useI18n();
-  const { width, height, isPhone, isWide, inset } = useBreakpoint();
+  const { isPhone } = useBreakpoint();
   const photos = useFrameStore((s) => s.photos);
   const photo = useFrameStore((s) => currentPhoto(s));
   const cinema = useFrameStore((s) => s.cinema);
@@ -98,95 +75,56 @@ export function PhotoFrameScreen() {
   useKeyboard();
   useFullscreenSync();
 
-  const enhancedCount = photos.filter((item) => item.motion).length;
-  const status = photos.length ? t("已同步 {photos} 張照片・{motion} 張 AI 動態", { photos: photos.length, motion: enhancedCount }) : t("目前沒有照片");
   const playing = Boolean(photo?.motion && autoPlay);
-  const index = photo ? photos.indexOf(photo) + 1 : 0;
-  const motionStatus = photo
-    ? photo.motion
-      ? `${motionLabel(photo.motion)}・${t("同一張照片 {n} 秒", { n: photo.motion.durationSeconds || MOTION_SECONDS })}${playing ? t("自動播放中") : t("自動播放已關閉")}`
-      : t("靜態照片・只會手動切換")
-    : t("請到設定加入照片");
-
-  // Wide screens: keep the stage within the viewport so the toolbar stays visible beneath it.
-  const contentWidth = width - inset * 2 - (isWide ? 120 : 0);
-  const maxByHeight = Math.max(480, (height - 340) * (16 / 9));
-  const frameWidth = isPhone ? undefined : Math.min(contentWidth, maxByHeight);
-
   const onAi = (photoId: string) => {
     if (useFrameStore.getState().cinema) void exitFullscreen();
     openAiDialog(photoId);
   };
 
+  const toolbar = (
+    <>
+      <RoundButton icon={autoPlay ? "pause" : "play"} label={autoPlay ? t("暫停") : t("播放")} onPress={() => setSettings({ autoPlayMotion: !autoPlay })} />
+      <RoundButton icon="maximize" label={t("全螢幕")} onPress={() => void toggleFullscreen()} disabled={!photo} />
+      <RoundButton icon="settings" label={t("設定")} onPress={openSettingsDialog} />
+    </>
+  );
+
+  const thumbs = photos.length > 1 ? (
+    <View style={{ flexDirection: "row", gap: 6, padding: 6, borderRadius: radius.md, backgroundColor: "rgba(17,25,22,0.45)" }}>
+      {photos.map((item) => {
+        const selected = item.id === photo?.id;
+        return (
+          <Pressable
+            key={item.id}
+            accessibilityRole="button"
+            accessibilityLabel={t(item.title)}
+            accessibilityState={{ selected }}
+            onPress={() => frame.selectPhoto(item.id)}
+            style={({ pressed }) => ({ width: isPhone ? 44 : 60, height: isPhone ? 30 : 40, borderRadius: 6, overflow: "hidden", borderWidth: 2, borderColor: selected ? "#fff" : "transparent", opacity: pressed ? 0.8 : selected ? 1 : 0.7, backgroundColor: palette.surfaceMuted })}>
+            <Image source={imageSource(item.src)} contentFit="cover" style={{ width: "100%", height: "100%" }} />
+            {item.motion ? (
+              <View style={{ position: "absolute", right: 2, bottom: 2, width: 14, height: 14, borderRadius: 7, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(18,107,85,0.9)" }}>
+                <Icon name="sparkles" size={9} color="#fff" strokeWidth={2.4} />
+              </View>
+            ) : null}
+          </Pressable>
+        );
+      })}
+    </View>
+  ) : null;
+
   return (
-    <Page background={palette.canvas} gap={18}>
-      <View style={{ gap: 4 }}>
-        <Txt variant="caption" color={palette.coral} weight="700" style={{ letterSpacing: 1.2 }}>
-          FAMILY MEMORIES
-        </Txt>
-        <Txt variant="h1" color={palette.ink}>
-          {t("家裡最近的好時刻。")}
-        </Txt>
-        <Txt variant="body" color={palette.inkSoft} accessibilityLiveRegion="polite">
-          {status}
-        </Txt>
-      </View>
-
-      <View style={[{ width: frameWidth, maxWidth: "100%", alignSelf: isPhone ? "stretch" : "center", backgroundColor: palette.surface, borderWidth: 1, borderColor: palette.line, borderRadius: radius.md, padding: isPhone ? 10 : 16, gap: 12 }, shadow]}>
-        {cinema ? (
-          <View style={{ aspectRatio: 16 / 9, borderRadius: radius.sm, backgroundColor: palette.surfaceMuted, alignItems: "center", justifyContent: "center" }}>
-            <Txt variant="meta" color={palette.inkSoft}>
-              {t("全螢幕")}
-            </Txt>
-          </View>
-        ) : (
-          <PhotoStage photo={photo} playing={playing} onPrevious={() => frame.changePhoto(-1)} onNext={() => frame.changePhoto(1)} onAi={onAi} />
-        )}
-
-        <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 12, minHeight: 48 }}>
-          <View style={{ flex: 1, minWidth: 180, gap: 2 }}>
-            <Txt variant="control" weight="600" color={palette.ink} numberOfLines={1}>
-              {photo ? `${index} / ${photos.length}・${t(photo.title)}` : t("尚未選擇照片")}
-            </Txt>
-            <Txt variant="meta" color={palette.inkSoft} numberOfLines={2}>
-              {motionStatus}
-            </Txt>
-          </View>
-          <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-            <ToolbarButton icon="chevron-left" label={t("上一張照片")} onPress={() => frame.changePhoto(-1)} disabled={!photo} />
-            <ToolbarButton icon="chevron-right" label={t("下一張照片")} onPress={() => frame.changePhoto(1)} disabled={!photo} />
-            <ToolbarButton icon={autoPlay ? "pause" : "play"} label={autoPlay ? t("暫停") : t("播放")} active={autoPlay} onPress={() => setSettings({ autoPlayMotion: !autoPlay })} />
-            <ToolbarButton icon="maximize" label={t("全螢幕")} onPress={() => void toggleFullscreen()} disabled={!photo} />
-            <ToolbarButton icon="settings" label={t("設定")} onPress={openSettingsDialog} />
-          </View>
+    <Page background="#0d0f0e" scroll={false} padded={false} gap={0}>
+      {cinema ? (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Txt variant="meta" color="rgba(255,255,255,0.7)">
+            {t("全螢幕")}
+          </Txt>
         </View>
-
-        {photos.length ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingVertical: 2 }}>
-            {photos.map((item) => {
-              const selected = item.id === photo?.id;
-              return (
-                <Pressable
-                  key={item.id}
-                  accessibilityRole="button"
-                  accessibilityLabel={t(item.title)}
-                  accessibilityState={{ selected }}
-                  onPress={() => frame.selectPhoto(item.id)}
-                  style={({ pressed }) => ({ width: 80, height: 52, borderRadius: radius.sm, overflow: "hidden", borderWidth: 2, borderColor: selected ? palette.green : "transparent", opacity: pressed ? 0.8 : selected ? 1 : 0.75, backgroundColor: palette.surfaceMuted })}>
-                  <Image source={imageSource(item.src)} contentFit="cover" style={{ width: "100%", height: "100%" }} />
-                  {item.motion ? (
-                    <View style={{ position: "absolute", right: 3, bottom: 3, width: 16, height: 16, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(18,107,85,0.9)" }}>
-                      <Icon name="sparkles" size={10} color="#fff" strokeWidth={2.4} />
-                    </View>
-                  ) : null}
-                </Pressable>
-              );
-            })}
-          </ScrollView>
-        ) : null}
-      </View>
-
-      {!photos.length ? <Button icon="settings" label={t("請到設定加入照片")} onPress={openSettingsDialog} accent={palette.green} style={{ alignSelf: "flex-start" }} /> : null}
+      ) : (
+        <PhotoStage fill photo={photo} playing={playing} toolbar={toolbar} footer={thumbs} onPrevious={() => frame.changePhoto(-1)} onNext={() => frame.changePhoto(1)} onAi={onAi} />
+      )}
+      {!photos.length ? <Button icon="settings" label={t("請到設定加入照片")} onPress={openSettingsDialog} accent={palette.green} style={{ position: "absolute", bottom: 24, alignSelf: "center" }} /> : null}
 
       <Modal visible={cinema} animationType="fade" onRequestClose={() => void exitFullscreen()} statusBarTranslucent supportedOrientations={["portrait", "landscape"]}>
         <View style={{ flex: 1, backgroundColor: "#0d0f0e" }}>

@@ -57,10 +57,11 @@ export const STOCK: StockRow[] = [
 export type DetBox = [name: string, left: string, top: string, width: string, height: string, alt: 0 | 1];
 export type Shot = { items: [string, number][]; boxes: DetBox[] };
 export const SHOTS: Shot[] = [
-  { items: [["Broccoli", 1], ["Beef sirloin", 1]], boxes: [["Broccoli", "14%", "22%", "26%", "34%", 0], ["Beef sirloin", "56%", "44%", "26%", "30%", 1]] },
-  { items: [["Green onion", 3]], boxes: [["Green onion", "20%", "50%", "34%", "22%", 0]] },
-  { items: [["Tomato", 2], ["Avocado", 1]], boxes: [["Tomato", "12%", "26%", "22%", "30%", 0], ["Avocado", "48%", "36%", "22%", "28%", 1]] },
-  { items: [["Tomato", 1], ["Garlic", 1]], boxes: [["Garlic", "34%", "30%", "24%", "26%", 1]] },
+  /* boxes are placed over the fridge demo photo (the middle band of assets/images/lucky/tile-fridge.webp) */
+  { items: [["Broccoli", 1], ["Beef sirloin", 1]], boxes: [["Broccoli", "30%", "14%", "20%", "34%", 0], ["Beef sirloin", "52%", "62%", "30%", "32%", 1]] },
+  { items: [["Green onion", 3]], boxes: [["Green onion", "50%", "8%", "32%", "40%", 0]] },
+  { items: [["Tomato", 2], ["Avocado", 1]], boxes: [["Tomato", "8%", "26%", "28%", "32%", 0], ["Avocado", "12%", "64%", "34%", "32%", 1]] },
+  { items: [["Tomato", 1], ["Garlic", 1]], boxes: [["Garlic", "38%", "46%", "20%", "16%", 1]] },
 ];
 export const ITEMS: Record<string, { zh: string; conf: number; unit: string; size: Size }> = {
   Broccoli: { zh: "花椰菜", conf: 98, unit: "heads", size: { kind: "weight", g: 500 } },

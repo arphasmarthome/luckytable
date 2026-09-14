@@ -35,10 +35,10 @@ function Tile({ icon, title, body, tone, image, onPress }: { icon: string; title
         <Icon name={icon} size={isPhone ? 30 : 38} color={ringFg} strokeWidth={2.2} />
       </View>
       <View style={{ flex: isPhone ? 1 : undefined, gap: 6 }}>
-        <MTxt variant="section" weight="700" color={fg}>
+        <MTxt variant="section" weight="700" color={fg} numberOfLines={1} adjustsFontSizeToFit>
           {title}
         </MTxt>
-        <MTxt variant="body" color={tone === "plain" ? make.muted : "#ffffffe6"}>
+        <MTxt variant="body" color={tone === "plain" ? make.muted : "#ffffffe6"} numberOfLines={2} style={isPhone ? undefined : { height: 48 }}>
           {body}
         </MTxt>
       </View>

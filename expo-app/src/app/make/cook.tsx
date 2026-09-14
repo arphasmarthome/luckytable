@@ -57,7 +57,7 @@ export default function CookScreen() {
   const addDish = (pane: "A" | "B" | "" = "") => openAddDishModal(t.addDish, pane);
 
   const top = (
-    <MCard padding={isPhone ? 12 : 16} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: isPhone ? 12 : 20 }}>
+    <MCard padding={isPhone ? 12 : 14} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: isPhone ? 12 : 18 }}>
       <Button square icon="columns-2" variant={cook.split ? "primary" : "secondary"} accent={make.primary} accessibilityLabel={cook.split ? t.singleScreen : t.splitScreen} onPress={toggleSplit} />
       <View style={{ flex: 1, minWidth: 200, gap: 4 }}>
         <MTxt variant="meta" muted weight="600" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
@@ -92,9 +92,9 @@ export default function CookScreen() {
 
   if (cook.split) {
     return (
-      <Page background={make.background} gap={16}>
+      <Page background={make.background} gap={16} scroll={!isWide}>
         {top}
-        <View style={{ flexDirection: isWide ? "row" : "column", gap: 20, alignItems: isWide ? "flex-start" : undefined }}>
+        <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 20, alignItems: isWide ? "stretch" : undefined }}>
           <CookPane cook={cook} tag="A" id={cook.active} onAdd={() => addDish("A")} />
           <CookPane cook={cook} tag="B" id={cook.paneB} onAdd={() => addDish("B")} />
         </View>
@@ -108,11 +108,11 @@ export default function CookScreen() {
   const sel = cook.selected[id] ?? 0;
   const s = stepAt(cook, id, sel);
   const playLabel = s?.running ? t.pause : dishRunning(cook, id) || (s && s.remaining < s.seconds) ? t.resume : t.play;
-  const photoWidth = isWide ? Math.min(isDesktop ? 480 : 380, Math.round(width * 0.34)) : undefined;
+  const photoWidth = isWide ? Math.min(isDesktop ? 440 : 360, Math.round(width * 0.32)) : undefined;
 
   const photoCol = (
-    <View style={{ width: photoWidth, gap: 14 }}>
-      <Photo uri={dishImg(id)} aspectRatio={1} round={radius.xl}>
+    <View style={{ width: photoWidth, gap: 12, minHeight: 0 }}>
+      <Photo uri={dishImg(id)} aspectRatio={isWide ? undefined : 1} round={radius.xl} style={isWide ? { flex: 1, minHeight: 160 } : undefined}>
         <View style={{ position: "absolute", left: 16, right: 16, bottom: 16, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.lg, backgroundColor: "#ffffffe8" }}>
           <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: make.primary, alignItems: "center", justifyContent: "center" }}>
             <MTxt weight="700" color="#fff">
@@ -134,21 +134,21 @@ export default function CookScreen() {
   );
 
   const stepsCol = (
-    <View style={{ flex: isWide ? 1 : undefined, minWidth: 0, gap: 12 }}>
+    <View style={{ flex: isWide ? 1 : undefined, minWidth: 0, minHeight: 0, gap: 12 }}>
       <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 14, paddingHorizontal: 4 }}>
         <MTxt variant="section">{dishName(d)}</MTxt>
         <MTxt variant="meta" muted>
           {(cook.steps[id] || []).length} {t.steps} · {t.est} {fmtMin(planSeconds({ recipes }, id))}
         </MTxt>
       </View>
-      <StepList cook={cook} id={id} />
+      <StepList cook={cook} id={id} scroll={isWide} />
     </View>
   );
 
   return (
-    <Page background={make.background} gap={16}>
+    <Page background={make.background} gap={16} scroll={!isWide}>
       {top}
-      <View style={{ flexDirection: isWide ? "row" : "column", gap: isPhone ? 16 : 22, alignItems: isWide ? "flex-start" : undefined }}>
+      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: isPhone ? 16 : 22, alignItems: isWide ? "stretch" : undefined }}>
         <DishRail cook={cook} horizontal={!isWide} onAdd={() => addDish("")} />
         {photoCol}
         {stepsCol}

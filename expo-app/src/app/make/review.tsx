@@ -1,6 +1,6 @@
 /* Review: check the quantities of what the camera found, then add to stock or match directly. */
 import { useMemo } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Button, Page } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { make } from "@/theme";
@@ -11,7 +11,7 @@ import { useMakeStrings } from "@/features/make/strings";
 
 export default function ReviewScreen() {
   const { t, lang } = useMakeStrings();
-  const { isPhone, isDesktop } = useBreakpoint();
+  const { isPhone, isDesktop, isWide } = useBreakpoint();
   const nav = useMakeNav();
   const shots = useMakeStore((s) => s.shots);
   const qty = useMakeStore((s) => s.qty);
@@ -19,9 +19,7 @@ export default function ReviewScreen() {
   const addCapturedToStock = useMakeStore((s) => s.addCapturedToStock);
   const captured = useMemo(() => capturedItems({ shots, qty }, lang), [shots, qty, lang]);
   const units = captured.reduce((a, c) => a + c.qty, 0);
-  return (
-    <Page background={make.background} gap={20}>
-      <MakeHeader title={t.titles.review} />
+  const grid = (
       <Grid cols={isPhone ? 1 : isDesktop ? 3 : 2} gap={16}>
         {captured.map((c) => (
           <MCard key={c.name} gap={12}>
@@ -45,6 +43,17 @@ export default function ReviewScreen() {
           </MCard>
         ))}
       </Grid>
+  );
+  return (
+    <Page background={make.background} gap={16} scroll={!isWide}>
+      <MakeHeader title={t.titles.review} />
+      {isWide ? (
+        <ScrollView style={{ flex: 1, minHeight: 0 }} contentContainerStyle={{ paddingBottom: 4 }} showsVerticalScrollIndicator>
+          {grid}
+        </ScrollView>
+      ) : (
+        grid
+      )}
       <MCard background={make.surface2} padding={16} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 14 }}>
         <MTxt muted style={{ marginRight: "auto" }}>
           {captured.length} {t.itemized} · {units} {t.units}

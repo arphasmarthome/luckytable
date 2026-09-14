@@ -1,7 +1,7 @@
 /* The photo stage (port of renderStage / stageMedia): blurred backdrop, contained photo, the demo
  * motion layer, caption with AI badge, prev / next controls, the corner AI button and the playback bar. */
 import { Image } from "expo-image";
-import { createElement, useState } from "react";
+import { createElement, useState, type ReactNode } from "react";
 import { Platform, Pressable, StyleSheet, View, type LayoutChangeEvent } from "react-native";
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { Icon, Txt } from "@/components/ui";
@@ -21,6 +21,12 @@ export type PhotoStageProps = {
   onNext: () => void;
   onAi: (photoId: string) => void;
   onExitCinema?: () => void;
+  /** Fill the parent instead of keeping a 16:9 card (the in-app frame view). */
+  fill?: boolean;
+  /** Extra round controls rendered top-right, before the AI button. */
+  toolbar?: ReactNode;
+  /** Content rendered bottom-centre over the photo (thumbnail strip). */
+  footer?: ReactNode;
 };
 
 /** Generated clip from the AI endpoint: a <video> on web, the poster elsewhere. */
@@ -74,7 +80,7 @@ export function StageMedia({ photo, motion, playing, size, backdrop = true }: { 
   );
 }
 
-function RoundButton({ icon, label, onPress, disabled, style, light }: { icon: string; label: string; onPress?: () => void; disabled?: boolean; style?: object; light?: boolean }) {
+export function RoundButton({ icon, label, onPress, disabled, style, light }: { icon: string; label: string; onPress?: () => void; disabled?: boolean; style?: object; light?: boolean }) {
   return (
     <Pressable
       accessibilityRole="button"
@@ -102,7 +108,7 @@ function RoundButton({ icon, label, onPress, disabled, style, light }: { icon: s
   );
 }
 
-export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext, onAi, onExitCinema }: PhotoStageProps) {
+export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext, onAi, onExitCinema, fill = false, toolbar, footer }: PhotoStageProps) {
   const { t } = useI18n(); // subscribes to locale changes
   const { isPhone } = useBreakpoint();
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
@@ -110,12 +116,12 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
     const { width, height } = event.nativeEvent.layout;
     if (Math.abs(width - size.width) > 1 || Math.abs(height - size.height) > 1) setSize({ width, height });
   };
-  const edge = cinema ? (isPhone ? 20 : 48) : isPhone ? 14 : 20;
+  const edge = cinema ? (isPhone ? 20 : 48) : fill ? (isPhone ? 16 : 28) : isPhone ? 14 : 20;
   const aiLabel = photo?.motion ? t("一鍵更新 AI 動態") : t("一鍵生成 AI 動態");
 
   if (!photo) {
     return (
-      <View style={[styles.stage, { backgroundColor: palette.surfaceMuted, minHeight: isPhone ? 240 : 320, alignItems: "center", justifyContent: "center", padding: 24, gap: 8 }]}>
+      <View style={[styles.stage, fill ? styles.fill : null, { backgroundColor: palette.surfaceMuted, minHeight: isPhone ? 240 : 320, alignItems: "center", justifyContent: "center", padding: 24, gap: 8 }]}>
         <Icon name="images" size={46} color={palette.green} strokeWidth={1.6} />
         <Txt variant="h2" color={palette.ink} align="center">
           {t("相簿還是空的")}
@@ -130,10 +136,10 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
 
   const motion = photo.motion;
   return (
-    <View onLayout={onLayout} style={[styles.stage, cinema ? styles.cinema : { aspectRatio: 16 / 9, minHeight: isPhone ? 200 : 320 }]}>
+    <View onLayout={onLayout} style={[styles.stage, cinema ? styles.cinema : fill ? styles.fill : { aspectRatio: 16 / 9, minHeight: isPhone ? 200 : 320 }]}>
       <StageMedia photo={photo} motion={motion} playing={playing} size={size} />
       <Shade />
-      <View pointerEvents="none" style={{ position: "absolute", left: edge, right: edge + 100, bottom: edge, gap: 4 }}>
+      <View pointerEvents="none" style={{ position: "absolute", left: edge, right: edge + 100, bottom: footer ? edge + 64 : edge, gap: 4 }}>
         {motion ? (
           <View style={{ alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 9, paddingVertical: 4, borderRadius: radius.pill, borderWidth: 1, borderColor: "rgba(255,255,255,0.4)", backgroundColor: "rgba(18,107,85,0.84)", marginBottom: 2 }}>
             <Icon name={motionIcon(motion)} size={13} color="#fff" strokeWidth={2.2} />
@@ -145,15 +151,19 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
         <Txt variant="meta" color="rgba(255,255,255,0.78)" weight="600">
           {t(photo.capturedAt)}・{t(photo.owner)}
         </Txt>
-        <Txt variant={cinema ? "h1" : isPhone ? "h3" : "section"} color="#fff" numberOfLines={1}>
+        <Txt variant={cinema || fill ? "h1" : isPhone ? "h3" : "section"} color="#fff" numberOfLines={1}>
           {t(photo.title)}
         </Txt>
       </View>
-      <View style={{ position: "absolute", right: edge, bottom: edge, flexDirection: "row", gap: 7 }}>
+      <View style={{ position: "absolute", right: edge, bottom: footer ? edge + 64 : edge, flexDirection: "row", gap: 7 }}>
         <RoundButton icon="chevron-left" label={t("上一張照片")} onPress={onPrevious} />
         <RoundButton icon="chevron-right" label={t("下一張照片")} onPress={onNext} />
       </View>
-      <RoundButton light icon="wand-sparkles" label={aiLabel} onPress={() => onAi(photo.id)} style={{ position: "absolute", top: cinema ? edge : 14, right: cinema ? edge : 14 }} />
+      <View style={{ position: "absolute", top: cinema || fill ? edge : 14, right: cinema || fill ? edge : 14, flexDirection: "row", gap: 8 }}>
+        {toolbar}
+        <RoundButton light icon="wand-sparkles" label={aiLabel} onPress={() => onAi(photo.id)} />
+      </View>
+      {footer ? <View style={{ position: "absolute", left: 0, right: 0, bottom: edge - 6, alignItems: "center" }}>{footer}</View> : null}
       {cinema && onExitCinema ? <RoundButton icon="minimize" label={t("離開全螢幕")} onPress={onExitCinema} style={{ position: "absolute", top: edge, left: edge }} /> : null}
       {motion ? <PlaybackProgress playing={playing} /> : null}
     </View>
@@ -163,4 +173,5 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
 const styles = StyleSheet.create({
   stage: { position: "relative", width: "100%", overflow: "hidden", borderRadius: radius.sm, backgroundColor: "#cec7bc" },
   cinema: { flex: 1, borderRadius: 0, backgroundColor: "#0d0f0e" },
+  fill: { flex: 1, minHeight: 0, borderRadius: 0 },
 });

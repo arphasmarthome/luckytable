@@ -1,7 +1,7 @@
 /* Cooking-screen pieces: the numbered step list with a timer per step, the dish rail, and the
  * split-screen pane (photo with the timer overlaid, step list below). */
-import { useEffect } from "react";
-import { Platform, Pressable, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { Platform, Pressable, ScrollView, View } from "react-native";
 import { Button, Icon } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { fmtClock } from "@/lib/date";
@@ -13,16 +13,28 @@ import { MTxt, Photo } from "./ui";
 
 const online = () => Platform.OS !== "web" || typeof navigator === "undefined" || navigator.onLine !== false;
 
-export function StepList({ cook, id, compact }: { cook: CookSession; id: string; compact?: boolean }) {
+/** Numbered steps. `scroll` makes the list fill its column and scroll on its own; the list follows
+ * the selected step (completed steps stay above, crossed out, and can be scrolled back to). */
+export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id: string; compact?: boolean; scroll?: boolean }) {
   const { t, lang } = useMakeStrings();
   const recipes = useMakeStore((s) => s.recipes);
   const fetching = useMakeStore((s) => s.fetching);
   const selectStep = useMakeStore((s) => s.selectStep);
   const steps = cook.steps[id] || [];
   const plan = planFor({ recipes }, id, lang);
+  const selected = cook.selected[id] ?? 0;
+  const listRef = useRef<ScrollView>(null);
+  const offsets = useRef<Record<number, number>>({});
   useEffect(() => {
     if (!steps.length) ensureRecipe(id);
   }, [id, steps.length]);
+  useEffect(() => {
+    if (!scroll) return;
+    const y = offsets.current[selected];
+    if (y == null) return;
+    const handle = setTimeout(() => listRef.current?.scrollTo({ y: Math.max(0, y - 6), animated: true }), 40);
+    return () => clearTimeout(handle);
+  }, [scroll, selected, id, steps.length]);
   if (!steps.length) {
     return (
       <View style={{ alignItems: "center", gap: 8, padding: 32, borderWidth: 2, borderStyle: "dashed", borderColor: make.border, borderRadius: radius.lg }}>
@@ -36,7 +48,7 @@ export function StepList({ cook, id, compact }: { cook: CookSession; id: string;
       </View>
     );
   }
-  return (
+  const rows = (
     <View style={{ gap: 10 }}>
       {steps.map((s, i) => {
         const current = cook.selected[id] === i;
@@ -44,6 +56,9 @@ export function StepList({ cook, id, compact }: { cook: CookSession; id: string;
         return (
           <Pressable
             key={i}
+            onLayout={(e) => {
+              offsets.current[i] = e.nativeEvent.layout.y;
+            }}
             accessibilityRole="button"
             accessibilityState={{ selected: current }}
             onPress={() => selectStep(id, i)}
@@ -78,6 +93,12 @@ export function StepList({ cook, id, compact }: { cook: CookSession; id: string;
         );
       })}
     </View>
+  );
+  if (!scroll) return rows;
+  return (
+    <ScrollView ref={listRef} style={{ flex: 1, minHeight: 0 }} contentContainerStyle={{ paddingBottom: 4 }} showsVerticalScrollIndicator>
+      {rows}
+    </ScrollView>
   );
 }
 
@@ -146,7 +167,7 @@ function PaneChips({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A" | "B"
 /** One side of the split screen. */
 export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A" | "B"; id: string | null; onAdd: () => void }) {
   const { t, dishName } = useMakeStrings();
-  const { isPhone } = useBreakpoint();
+  const { isPhone, isWide } = useBreakpoint();
   const toggleTimer = useMakeStore((s) => s.toggleTimer);
   const completeStep = useMakeStore((s) => s.completeStep);
   const valid = Boolean(id && cook.dishIds.includes(id));
@@ -181,9 +202,9 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
   const sel = cook.selected[id] ?? 0;
   const s = stepAt(cook, id, sel);
   return (
-    <View style={{ flex: 1, gap: 12, padding: isPhone ? 12 : 16, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
+    <View style={{ flex: 1, minHeight: 0, gap: 12, padding: isPhone ? 12 : 16, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
       {head}
-      <Photo uri={dishImg(id)} height={isPhone ? 240 : 300} round={16}>
+      <Photo uri={dishImg(id)} height={isPhone ? 240 : isWide ? 220 : 300} round={16}>
         <View style={{ position: "absolute", left: 16, top: 16, flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 10, paddingLeft: 18, paddingRight: 14, borderRadius: 16, backgroundColor: "#1f1f1dcc" }}>
           <View>
             <MTxt variant="caption" color="#ffffffcc" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
@@ -202,7 +223,7 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
           </MTxt>
         </View>
       </Photo>
-      <StepList cook={cook} id={id} compact />
+      <StepList cook={cook} id={id} compact scroll={isWide} />
     </View>
   );
 }

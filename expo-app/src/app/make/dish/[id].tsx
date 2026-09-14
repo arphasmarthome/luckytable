@@ -2,7 +2,7 @@
  * ingredient checklist and the hand-off cart. Steps only appear on the cooking screen. */
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo } from "react";
-import { Linking, Pressable, View } from "react-native";
+import { Linking, Pressable, ScrollView, View } from "react-native";
 import { Button, Icon, Page } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { toast } from "@/store/toast";
@@ -55,8 +55,8 @@ export default function DishScreen() {
   };
 
   const main = (
-    <View style={{ flex: isWide ? 1 : undefined, minWidth: 0, gap: 20 }}>
-      <Photo uri={dishImg(d.id)} height={isPhone ? 220 : 380} round={radius.xl}>
+    <View style={{ flex: isWide ? 1 : undefined, minWidth: 0, minHeight: 0, gap: 16 }}>
+      <Photo uri={dishImg(d.id)} height={isWide ? undefined : isPhone ? 220 : 380} round={radius.xl} style={isWide ? { flex: 1, minHeight: 200 } : undefined}>
         <View style={{ position: "absolute", left: 20, bottom: 18, maxWidth: "70%", paddingHorizontal: 18, paddingVertical: 8, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
           <MTxt variant="card" weight="600" numberOfLines={1}>
             {dishName(d)}
@@ -103,8 +103,8 @@ export default function DishScreen() {
   );
 
   const aside = (
-    <View style={{ width: isWide ? (isDesktop ? 460 : 380) : undefined, gap: 16 }}>
-      <MCard>
+    <View style={{ width: isWide ? (isDesktop ? 460 : 380) : undefined, gap: 16, minHeight: 0 }}>
+      <MCard style={isWide ? { flex: 1, minHeight: 0 } : undefined}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
           <MTxt variant="h3">{t.readyToCook}</MTxt>
           <MTxt variant="hero" weight="700" color={pct === 100 ? make.green : make.primaryPressed} style={{ marginLeft: "auto" }}>
@@ -114,6 +114,7 @@ export default function DishScreen() {
         <Bar pct={pct} />
         <MTxt muted>{pct === 100 ? t.allReady : zh ? `${have}／${ings.length} ${t.ingReady}` : `${have} ${t.ofReady} ${ings.length} ${t.ingReady}`}</MTxt>
         <Kicker>{t.ingredients}</Kicker>
+        <ScrollView style={isWide ? { flex: 1, minHeight: 0 } : undefined} contentContainerStyle={{ gap: 10 }} scrollEnabled={isWide} showsVerticalScrollIndicator>
         {ings.map((i, index) => (
           <Pressable
             key={`${i.name}-${index}`}
@@ -135,6 +136,7 @@ export default function DishScreen() {
             </MTxt>
           </Pressable>
         ))}
+        </ScrollView>
       </MCard>
       <MCard background={make.primarySoft} border={make.selectedBorder}>
         <MTxt weight="600">{missing.length ? `${t.stillNeed} ${missing.length}: ${missing.map((i) => i.label).join(sep)}` : t.nothingToBuy}</MTxt>
@@ -158,9 +160,9 @@ export default function DishScreen() {
   );
 
   return (
-    <Page background={make.background} gap={20}>
+    <Page background={make.background} gap={16} scroll={!isWide}>
       <MakeHeader title={dishName(d)} />
-      <View style={{ flexDirection: isWide ? "row" : "column", gap: 24, alignItems: isWide ? "flex-start" : undefined }}>
+      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 24, alignItems: isWide ? "stretch" : undefined }}>
         {main}
         {aside}
       </View>
