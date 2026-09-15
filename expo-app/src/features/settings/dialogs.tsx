@@ -272,7 +272,7 @@ export const openCityDialog = () => dialog.show({ title: t("天氣地區"), body
 export function openNotificationDialog() {
   dialog.show({
     title: t("通知權限 · 演示"),
-    body: <Txt>{t("正式設備需允許系統通知。本原型僅演示權限狀態，不申請瀏覽器通知。")}</Txt>,
+    body: <DemoNotice>{t("正式設備需允許系統通知。本原型僅演示權限狀態，不申請瀏覽器通知。")}</DemoNotice>,
     footer: (
       <>
         <Button label={t("取消")} onPress={() => dialog.close()} />

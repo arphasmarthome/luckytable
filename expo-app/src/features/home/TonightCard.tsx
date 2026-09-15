@@ -2,7 +2,7 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Pressable, View } from "react-native";
-import { EmptyNote, Icon, Txt } from "@/components/ui";
+import { Button, EmptyNote, Icon, Txt } from "@/components/ui";
 import { useMakeSummary, type TonightDish } from "@/features/make/summary";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
@@ -39,8 +39,9 @@ function DishRow({ dish, meta }: { dish: TonightDish; meta: string }) {
 }
 
 export function TonightCard() {
+  const router = useRouter();
   const { t, list } = useI18n();
-  const { tonight } = useMakeSummary();
+  const { tonight, allReady, cooking } = useMakeSummary();
   const members = useDeviceStore((s) => s.members);
   const dinnerMembers = useDeviceStore((s) => s.dinnerMembers);
   const dinnerTime = useDeviceStore((s) => s.dinner.time);
@@ -48,7 +49,15 @@ export function TonightCard() {
   const cooks = members.filter((m) => m.prefs && m.prefs.cook[cookIndexToday]);
   const cookLabel = cooks.length ? list(cooks.map((m) => m.name)) : t("全家");
   return (
-    <HomeCard title={t("今晚的菜色")} aside={<Pill label={diners.length ? t("{n} 人一起吃", { n: diners.length }) : t("尚未有人加入")} tone={diners.length ? "green" : "off"} />} style={{ flex: 1 }}>
+    <HomeCard
+      title={t("今晚的菜色")}
+      aside={
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Pill label={diners.length ? t("{n} 人一起吃", { n: diners.length }) : t("尚未有人加入")} tone={diners.length ? "green" : "off"} />
+          {tonight.length ? <Button size="sm" variant="primary" icon="flame" label={cooking ? t("繼續料理") : t("開始料理")} disabled={!cooking && !allReady} accessibilityLabel={!cooking && !allReady ? t("先補齊缺少的食材") : undefined} onPress={() => router.navigate("/make/cook" as never)} /> : null}
+        </View>
+      }
+      style={{ flex: 1 }}>
       {tonight.length ? (
         <View style={{ gap: 12 }}>
           {tonight.map((dish) => (

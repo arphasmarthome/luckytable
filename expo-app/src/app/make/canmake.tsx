@@ -2,7 +2,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo } from "react";
 import { View } from "react-native";
-import { Chip, Page } from "@/components/ui";
+import { Chip, Page, Segmented } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { make } from "@/theme";
 import { DishGrid } from "@/features/make/components/DishCard";
@@ -30,9 +30,23 @@ export default function CanMakeScreen() {
   const { dishes } = useDecoratedDishes();
   const ranked = useMemo(() => rankDishes(dishes), [dishes]);
   const sources = matchMode === "captured" ? capturedItems({ shots, qty }, lang).map((c) => ({ label: c.label, qty: c.qty })) : stock.map((x) => ({ label: nm(x.name, x.zh), qty: x.qty }));
+  const hasCapture = shots > 0;
   const aside = (
     <MCard style={{ width: isWide ? 300 : undefined }}>
       <Kicker>{t.matchingFrom}</Kicker>
+      {hasCapture ? (
+        <Segmented<MatchMode>
+          size="sm"
+          accent={make.primary}
+          value={matchMode}
+          options={[
+            { value: "captured", label: t.modeCaptured },
+            { value: "stock", label: t.modeStock },
+          ]}
+          onChange={(value) => nav.router.setParams({ mode: value })}
+          accessibilityLabel={t.matchingFrom}
+        />
+      ) : null}
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
         {sources.map((s, i) => (
           <Chip key={`${s.label}-${i}`} label={s.label} count={s.qty} soft accent={make.primaryPressed} />
@@ -42,7 +56,7 @@ export default function CanMakeScreen() {
   );
   return (
     <Page background={make.background} gap={20}>
-      <MakeHeader title={mode === "stock" ? t.titleAll : t.titles.canmake} />
+      <MakeHeader title={t.titles.canmake} />
       <View style={{ flexDirection: isWide ? "row" : "column", gap: 24, alignItems: isWide ? "flex-start" : undefined }}>
         {aside}
         <View style={{ flex: isWide ? 1 : undefined, minWidth: 0 }}>

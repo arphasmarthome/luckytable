@@ -1315,6 +1315,8 @@ const es: Dictionary = {
   "未同步": "Sin sincronizar",
   "立即同步": "Sincronizar ahora",
   "重新同步": "Sincronizar de nuevo",
+  "繼續料理": "Seguir cocinando",
+  "先補齊缺少的食材": "Compra primero los ingredientes que faltan",
 };
 
 export default es;

@@ -91,7 +91,7 @@ export default function DishScreen() {
             <Button icon="flame" label={t.cookNow} variant="primary" accent={make.primary} disabled={!canCook} accessibilityLabel={canCook ? undefined : t.needAll} onPress={onCook} />
           </View>
           <MTxt variant="caption" muted>
-            {canCook ? t.stepsLater : t.needAll}
+            {canCook ? t.stepsLater : carted ? t.tickToUnlock : t.needAll}
             {rec?.source ? (
               <MTxt variant="caption" color={make.primaryPressed} onPress={() => { void Linking.openURL(rec.source); }} accessibilityRole="link">
                 {" · "}TheMealDB

@@ -125,10 +125,10 @@ export default function CookScreen() {
         </View>
       </Photo>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-        <Button size="lg" icon={s?.running ? "pause" : "play"} label={playLabel} variant="primary" accent={make.primary} disabled={!s || s.done} onPress={() => toggleTimer(id, sel)} style={{ flexGrow: 1.6, flexBasis: isPhone ? "100%" : 160 }} />
-        <Button size="lg" icon="plus" label={t.plusMin} disabled={!s} onPress={() => addMinute(id, sel)} style={{ flexGrow: 1, flexBasis: 100 }} />
-        <Button size="lg" icon="rotate-ccw" label={t.reset} disabled={!s} onPress={() => resetStep(id, sel)} style={{ flexGrow: 1, flexBasis: 100 }} />
-        <Button size="lg" icon="check" label={s?.done ? t.reset : t.done} variant="primary" accent={make.green} disabled={!s} onPress={() => completeStep(id, sel)} style={{ flexGrow: 1, flexBasis: 100 }} />
+        <Button size="lg" icon={s?.running ? "pause" : "play"} label={playLabel} variant="primary" accent={make.primary} disabled={!s || s.done} onPress={() => toggleTimer(id, sel)} style={{ flexGrow: 1.6, flexBasis: isPhone ? "47%" : 160 }} />
+        <Button size="lg" icon="plus" label={t.plusMin} disabled={!s} onPress={() => addMinute(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
+        <Button size="lg" icon="rotate-ccw" label={t.reset} disabled={!s} onPress={() => resetStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
+        <Button size="lg" icon="check" label={s?.done ? t.reset : t.done} variant="primary" accent={make.green} disabled={!s} onPress={() => completeStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
       </View>
     </View>
   );

@@ -349,9 +349,9 @@ export const useDeviceStore = create<DeviceState>()(
       name: "lucky-table.device",
       version: 1,
       storage: zustandStorage,
-      partialize: (s) => ({ members: s.members, dinnerMembers: s.dinnerMembers, settings: s.settings }),
+      partialize: (s) => ({ members: s.members, dinnerMembers: s.dinnerMembers, settings: s.settings, events: s.events, tasks: s.tasks, archivedTasks: s.archivedTasks, rewards: s.rewards, pointsLog: s.pointsLog }),
       merge: (persisted, current) => {
-        const stored = (persisted || {}) as Partial<Pick<DeviceData, "members" | "dinnerMembers" | "settings">>;
+        const stored = (persisted || {}) as Partial<Pick<DeviceData, "members" | "dinnerMembers" | "settings" | "events" | "tasks" | "archivedTasks" | "rewards" | "pointsLog">>;
         const members = (stored.members || []).map(normalizeMember).filter((m): m is Member => Boolean(m));
         const next: DeviceState = { ...current, settings: { ...current.settings, ...(stored.settings || {}), section: current.settings.section } };
         if (members.length) {
@@ -359,6 +359,11 @@ export const useDeviceStore = create<DeviceState>()(
           next.dinnerMembers = Array.isArray(stored.dinnerMembers) ? stored.dinnerMembers.filter((id) => members.some((m) => m.id === id)) : members.map((m) => m.id);
           next.household = { ...current.household, selected: members[0].id };
         }
+        if (Array.isArray(stored.events)) next.events = stored.events;
+        if (Array.isArray(stored.tasks)) next.tasks = stored.tasks.map((task) => ({ ...task, completions: task.completions || [], completionPoints: task.completionPoints || {} }));
+        if (Array.isArray(stored.archivedTasks)) next.archivedTasks = stored.archivedTasks;
+        if (Array.isArray(stored.rewards)) next.rewards = stored.rewards;
+        if (Array.isArray(stored.pointsLog)) next.pointsLog = stored.pointsLog;
         return next;
       },
     },

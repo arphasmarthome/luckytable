@@ -67,7 +67,6 @@ export default function ReviewScreen() {
           }}
         />
         <Button size="lg" variant="primary" accent={make.primary} label={t.seeWhatICanMake} onPress={() => nav.go("/make/canmake?mode=captured")} />
-        <Button size="lg" variant="primary" accent={make.green} label={t.makeAll} onPress={() => nav.go("/make/canmake?mode=stock")} />
       </MCard>
     </Page>
   );
