@@ -14,6 +14,7 @@ import { toast } from "@/store/toast";
 import { ALIAS, AMT, CAT, DAY_EN, DISHES, ING_ZH, ITEMS, SHOTS, STAPLES, STEPS, STOCK, UNIT, VOTE_SEED, WEEK_MEALS, categoryOf, cookMinutes, dishById, dishImg, hasDish, hasDishImg, ingImg, type StockRow } from "./data";
 import type { Dish, DishIngredient } from "./dishes";
 import { STR, dishNameIn, langOf, nameIn, sepIn, type Lang } from "./strings";
+import type { VendorId } from "./vendors";
 
 export type { Size, StockRow } from "./data";
 
@@ -39,6 +40,7 @@ export type MakeData = {
   stock: StockRow[];
   acquired: Record<string, string[]>;
   cart: CartItem[];
+  vendor: VendorId;
   myVotes: string[];
   recipes: Record<string, Recipe>;
   /* in-memory */
@@ -78,6 +80,7 @@ export type MakeActions = {
   /** adds the missing ingredients of a dish to the hand-off cart; returns how many were missing */
   addMissingToCart: (dishId: string, lang: Lang) => number;
   removeFromCart: (dishId: string, name: string) => void;
+  setVendor: (vendor: VendorId) => void;
   setEvDay: (day: number) => void;
   setEvTime: (time: string) => void;
   /** saves the plan (today → also added to tonight); returns the chosen date */
@@ -111,6 +114,7 @@ export const KEYS = {
   cook: "luckytable-make-cook",
   stock: "luckytable-make-stock",
   cart: "luckytable-make-cart",
+  vendor: "luckytable-make-vendor",
   acquired: "luckytable-make-acquired",
   votes: "luckytable-make-votes",
   mealdb: "luckytable-mealdb",
@@ -140,6 +144,7 @@ function readPersisted() {
     stock: normalizeStock(loadJSON<StockRow[] | null>(KEYS.stock, null)),
     acquired: loadJSON<Record<string, string[]>>(KEYS.acquired, {}),
     cart: loadJSON<CartItem[]>(KEYS.cart, []),
+    vendor: loadJSON<VendorId>(KEYS.vendor, "instacart"),
     myVotes: loadJSON<string[]>(KEYS.votes, []),
     recipes: loadJSON<Record<string, Recipe>>(KEYS.mealdb, {}),
   };
@@ -302,7 +307,7 @@ export const useMakeStore = create<MakeState>()((set, get) => {
     fn(c, s);
     set({ cook: c });
   };
-  const persisted = Platform.OS === "web" ? readPersisted() : { tonight: normalizeTonight(null), cook: null, stock: normalizeStock(null), acquired: {}, cart: [], myVotes: [], recipes: {} };
+  const persisted = Platform.OS === "web" ? readPersisted() : { tonight: normalizeTonight(null), cook: null, stock: normalizeStock(null), acquired: {}, cart: [], vendor: "instacart" as VendorId, myVotes: [], recipes: {} };
   return {
     ...persisted,
     votes: { ...VOTE_SEED },
@@ -375,7 +380,12 @@ export const useMakeStore = create<MakeState>()((set, get) => {
     toggleAcquired: (dishId, name) =>
       set((s) => {
         const list = s.acquired[dishId] || [];
-        return { acquired: { ...s.acquired, [dishId]: list.includes(name) ? list.filter((x) => x !== name) : list.concat(name) } };
+        const acquired = { ...s.acquired, [dishId]: list.includes(name) ? list.filter((x) => x !== name) : list.concat(name) };
+        const carted = s.cart.some((c) => c.dishId === dishId);
+        if (!carted || s.cart.some((c) => c.dishId === dishId && c.name === name)) return { acquired };
+        // a dish that's already queued keeps every still-missing ingredient queued, so un-ticking shows "Added" too
+        const row = readiness({ ...s, acquired }, dishById(dishId), currentLang(), pantryNames(s)).missing.find((m) => m.name === name);
+        return row ? { acquired, cart: s.cart.concat({ name: row.name, zh: row.label, amount: row.amount, dishId }) } : { acquired };
       }),
     addMissingToCart: (dishId, lang) => {
       const s = get();
@@ -389,6 +399,7 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       return missing.length;
     },
     removeFromCart: (dishId, name) => set((s) => ({ cart: s.cart.filter((c) => !(c.dishId === dishId && c.name === name)) })),
+    setVendor: (vendor) => set({ vendor }),
     setEvDay: (evDay) => set({ evDay }),
     setEvTime: (evTime) => set({ evTime }),
     savePlan: (dishId) => {
@@ -655,6 +666,7 @@ useMakeStore.subscribe((s, prev) => {
   if (s.cook !== prev.cook) saveJSON(KEYS.cook, s.cook);
   if (s.stock !== prev.stock) saveJSON(KEYS.stock, s.stock);
   if (s.cart !== prev.cart) saveJSON(KEYS.cart, s.cart);
+  if (s.vendor !== prev.vendor) saveJSON(KEYS.vendor, s.vendor);
   if (s.acquired !== prev.acquired) saveJSON(KEYS.acquired, s.acquired);
   if (s.myVotes !== prev.myVotes) saveJSON(KEYS.votes, s.myVotes);
   if (s.recipes !== prev.recipes) saveJSON(KEYS.mealdb, s.recipes);
@@ -680,10 +692,11 @@ else {
     loadJSONAsync<StockRow[] | null>(KEYS.stock, null),
     loadJSONAsync<Record<string, string[]>>(KEYS.acquired, {}),
     loadJSONAsync<CartItem[]>(KEYS.cart, []),
+    loadJSONAsync<VendorId>(KEYS.vendor, "instacart"),
     loadJSONAsync<string[]>(KEYS.votes, []),
     loadJSONAsync<Record<string, Recipe>>(KEYS.mealdb, {}),
-  ]).then(([tonight, cook, stock, acquired, cart, myVotes, recipes]) => {
-    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, myVotes, recipes, hydrated: true });
+  ]).then(([tonight, cook, stock, acquired, cart, vendor, myVotes, recipes]) => {
+    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, vendor, myVotes, recipes, hydrated: true });
     boot();
   });
 }

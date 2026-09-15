@@ -14,8 +14,8 @@ import { cookMinutes, dishById, dishImg, hasDish } from "@/features/make/data";
 import { usePantrySlice } from "@/features/make/hooks";
 import { pantryNames, readiness, useMakeStore } from "@/features/make/store";
 import { useMakeStrings } from "@/features/make/strings";
+import { vendorById } from "@/features/make/vendors";
 
-const INSTACART_URL = "https://www.instacart.com";
 
 export default function DishScreen() {
   const { t, lang, zh, dishName, sep } = useMakeStrings();
@@ -33,6 +33,7 @@ export default function DishScreen() {
   const myVotes = useMakeStore((s) => s.myVotes);
   const votes = useMakeStore((s) => s.votes);
   const cart = useMakeStore((s) => s.cart);
+  const vendor = vendorById(useMakeStore((s) => s.vendor));
   const toggleVote = useMakeStore((s) => s.toggleVote);
   const toggleTonight = useMakeStore((s) => s.toggleTonight);
   const toggleAcquired = useMakeStore((s) => s.toggleAcquired);
@@ -115,7 +116,7 @@ export default function DishScreen() {
           </MTxt>
         </View>
         <Bar pct={pct} height={10} />
-        <MTxt variant="meta" muted numberOfLines={2}>
+        <MTxt variant="meta" muted numberOfLines={2} style={{ minHeight: 42 }}>
           {pct === 100 ? t.allReady : zh ? `${have}／${ings.length} ${t.ingReady}` : `${have} ${t.ofReady} ${ings.length} ${t.ingReady}`}
         </MTxt>
         <ScrollView style={isWide ? { flex: 1, minHeight: 0 } : undefined} contentContainerStyle={{ gap: 6 }} scrollEnabled={isWide} showsVerticalScrollIndicator>
@@ -183,9 +184,9 @@ export default function DishScreen() {
             {t.addedToCart} ✓
           </MTxt>
         ) : null}
-        <Pressable accessibilityRole="link" onPress={() => { void Linking.openURL(INSTACART_URL); }} style={{ alignSelf: "center" }}>
+        <Pressable accessibilityRole="link" onPress={() => { void Linking.openURL(vendor.url); }} style={{ alignSelf: "center" }}>
           <MTxt variant="caption" color={make.primaryPressed} align="center" style={{ fontFamily: "monospace", textDecorationLine: "underline" }}>
-            instacart.com
+            {vendor.host}
           </MTxt>
         </Pressable>
       </MCard>
