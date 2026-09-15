@@ -82,7 +82,7 @@ export default function CaptureScreen() {
   );
 
   return (
-    <Page background={make.background} gap={16} scroll={!isWide}>
+    <Page background={make.background} gap={12} scroll={!isWide}>
       <MakeHeader title={t.titles.capture} />
       <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: isPhone ? 18 : 24, alignItems: isWide ? "stretch" : undefined }}>
         {viewfinder}

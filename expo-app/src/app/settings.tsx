@@ -122,7 +122,7 @@ export default function SettingsScreen() {
 
   if (!isWide) {
     return (
-      <Page gap={16}>
+      <Page gap={12}>
         <SettingsNav section={section} onSelect={select} />
         {content}
       </Page>

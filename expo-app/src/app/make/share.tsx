@@ -42,11 +42,11 @@ export default function ShareScreen() {
     () => nav.go("/calendar"),
   ];
   return (
-    <Page background={make.background} gap={20}>
+    <Page background={make.background} gap={14}>
       <MakeHeader title={t.titles.share} />
-      <Grid cols={isPhone ? 1 : 3} gap={isPhone ? 16 : 24}>
+      <Grid cols={isPhone ? 1 : 3} gap={isPhone ? 12 : 18}>
         {t.share.map((o, i) => (
-          <MCard key={o.num} padding={isPhone ? 20 : 28} gap={16} style={{ minHeight: isPhone ? 0 : 360 }}>
+          <MCard key={o.num} padding={isPhone ? 16 : 22} gap={12} style={{ minHeight: isPhone ? 0 : 360 }}>
             <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: make.primarySoft, alignItems: "center", justifyContent: "center" }}>
               <MTxt variant="h1" weight="700" color={make.primaryPressed}>
                 {o.num}

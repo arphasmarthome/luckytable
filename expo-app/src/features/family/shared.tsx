@@ -100,7 +100,7 @@ export function PageHeading({ title, children }: { title: string; children?: Rea
 /** White content board (.fh-family-board / .fh-health-layout). */
 export function Board({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
   const { isPhone } = useBreakpoint();
-  return <View style={[{ backgroundColor: "#fff", borderRadius: radius.md, borderWidth: 1, borderColor: fh.line, padding: isPhone ? 16 : 18, gap: 14 }, style]}>{children}</View>;
+  return <View style={[{ backgroundColor: "#fff", borderRadius: radius.md, borderWidth: 1, borderColor: fh.line, padding: isPhone ? 14 : 16, gap: 10 }, style]}>{children}</View>;
 }
 
 /** Centered empty state (.empty-state): icon, heading, optional note and primary action. */

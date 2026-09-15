@@ -21,7 +21,7 @@ export default function RecipesScreen() {
     return recipeFilter === "All" ? ranked : ranked.filter((d) => d.cat === recipeFilter);
   }, [dishes, recipeFilter]);
   return (
-    <Page background={make.background} gap={20}>
+    <Page background={make.background} gap={14}>
       <MakeHeader title={t.titles.recipes} />
       <MTxt variant="meta" muted weight="600" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
         {t.recKicker} · {list.length} {t.dishesN}

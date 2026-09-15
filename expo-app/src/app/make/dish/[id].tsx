@@ -121,7 +121,15 @@ export default function DishScreen() {
         <ScrollView style={isWide ? { flex: 1, minHeight: 0 } : undefined} contentContainerStyle={{ gap: 6 }} scrollEnabled={isWide} showsVerticalScrollIndicator>
         {ings.map((i, index) => {
           const inCart = !i.have && cartedNames.has(i.name);
-          const tone = i.have ? { border: "#cfe3d9", bg: make.greenSoft, dot: make.yellowStrong, dotFg: make.yellowInk } : inCart ? { border: make.selectedBorder, bg: make.primarySoft, dot: make.yellowStrong, dotFg: make.yellowInk } : { border: make.border, bg: make.surface, dot: make.primary, dotFg: "#fff" };
+          /* Green = already in stock; yellow = not in stock, marked "have it" by tapping the row
+             (added later); orange "+" = still to buy (whether or not it's queued in the cart). */
+          const tone = i.have
+            ? i.fromStock
+              ? { border: "#cfe3d9", bg: make.greenSoft, dot: make.green, dotFg: "#fff" }
+              : { border: make.yellowStrong, bg: make.yellow, dot: make.yellowStrong, dotFg: make.yellowInk }
+            : inCart
+              ? { border: make.selectedBorder, bg: make.primarySoft, dot: make.primary, dotFg: "#fff" }
+              : { border: make.border, bg: make.surface, dot: make.primary, dotFg: "#fff" };
           return (
           <Pressable
             key={`${i.name}-${index}`}
@@ -131,11 +139,9 @@ export default function DishScreen() {
             onPress={() => toggleAcquired(d.id, i.name)}
             style={{ flexDirection: "row", alignItems: "center", gap: 10, minHeight: 40, paddingVertical: 3, paddingLeft: 6, paddingRight: 12, borderWidth: 1, borderColor: tone.border, borderRadius: radius.pill, backgroundColor: tone.bg }}>
             <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: tone.dot, alignItems: "center", justifyContent: "center" }}>
-              {inCart ? <Icon name="check" size={15} color={tone.dotFg} strokeWidth={3} /> : (
-                <MTxt variant="meta" weight="700" color={tone.dotFg}>
-                  {i.have ? "✓" : "+"}
-                </MTxt>
-              )}
+              <MTxt variant="meta" weight="700" color={tone.dotFg}>
+                {i.have ? "✓" : "+"}
+              </MTxt>
             </View>
             <MTxt variant="meta" weight="500" numberOfLines={1} style={{ flex: 1 }}>
               {i.label}
@@ -187,9 +193,9 @@ export default function DishScreen() {
   );
 
   return (
-    <Page background={make.background} gap={16} scroll={!isWide}>
+    <Page background={make.background} gap={12} scroll={!isWide}>
       <MakeHeader title={dishName(d)} />
-      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 24, alignItems: isWide ? "stretch" : undefined }}>
+      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 16, alignItems: isWide ? "stretch" : undefined }}>
         {main}
         {aside}
       </View>

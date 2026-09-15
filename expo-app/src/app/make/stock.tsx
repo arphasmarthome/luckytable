@@ -20,7 +20,7 @@ export default function StockScreen() {
   const cols = [2, 1, 1, 1.1, 1, 0.9];
   const head = [t.colItem, t.colCat, t.colSize, t.colCount, t.colAdded, ""];
   return (
-    <Page background={make.background} gap={16}>
+    <Page background={make.background} gap={12}>
       <MakeHeader title={t.titles.stock} />
       <MTxt muted>
         {t.unitsLabel}:{" "}

@@ -92,9 +92,9 @@ export default function CookScreen() {
 
   if (cook.split) {
     return (
-      <Page background={make.background} gap={16} scroll={!isWide}>
+      <Page background={make.background} gap={12} scroll={!isWide}>
         {top}
-        <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 20, alignItems: isWide ? "stretch" : undefined }}>
+        <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 14, alignItems: isWide ? "stretch" : undefined }}>
           <CookPane cook={cook} tag="A" id={cook.active} onAdd={() => addDish("A")} />
           <CookPane cook={cook} tag="B" id={cook.paneB} onAdd={() => addDish("B")} />
         </View>
@@ -146,9 +146,9 @@ export default function CookScreen() {
   );
 
   return (
-    <Page background={make.background} gap={16} scroll={!isWide}>
+    <Page background={make.background} gap={12} scroll={!isWide}>
       {top}
-      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: isPhone ? 16 : 22, alignItems: isWide ? "stretch" : undefined }}>
+      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: isPhone ? 12 : 16, alignItems: isWide ? "stretch" : undefined }}>
         <DishRail cook={cook} horizontal={!isWide} onAdd={() => addDish("")} />
         {photoCol}
         {stepsCol}

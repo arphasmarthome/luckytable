@@ -20,7 +20,7 @@ export default function ReviewScreen() {
   const captured = useMemo(() => capturedItems({ shots, qty }, lang), [shots, qty, lang]);
   const units = captured.reduce((a, c) => a + c.qty, 0);
   const grid = (
-      <Grid cols={isPhone ? 1 : isDesktop ? 3 : 2} gap={16}>
+      <Grid cols={isPhone ? 1 : isDesktop ? 3 : 2} gap={12}>
         {captured.map((c) => (
           <MCard key={c.name} gap={12}>
             <Photo uri={c.img} height={130} contentFit="contain" round={8} style={{ backgroundColor: make.surface2, justifyContent: "flex-end", padding: 10 }}>
@@ -45,7 +45,7 @@ export default function ReviewScreen() {
       </Grid>
   );
   return (
-    <Page background={make.background} gap={16} scroll={!isWide}>
+    <Page background={make.background} gap={12} scroll={!isWide}>
       <MakeHeader title={t.titles.review} />
       {isWide ? (
         <ScrollView style={{ flex: 1, minHeight: 0 }} contentContainerStyle={{ paddingBottom: 4 }} showsVerticalScrollIndicator>

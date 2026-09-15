@@ -12,5 +12,6 @@ export { Segmented } from "./Segmented";
 export { Select } from "./Select";
 export { TextField } from "./TextField";
 export { Toggle } from "./Toggle";
+export { YesNoSlider, type YesNoSliderProps } from "./YesNoSlider";
 export { ToastHost } from "./ToastHost";
 export { Txt } from "./Txt";

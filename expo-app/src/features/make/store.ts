@@ -26,7 +26,7 @@ export type MatchMode = "captured" | "stock";
 export type PlannedMeal = { dishId: string; day: string; time: string };
 export type Pane = "A" | "B" | "";
 export type CapturedItem = { name: string; label: string; cat: string; unit: string; conf: number; img: string; qty: number; base: number };
-export type IngredientRow = { name: string; label: string; amount: string; have: boolean };
+export type IngredientRow = { name: string; label: string; amount: string; have: boolean; fromStock: boolean };
 export type Readiness = { ings: IngredientRow[]; have: number; pct: number; missing: IngredientRow[] };
 export type Decorated = { id: string; label: string; img: string; m: number; full: boolean; cat: string; minutes: number; matchLabel: string; note: string; shopNote: string };
 export type StepPlanItem = { text: string; seconds: number };
@@ -176,8 +176,9 @@ export function dishIngredients(s: Pick<MakeData, "recipes" | "acquired">, d: Di
   const acquired = s.acquired[d.id] || [];
   return ingList(s, d).map(([name, zhName, amount]) => {
     const label = nameIn(name, zhName || ING_ZH[String(name).toLowerCase()] || name, lang);
-    const have = hasIng(name, pantry) || acquired.includes(name);
-    return { name, label, amount: lang === "zh" ? AMT[amount] || amount : amount, have };
+    const fromStock = hasIng(name, pantry);
+    const have = fromStock || acquired.includes(name);
+    return { name, label, amount: lang === "zh" ? AMT[amount] || amount : amount, have, fromStock };
   });
 }
 

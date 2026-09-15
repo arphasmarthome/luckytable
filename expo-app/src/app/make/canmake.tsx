@@ -55,7 +55,7 @@ export default function CanMakeScreen() {
     </MCard>
   );
   return (
-    <Page background={make.background} gap={20}>
+    <Page background={make.background} gap={14}>
       <MakeHeader title={t.titles.canmake} />
       <View style={{ flexDirection: isWide ? "row" : "column", gap: 24, alignItems: isWide ? "flex-start" : undefined }}>
         {aside}

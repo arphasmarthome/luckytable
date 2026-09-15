@@ -43,7 +43,7 @@ export function DishCard({ d, note, onPress, photoHeight = 200, highlight }: { d
 export function DishGrid({ dishes, noteOf, onOpen, photoHeight, highlightIds, cols }: { dishes: Decorated[]; noteOf: (d: Decorated) => string; onOpen: (id: string) => void; photoHeight?: number; highlightIds?: string[]; cols?: number }) {
   const auto = useGridCols();
   return (
-    <Grid cols={cols ?? auto} gap={16}>
+    <Grid cols={cols ?? auto} gap={12}>
       {dishes.map((d) => (
         <DishCard key={d.id} d={d} note={noteOf(d)} onPress={() => onOpen(d.id)} photoHeight={photoHeight} highlight={highlightIds?.includes(d.id)} />
       ))}

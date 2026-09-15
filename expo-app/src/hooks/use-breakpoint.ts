@@ -22,6 +22,6 @@ export function useBreakpoint() {
     mult,
     fs,
     /** page inset used by local modules */
-    inset: bp === "phone" ? 16 : 24,
+    inset: bp === "phone" ? 16 : 18,
   };
 }

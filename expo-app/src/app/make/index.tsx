@@ -45,7 +45,7 @@ export default function MakeHomeScreen() {
   const { isPhone } = useBreakpoint();
   const nav = useMakeNav();
   return (
-    <Page background={make.background} gap={16} scroll={isPhone}>
+    <Page background={make.background} gap={12} scroll={isPhone}>
       <MakeHeader brand />
       <Grid cols={isPhone ? 1 : 3} gap={isPhone ? 14 : 20} style={isPhone ? undefined : { flex: 1, minHeight: 0, alignContent: "stretch" }}>
         <Tile icon="camera" tone="primary" image="fridge" title={t.tile1} body={t.tile1Body} onPress={() => nav.go("/make/capture")} />

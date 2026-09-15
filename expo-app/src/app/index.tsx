@@ -12,7 +12,7 @@ export default function HomeScreen() {
   const { isWide } = useBreakpoint();
   if (!isWide) {
     return (
-      <Page gap={20}>
+      <Page gap={12}>
         <TonightCard />
         <AgendaCard />
         <PhotosCard />

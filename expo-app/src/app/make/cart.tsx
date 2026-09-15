@@ -22,7 +22,7 @@ export default function CartScreen() {
   };
 
   return (
-    <Page background={make.background} gap={16}>
+    <Page background={make.background} gap={12}>
       <MakeHeader title={t.titles.cart} />
       {cart.length ? (
         <MCard padding={0} gap={0} style={{ overflow: "hidden" }}>

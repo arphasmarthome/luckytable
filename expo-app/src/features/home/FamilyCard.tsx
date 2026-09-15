@@ -1,7 +1,7 @@
 /* Home → 家人 · 今晚一起吃 (prototype familyJoiningMarkup). */
 import { useRouter } from "expo-router";
 import { View } from "react-native";
-import { Avatar, Button, Segmented, Txt } from "@/components/ui";
+import { Avatar, Button, Txt, YesNoSlider } from "@/components/ui";
 import { useI18n } from "@/i18n";
 import { useDeviceStore } from "@/store/device";
 import { shell } from "@/theme";
@@ -41,7 +41,7 @@ export function FamilyCard() {
                   {m.name}
                 </Txt>
               </View>
-              <Segmented<"1" | "0"> size="sm" accessibilityLabel={m.name} value={on ? "1" : "0"} options={[{ value: "1", label: t("是") }, { value: "0", label: t("否") }]} onChange={(value) => setDinner(m.id, value === "1")} />
+              <YesNoSlider value={on} onChange={(value) => setDinner(m.id, value)} yesLabel={t("是")} noLabel={t("否")} accessibilityLabel={m.name} width={84} height={34} />
             </View>
           );
         })}

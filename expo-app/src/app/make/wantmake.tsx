@@ -21,7 +21,7 @@ export default function WantMakeScreen() {
   const { dishes } = useDecoratedDishes();
   const list = useMemo(() => (filter === "All" ? dishes : dishes.filter((d) => d.cat === filter)), [dishes, filter]);
   return (
-    <Page background={make.background} gap={20}>
+    <Page background={make.background} gap={14}>
       <MakeHeader title={t.titles.wantmake} />
       <FilterChips value={filter} onChange={setFilter} />
       <DishGrid

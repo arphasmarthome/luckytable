@@ -126,6 +126,6 @@ export function Tag({ children, green }: { children: string; green?: boolean }) 
 }
 
 /** Card with the Make border / radius (12 px panel). */
-export function MCard({ children, style, background = make.surface, border = make.border, padding = 20, gap = 12 }: { children: ReactNode; style?: StyleProp<ViewStyle>; background?: string; border?: string; padding?: number; gap?: number }) {
+export function MCard({ children, style, background = make.surface, border = make.border, padding = 16, gap = 10 }: { children: ReactNode; style?: StyleProp<ViewStyle>; background?: string; border?: string; padding?: number; gap?: number }) {
   return <View style={[{ backgroundColor: background, borderColor: border, borderWidth: 1, borderRadius: radius.lg, padding, gap, minWidth: 0 }, style]}>{children}</View>;
 }
