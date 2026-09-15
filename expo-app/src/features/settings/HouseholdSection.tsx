@@ -7,6 +7,8 @@ import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { HOUSEHOLD_SUGGEST, householdCookLabel, useDeviceStore, type Member, type Prefs } from "@/store/device";
 import { toast } from "@/store/toast";
+import { openHealthForm } from "@/features/health/dialogs";
+import { activityLabel, goalNames } from "@/features/health/estimate";
 import { radius, shell } from "@/theme";
 import { SectionHeader } from "./SettingsRow";
 
@@ -131,6 +133,44 @@ function AddMemberCard() {
   );
 }
 
+function HealthBasics({ member }: { member: Member }) {
+  const { t } = useI18n();
+  const h = member.health;
+  const filled = Boolean(h && h.height && h.weight);
+  const cell = (label: string, value: string) => (
+    <View key={label} style={{ minWidth: 96, flexGrow: 1, gap: 2 }}>
+      <Txt variant="caption" muted>
+        {label}
+      </Txt>
+      <Txt variant="body" weight="600">
+        {value}
+      </Txt>
+    </View>
+  );
+  return (
+    <View style={{ gap: 8, paddingTop: 12, borderTopWidth: 1, borderTopColor: shell.line }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+        <Kicker>{t("基本資料")}</Kicker>
+        <Button size="sm" variant="primary" icon="pencil" label={filled ? t("編輯資料") : t("新增資料")} onPress={() => openHealthForm(member.id)} style={{ marginLeft: "auto" }} />
+      </View>
+      {filled && h ? (
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
+          {cell(t("身高"), `${h.height} cm`)}
+          {cell(t("體重"), `${h.weight} kg`)}
+          {cell(t("年齡"), `${h.age} ${t("歲")}`)}
+          {cell(t("性別"), h.sex === "female" ? t("女性") : t("男性"))}
+          {cell(t("健康目標"), h.age < 18 ? t("成長記錄") : t(goalNames[h.goal] || goalNames.maintain))}
+          {cell(t("活動程度"), t(activityLabel(h.activity)))}
+        </View>
+      ) : (
+        <Txt variant="meta" muted>
+          {t("目前沒有紀錄")}
+        </Txt>
+      )}
+    </View>
+  );
+}
+
 function Profile({ member, cookCount, together }: { member: Member; cookCount: (day: number) => number; together: string[] }) {
   const { t } = useI18n();
   const field = useDeviceStore((s) => s.household.field);
@@ -157,6 +197,7 @@ function Profile({ member, cookCount, together }: { member: Member; cookCount: (
         </View>
       </View>
       <CookDays member={member} cookCount={cookCount} />
+      <HealthBasics member={member} />
       {together.length ? (
         <View style={{ padding: 12, paddingHorizontal: 14, borderRadius: radius.md, backgroundColor: shell.greenSoft, gap: 2 }}>
           <Txt variant="meta" weight="600" color={shell.green}>

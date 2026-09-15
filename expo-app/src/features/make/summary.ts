@@ -20,8 +20,9 @@ export function useMakeSummary(): MakeSummary {
   const votes = useMakeStore((s) => s.votes);
   const myVotes = useMakeStore((s) => s.myVotes);
   const cartCount = useMakeStore((s) => s.cart.length);
+  const history = useMakeStore((s) => s.history);
   return useMemo(() => {
-    const slice = { tonight, cook, stock, acquired, recipes };
+    const slice = { tonight, cook, stock, acquired, recipes, history };
     return {
       tonight: tonightDetail(slice, lang),
       votes: voteRows({ votes, myVotes }, lang),
@@ -29,5 +30,5 @@ export function useMakeSummary(): MakeSummary {
       allReady: tonight.length > 0 && allTonightReady(slice),
       cooking: Boolean(cook),
     };
-  }, [lang, tonight, cook, stock, acquired, recipes, votes, myVotes, cartCount]);
+  }, [lang, tonight, cook, stock, acquired, recipes, history, votes, myVotes, cartCount]);
 }

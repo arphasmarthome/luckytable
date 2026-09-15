@@ -8,7 +8,7 @@ import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import type { Member } from "@/store/device";
 import { radius } from "@/theme";
-import { EmptyState, fh, LocalLabel } from "@/features/family/shared";
+import { EmptyState, fh } from "@/features/family/shared";
 import { openHealthForm } from "./dialogs";
 import { activityLabel, foodSuggestions, goalNames, healthEstimate } from "./estimate";
 
@@ -78,9 +78,6 @@ export function HealthProfile({ person }: { person: Member }) {
         <Basic label={t("性別")} value={p.sex === "female" ? t("女性") : t("男性")} />
         <Basic label={t("健康目標")} value={child ? t("成長記錄") : t(goalNames[p.goal] || goalNames.maintain)} wide />
         <Basic label={t("活動程度")} value={t(activityLabel(p.activity))} wide />
-      </View>
-      <View style={{ marginTop: 12 }}>
-        <LocalLabel>{t("本次原型資料")}</LocalLabel>
       </View>
     </View>
   );

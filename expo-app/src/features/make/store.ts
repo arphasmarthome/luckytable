@@ -25,7 +25,7 @@ export type StepState = { seconds: number; remaining: number; done: boolean; run
 export type TimelineEvent = { kind: "start" | "pause" | "resume"; at: number };
 export type CookSession = { date: string; dishIds: string[]; active: string; split: boolean; paneB: string | null; steps: Record<string, StepState[]>; selected: Record<string, number>; timeline: TimelineEvent[] };
 /** One finished cooking session, kept for the Summary page. */
-export type CookRecord = { id: string; date: string; dishIds: string[]; timeline: TimelineEvent[]; startedAt: number; finishedAt: number; totalSeconds: number; photos: string[] };
+export type CookRecord = { id: string; date: string; dishIds: string[]; timeline: TimelineEvent[]; startedAt: number; finishedAt: number; totalSeconds: number; photos: Record<string, string[]> };
 export type MatchMode = "captured" | "stock";
 export type PlannedMeal = { dishId: string; day: string; time: string };
 export type Pane = "A" | "B" | "";
@@ -100,7 +100,7 @@ export type MakeActions = {
   enterCook: () => boolean;
   /** closes the session and returns its record (null when nothing was cooking) */
   finishCook: () => CookRecord | null;
-  addHistoryPhoto: (recordId: string, uri: string) => void;
+  addHistoryPhoto: (recordId: string, dishId: string, uri: string) => void;
   toggleSplit: () => void;
   setActiveDish: (id: string) => void;
   setPaneDish: (pane: "A" | "B", id: string) => void;
@@ -144,6 +144,9 @@ function normalizeCook(stored: CookSession | null): CookSession | null {
   if (!stored || stored.date !== todayKey || !Array.isArray(stored.dishIds)) return null;
   return { ...stored, steps: stored.steps || {}, selected: stored.selected || {}, paneB: stored.paneB ?? null, split: Boolean(stored.split), timeline: Array.isArray(stored.timeline) ? stored.timeline : [] };
 }
+function normalizeHistory(rows: CookRecord[] | null | undefined): CookRecord[] {
+  return (Array.isArray(rows) ? rows : []).map((r) => ({ ...r, photos: r.photos && !Array.isArray(r.photos) ? r.photos : {} }));
+}
 function readPersisted() {
   return {
     tonight: normalizeTonight(loadJSON<StoredTonight>(KEYS.tonight, null)),
@@ -152,7 +155,7 @@ function readPersisted() {
     acquired: loadJSON<Record<string, string[]>>(KEYS.acquired, {}),
     cart: loadJSON<CartItem[]>(KEYS.cart, []),
     vendor: loadJSON<VendorId>(KEYS.vendor, "instacart"),
-    history: loadJSON<CookRecord[]>(KEYS.history, []),
+    history: normalizeHistory(loadJSON<CookRecord[]>(KEYS.history, [])),
     myVotes: loadJSON<string[]>(KEYS.votes, []),
     recipes: loadJSON<Record<string, Recipe>>(KEYS.mealdb, {}),
   };
@@ -263,11 +266,12 @@ export function voteRows(s: Pick<MakeData, "votes" | "myVotes">, lang: Lang): Vo
 }
 
 /** The prototype's `tonightDetail` snapshot rows (what Home shows). */
-export function tonightDetail(s: Pick<MakeData, "tonight" | "recipes" | "acquired" | "stock" | "cook">, lang: Lang) {
+export const cookedToday = (history: CookRecord[], id: string) => history.some((r) => r.date === todayKey && r.dishIds.includes(id));
+export function tonightDetail(s: Pick<MakeData, "tonight" | "recipes" | "acquired" | "stock" | "cook" | "history">, lang: Lang) {
   return s.tonight.map((id) => {
     const d = dishById(id);
     const r = readiness(s, d, lang);
-    return { id, name: dishNameIn(d, lang), img: hasDishImg(id) ? dishImg(id) : "", minutes: cookMinutes(d), ready: r.pct === 100, missing: r.missing.length, cooked: dishDone(s.cook, id) };
+    return { id, name: dishNameIn(d, lang), img: hasDishImg(id) ? dishImg(id) : "", minutes: cookMinutes(d), ready: r.pct === 100, missing: r.missing.length, cooked: dishDone(s.cook, id) || cookedToday(s.history, id) };
   });
 }
 
@@ -482,11 +486,11 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       const now = Date.now();
       const timeline = c.timeline.slice();
       if (anyRunning(c)) timeline.push({ kind: "pause", at: now });
-      const record: CookRecord = { id: `${c.date}-${now}`, date: c.date, dishIds: c.dishIds.slice(), timeline, startedAt: timeline[0]?.at ?? now, finishedAt: now, totalSeconds: cookingSeconds(timeline, now), photos: [] };
+      const record: CookRecord = { id: `${c.date}-${now}`, date: c.date, dishIds: c.dishIds.slice(), timeline, startedAt: timeline[0]?.at ?? now, finishedAt: now, totalSeconds: cookingSeconds(timeline, now), photos: {} };
       set({ cook: null, history: [record, ...get().history] });
       return record;
     },
-    addHistoryPhoto: (recordId, uri) => set((s) => ({ history: s.history.map((r) => (r.id === recordId ? { ...r, photos: r.photos.concat(uri) } : r)) })),
+    addHistoryPhoto: (recordId, dishId, uri) => set((s) => ({ history: s.history.map((r) => (r.id === recordId ? { ...r, photos: { ...r.photos, [dishId]: (r.photos[dishId] || []).concat(uri) } } : r)) })),
     toggleSplit: () =>
       withCook((c) => {
         c.split = !c.split;
@@ -739,7 +743,7 @@ else {
     loadJSONAsync<string[]>(KEYS.votes, []),
     loadJSONAsync<Record<string, Recipe>>(KEYS.mealdb, {}),
   ]).then(([tonight, cook, stock, acquired, cart, vendor, history, myVotes, recipes]) => {
-    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, vendor, history, myVotes, recipes, hydrated: true });
+    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, vendor, history: normalizeHistory(history), myVotes, recipes, hydrated: true });
     boot();
   });
 }
