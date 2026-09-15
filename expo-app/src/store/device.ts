@@ -62,6 +62,10 @@ export type Settings = {
   notificationPermission: boolean;
   offlineDownloaded: boolean;
   paired: boolean;
+  /** phones linked to this device (demo) */
+  phones: { id: string; name: string }[];
+  deviceId: string;
+  familyName: string;
   autoPlayMotion: boolean;
   effectType: "action-extension" | "weather-transition";
   weatherPreset: "sunlight" | "clouds" | "rain" | "snow";
@@ -213,6 +217,9 @@ export function seedData(): DeviceData {
       notificationPermission: false,
       offlineDownloaded: false,
       paired: true,
+      phones: [{ id: "james", name: "James 的手機" }],
+      deviceId: "LT-DEMO-001",
+      familyName: "阿發之家",
       autoPlayMotion: true,
       effectType: "action-extension",
       weatherPreset: "clouds",

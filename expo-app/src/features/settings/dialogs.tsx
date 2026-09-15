@@ -57,41 +57,115 @@ function NetworkForm() {
 }
 export const openNetworkDialog = () => dialog.show({ title: t("切換網路"), body: () => <NetworkForm /> });
 
-/* 連結手機 · 演示 */
-function PairingBody() {
-  const paired = useDeviceStore((s) => s.settings.paired);
+/* 連結手機: the linked phones (pick one to unlink) + link a new one by name. */
+const setPhones = (phones: { id: string; name: string }[]) => useDeviceStore.getState().setSettings({ phones, paired: phones.length > 0 });
+function PairingForm() {
+  const phones = useDeviceStore((s) => s.settings.phones);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const link = () => {
+    const value = name.trim();
+    if (!value) return;
+    setPhones(phones.concat({ id: `phone-${Date.now()}`, name: value }));
+    setName("");
+    toast(t("已連結 {name}", { name: value }));
+  };
+  const unlink = () => {
+    const phone = phones.find((p) => p.id === selected);
+    if (!phone) return;
+    setPhones(phones.filter((p) => p.id !== phone.id));
+    setSelected(null);
+    dialog.close();
+    toast(t("已解除連結 {name}", { name: t(phone.name) }));
+  };
   return (
-    <View style={{ gap: 12 }}>
+    <View style={{ gap: 14 }}>
       <DemoNotice>{t("正式產品由手機 App 掃碼綁定。本原型沒有綁定服務，也不產生可掃描的假二維碼。")}</DemoNotice>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 20, paddingTop: 15, paddingBottom: 25 }}>
-        <Icon name="smartphone" size={40} color={shell.green} />
-        <View style={{ flex: 1 }}>
-          <Txt variant="h3">{paired ? t("James 的手機") : t("等待手機連結")}</Txt>
-          <Txt muted>{paired ? t("演示裝置 · 已連結") : t("演示配對碼：LT-0826")}</Txt>
-        </View>
+      <Txt variant="meta" muted>
+        {phones.length ? t("選擇要解除連結的手機") : t("尚未連結任何手機")}
+      </Txt>
+      <View style={{ gap: 8 }}>
+        {phones.map((phone) => {
+          const on = phone.id === selected;
+          return (
+            <Pressable
+              key={phone.id}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: on }}
+              accessibilityLabel={t(phone.name)}
+              onPress={() => setSelected(on ? null : phone.id)}
+              style={{ flexDirection: "row", alignItems: "center", gap: 14, padding: 12, borderRadius: radius.md, borderWidth: on ? 2 : 1, borderColor: on ? shell.green : shell.line, backgroundColor: on ? shell.greenSoft : shell.surface }}>
+              <Icon name="smartphone" size={28} color={shell.green} />
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Txt variant="body" weight="600">
+                  {t(phone.name)}
+                </Txt>
+                <Txt variant="meta" muted>
+                  {t("演示裝置 · 已連結")}
+                </Txt>
+              </View>
+              {on ? <Icon name="circle-check" size={22} color={shell.green} /> : null}
+            </Pressable>
+          );
+        })}
+      </View>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+        <TextField style={{ flex: 1, minWidth: 0 }} value={name} onChangeText={setName} maxLength={24} autoComplete="off" placeholder={t("手機名稱…")} accessibilityLabel={t("手機名稱…")} onSubmitEditing={link} />
+        <Button variant="primary" icon="smartphone" label={t("新增手機")} disabled={!name.trim()} onPress={link} />
+      </View>
+      <View style={{ flexDirection: "row", justifyContent: "flex-end", gap: 10, paddingTop: 6 }}>
+        <Button label={t("取消")} onPress={() => dialog.close()} />
+        <Button variant="primary" accent={shell.danger} icon="unlink" label={t("模擬解除連結")} disabled={!selected} onPress={unlink} />
       </View>
     </View>
   );
 }
-function PairingFooter() {
-  const paired = useDeviceStore((s) => s.settings.paired);
+export const openPairingDialog = () => dialog.show({ title: t("連結手機 · 演示"), body: () => <PairingForm /> });
+
+/* 裝置編號 / 家庭名稱 */
+function TextSettingForm({ label, initial, onSave }: { label: string; initial: string; onSave: (value: string) => void }) {
+  const [value, setValue] = useState(initial);
+  const submit = () => {
+    const next = value.trim();
+    if (!next) return;
+    onSave(next);
+    dialog.close();
+  };
   return (
-    <>
-      <Button label={t("取消")} onPress={() => dialog.close()} />
-      <Button
-        variant="primary"
-        label={paired ? t("模擬解除連結") : t("模擬手機已確認")}
-        onPress={() => {
-          const next = !useDeviceStore.getState().settings.paired;
-          useDeviceStore.getState().setSettings({ paired: next });
-          dialog.close();
-          toast(next ? t("演示手機已連結") : t("演示手機已解除連結"));
-        }}
-      />
-    </>
+    <View style={{ gap: 16 }}>
+      <TextField label={label} value={value} onChangeText={setValue} maxLength={32} autoComplete="off" onSubmitEditing={submit} />
+      <Button variant="primary" label={t("儲存")} disabled={!value.trim()} onPress={submit} style={{ alignSelf: "flex-start" }} />
+    </View>
   );
 }
-export const openPairingDialog = () => dialog.show({ title: t("連結手機 · 演示"), body: () => <PairingBody />, footer: () => <PairingFooter /> });
+export const openDeviceIdDialog = () =>
+  dialog.show({
+    title: t("裝置編號"),
+    body: () => (
+      <TextSettingForm
+        label={t("裝置編號")}
+        initial={useDeviceStore.getState().settings.deviceId}
+        onSave={(deviceId) => {
+          useDeviceStore.getState().setSettings({ deviceId });
+          toast(t("裝置編號已更新"));
+        }}
+      />
+    ),
+  });
+export const openFamilyNameDialog = () =>
+  dialog.show({
+    title: t("家庭名稱"),
+    body: () => (
+      <TextSettingForm
+        label={t("家庭名稱")}
+        initial={t(useDeviceStore.getState().settings.familyName)}
+        onSave={(familyName) => {
+          useDeviceStore.getState().setSettings({ familyName });
+          toast(t("家庭名稱已更新"));
+        }}
+      />
+    ),
+  });
 
 /* 行程提醒 preview */
 export function openReminderPreview() {

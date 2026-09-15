@@ -225,7 +225,7 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
           </View>
           <Button square round icon={s?.running ? "pause" : "play"} variant="primary" accent={make.primary} disabled={!s || s.done} accessibilityLabel={s?.running ? t.pause : t.play} onPress={() => toggleTimer(id, sel)} />
           <Button square round icon="rotate-ccw" disabled={!s} accessibilityLabel={t.reset} onPress={() => resetStep(id, sel)} />
-          <Button square round icon="check" variant="primary" accent={make.green} disabled={!s} accessibilityLabel={t.done} onPress={() => completeStep(id, sel)} />
+          <Button square round icon="check" variant="primary" accent={make.green} disabled={!s || s.done} accessibilityLabel={t.done} onPress={() => completeStep(id, sel)} />
         </View>
         <View style={{ position: "absolute", right: 12, bottom: 12, maxWidth: "80%", paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
           <MTxt variant="meta" weight="600" numberOfLines={1}>

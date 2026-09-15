@@ -6,7 +6,7 @@ import { useI18n } from "@/i18n";
 import { useDeviceStore } from "@/store/device";
 import { toast } from "@/store/toast";
 import { radius, shell } from "@/theme";
-import { openDhcpDialog, openDownloadDialog, openInstallDialog, openNetworkDialog, openPairingDialog, openSyncDialog, openSystemUpdateDialog } from "./dialogs";
+import { openDeviceIdDialog, openDhcpDialog, openDownloadDialog, openFamilyNameDialog, openInstallDialog, openNetworkDialog, openPairingDialog, openSyncDialog, openSystemUpdateDialog } from "./dialogs";
 import { SectionHeader, SettingsGroup, SettingsRow } from "./SettingsRow";
 
 const DEMO_IP = "192.168.1.108";
@@ -14,8 +14,10 @@ const DEMO_IP = "192.168.1.108";
 function DeviceInformation() {
   const { t } = useI18n();
   const version = useDeviceStore((s) => s.settings.version);
+  const deviceId = useDeviceStore((s) => s.settings.deviceId);
+  const familyName = useDeviceStore((s) => s.settings.familyName);
   const rows: [string, string][] = [
-    [t("裝置編號"), "LT-DEMO-001"],
+    [t("裝置編號"), deviceId],
     [t("螢幕解析度"), "1920 × 1080"],
     [t("可用儲存空間"), "18 GB / 19 GB"],
     [t("目前版本"), version],
@@ -27,7 +29,7 @@ function DeviceInformation() {
       </View>
       <View>
         <Txt variant="h3">Lucky Table LT-15</Txt>
-        <Txt muted>{t("阿發之家")}</Txt>
+        <Txt muted>{t(familyName)}</Txt>
       </View>
       <View>
         {rows.map(([label, value]) => (
@@ -70,6 +72,10 @@ export function DeviceSection() {
   };
   const groups = (
     <View style={{ flex: 1, minWidth: 0 }}>
+      <SettingsGroup title={t("裝置")}>
+        <SettingsRow title={t("裝置編號")} detail={settings.deviceId} control={<Button icon="pencil" label={t("變更")} onPress={openDeviceIdDialog} />} />
+        <SettingsRow title={t("家庭名稱")} detail={t(settings.familyName)} control={<Button icon="pencil" label={t("變更")} onPress={openFamilyNameDialog} />} />
+      </SettingsGroup>
       <SettingsGroup title={t("網路與連結")}>
         <SettingsRow
           title="Wi-Fi"
@@ -97,7 +103,7 @@ export function DeviceSection() {
             </>
           }
         />
-        <SettingsRow title={t("連結手機")} detail={settings.paired ? t("James 的手機 · 已連結") : t("尚未連結")} control={<Button icon="smartphone" label={t("管理連結")} onPress={openPairingDialog} />} />
+        <SettingsRow title={t("連結手機")} detail={settings.phones.length ? `${settings.phones.map((p) => t(p.name)).join(", ")} · ${t("{n} 支手機已連結", { n: settings.phones.length })}` : t("尚未連結")} control={<Button icon="smartphone" label={t("管理連結")} onPress={openPairingDialog} />} />
         <SettingsRow
           title={t("家庭同步")}
           detail={`${settings.synced ? t("已同步") : t("未同步")} · ${t("{events} 個行程 · {tasks} 個家庭任務", { events: eventCount, tasks: taskCount })}`}
@@ -115,10 +121,11 @@ export function DeviceSection() {
           title={t("系統更新")}
           detail={`${settings.version}${settings.updateAvailable ? t(" · 可更新至 0.19.0") : t(" · 已是最新版本")}`}
           control={
-            <>
-              <Button square icon="refresh-cw" accessibilityLabel={t("檢查更新")} onPress={openSystemUpdateDialog} />
-              <Button icon="download" label={t("安裝")} disabled={!settings.wifi || !settings.updateAvailable} onPress={openInstallDialog} />
-            </>
+            settings.updateAvailable ? (
+              <Button variant="primary" icon="download" label={t("立即更新")} disabled={!settings.wifi} onPress={openInstallDialog} />
+            ) : (
+              <Button icon="refresh-cw" label={t("檢查更新")} onPress={openSystemUpdateDialog} />
+            )
           }
         />
       </SettingsGroup>
