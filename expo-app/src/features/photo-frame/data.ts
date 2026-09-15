@@ -3,54 +3,71 @@ import { Image as RNImage } from "react-native";
 import { t } from "@/i18n";
 import type { EffectType, Motion, Photo, PhotoSource, WeatherPreset } from "./types";
 
-const teaImage = require("@/assets/images/lucky/family-tea.png");
-const sofaImage = require("@/assets/images/lucky/family-sofa.png");
-const laughterImage = require("@/assets/images/lucky/family-laughter.png");
-const reunionImage = require("@/assets/images/lucky/family-reunion.png");
+/* Family album (2026-09-15): 16 photos, newest first. */
+const familyImages = [
+  require("@/assets/images/lucky/family/family-01.jpg"),
+  require("@/assets/images/lucky/family/family-02.jpg"),
+  require("@/assets/images/lucky/family/family-03.jpg"),
+  require("@/assets/images/lucky/family/family-04.jpg"),
+  require("@/assets/images/lucky/family/family-05.jpg"),
+  require("@/assets/images/lucky/family/family-06.jpg"),
+  require("@/assets/images/lucky/family/family-07.jpg"),
+  require("@/assets/images/lucky/family/family-08.jpg"),
+  require("@/assets/images/lucky/family/family-09.jpg"),
+  require("@/assets/images/lucky/family/family-10.jpg"),
+  require("@/assets/images/lucky/family/family-11.jpg"),
+  require("@/assets/images/lucky/family/family-12.jpg"),
+  require("@/assets/images/lucky/family/family-13.jpg"),
+  require("@/assets/images/lucky/family/family-14.jpg"),
+  require("@/assets/images/lucky/family/family-15.jpg"),
+  require("@/assets/images/lucky/family/family-16.jpg"),
+];
+
+const FAMILY_META: { id: string; title: string; capturedAt: string; owner: string; motion?: { subject: string; depth: string; motion: string; generatedAt: string } }[] = [
+  { id: "sandcastle", title: "堆沙堡的下午", capturedAt: "今天・14:10", owner: "James", motion: { subject: "4 位家人", depth: "前後三層", motion: "人物自然微動", generatedAt: "剛剛" } },
+  { id: "waves", title: "追浪花", capturedAt: "今天・14:35", owner: "Sophia" },
+  { id: "sunset-walk", title: "夕陽散步", capturedAt: "昨天・18:20", owner: "James" },
+  { id: "hand-in-hand", title: "牽手漫步沙灘", capturedAt: "昨天・18:05", owner: "Sophia" },
+  { id: "trail-map", title: "看地圖找路", capturedAt: "9 月 13 日・10:15", owner: "James" },
+  { id: "picnic-view", title: "山頂野餐", capturedAt: "9 月 13 日・12:40", owner: "Sophia" },
+  { id: "waterfall-wide", title: "瀑布探險", capturedAt: "9 月 12 日・15:00", owner: "James" },
+  { id: "waterfall-close", title: "看瀑布", capturedAt: "9 月 12 日・15:05", owner: "Sophia" },
+  { id: "campfire-day", title: "營火棉花糖", capturedAt: "9 月 6 日・19:20", owner: "James" },
+  { id: "tent-day", title: "帳篷裡的笑聲", capturedAt: "9 月 6 日・17:30", owner: "Sophia" },
+  { id: "campfire-night", title: "夜晚的營火", capturedAt: "9 月 5 日・20:10", owner: "James" },
+  { id: "tent-sunset", title: "帳篷看夕陽", capturedAt: "9 月 5 日・18:45", owner: "Sophia" },
+  { id: "dock", title: "湖邊碼頭", capturedAt: "8 月 30 日・18:00", owner: "James" },
+  { id: "tree-story", title: "樹上說故事", capturedAt: "8 月 24 日・16:30", owner: "Sophia" },
+  { id: "cobblestone", title: "石板路散步", capturedAt: "8 月 18 日・09:15", owner: "James" },
+  { id: "bridge-selfie", title: "橋上自拍", capturedAt: "8 月 10 日・19:00", owner: "Sophia", motion: { subject: "3 位家人", depth: "前後兩層", motion: "人物自然微動", generatedAt: "昨天" } },
+];
 
 export const MOTION_SECONDS = 5;
 
 export function demoPhotos(): Photo[] {
-  return [
-    {
-      id: "tea",
-      title: "週末午後",
-      capturedAt: "今天・14:20",
-      owner: "James",
-      src: teaImage,
+  return FAMILY_META.map((meta, index) => {
+    const src = familyImages[index];
+    return {
+      id: meta.id,
+      title: meta.title,
+      capturedAt: meta.capturedAt,
+      owner: meta.owner,
+      src,
       uploaded: false,
-      motion: {
-        kind: "demo",
-        effectType: "action-extension",
-        weatherPreset: "",
-        durationSeconds: MOTION_SECONDS,
-        videoUrl: "",
-        posterUrl: teaImage,
-        analysis: { subject: "4 位家人", depth: "前後三層", motion: "人物自然微動" },
-        generatedAt: "剛剛",
-      },
-    },
-    { id: "sofa", title: "一起窩在沙發", capturedAt: "8 月 31 日・20:12", owner: "miles", src: sofaImage, uploaded: false, motion: null },
-    { id: "laughter", title: "笑成一團", capturedAt: "8 月 24 日・16:45", owner: "大家好", src: laughterImage, uploaded: false, motion: null },
-    {
-      id: "reunion",
-      title: "全家都到齊",
-      capturedAt: "8 月 18 日・12:30",
-      owner: "James",
-      src: reunionImage,
-      uploaded: false,
-      motion: {
-        kind: "demo",
-        effectType: "action-extension",
-        weatherPreset: "",
-        durationSeconds: MOTION_SECONDS,
-        videoUrl: "",
-        posterUrl: reunionImage,
-        analysis: { subject: "6 位家人", depth: "前後三層", motion: "人物自然微動" },
-        generatedAt: "昨天",
-      },
-    },
-  ];
+      motion: meta.motion
+        ? {
+            kind: "demo",
+            effectType: "action-extension",
+            weatherPreset: "",
+            durationSeconds: MOTION_SECONDS,
+            videoUrl: "",
+            posterUrl: src,
+            analysis: { subject: meta.motion.subject, depth: meta.motion.depth, motion: meta.motion.motion },
+            generatedAt: meta.motion.generatedAt,
+          }
+        : null,
+    };
+  });
 }
 
 export const EFFECT_LABELS: Record<EffectType, string> = {
