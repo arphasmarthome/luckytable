@@ -76,8 +76,8 @@ export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id:
               backgroundColor: current ? make.yellow : make.surface,
               opacity: s.done ? 0.62 : pressed ? 0.85 : 1,
             })}>
-            <View style={{ width: compact ? 36 : 42, height: compact ? 36 : 42, borderRadius: 21, alignItems: "center", justifyContent: "center", backgroundColor: s.done || current ? make.yellowStrong : make.surface2 }}>
-              {s.done ? <Icon name="check" size={compact ? 18 : 22} color={make.yellowInk} /> : (
+            <View style={{ width: compact ? 36 : 42, height: compact ? 36 : 42, borderRadius: 21, alignItems: "center", justifyContent: "center", backgroundColor: s.done ? make.green : current ? make.yellowStrong : make.surface2 }}>
+              {s.done ? <Icon name="check" size={compact ? 18 : 22} color="#fff" /> : (
                 <MTxt variant={compact ? "body" : "h3"} weight="700" color={current ? make.yellowInk : make.foreground}>
                   {String(i + 1)}
                 </MTxt>
@@ -125,8 +125,8 @@ export function DishRail({ cook, horizontal, onAdd }: { cook: CookSession; horiz
               {String(i + 1)}
             </MTxt>
             {done ? (
-              <View style={{ position: "absolute", right: -6, top: -6, width: 22, height: 22, borderRadius: 11, backgroundColor: make.yellowStrong, alignItems: "center", justifyContent: "center" }}>
-                <Icon name="check" size={13} color={make.yellowInk} strokeWidth={3} />
+              <View style={{ position: "absolute", right: -6, top: -6, width: 22, height: 22, borderRadius: 11, backgroundColor: make.green, alignItems: "center", justifyContent: "center" }}>
+                <Icon name="check" size={13} color="#fff" strokeWidth={3} />
               </View>
             ) : null}
           </Pressable>
@@ -217,7 +217,7 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
             </MTxt>
           </View>
           <Button square round icon={s?.running ? "pause" : "play"} variant="primary" accent={make.primary} disabled={!s || s.done} accessibilityLabel={s?.running ? t.pause : t.play} onPress={() => toggleTimer(id, sel)} />
-          <Button square round icon="check" variant="primary" accent={s?.done ? make.yellowStrong : make.green} onAccent={s?.done ? make.yellowInk : "#fff"} disabled={!s} accessibilityLabel={t.done} onPress={() => completeStep(id, sel)} />
+          <Button square round icon="check" variant="primary" accent={make.green} disabled={!s} accessibilityLabel={t.done} onPress={() => completeStep(id, sel)} />
         </View>
         <View style={{ position: "absolute", right: 12, bottom: 12, maxWidth: "80%", paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
           <MTxt variant="meta" weight="600" numberOfLines={1}>

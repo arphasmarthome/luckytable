@@ -55,12 +55,11 @@ function SettingsNav({ section, onSelect }: { section: SettingsSection; onSelect
         accessibilityRole="tab"
         accessibilityState={{ selected: active }}
         onPress={() => onSelect(tab.id)}
-        style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: isWide ? 64 : 44, paddingHorizontal: 14, paddingVertical: isWide ? 14 : 8, borderRadius: radius.sm, backgroundColor: active ? shell.greenSoft : pressed ? shell.surfaceMuted : "transparent" })}>
-        <Icon name={tab.icon} size={isWide ? 22 : 18} color={active ? shell.green : "#617068"} />
-        <Txt variant={isDesktop ? "card" : isWide ? "body" : "meta"} weight={active ? "600" : "400"} color={active ? shell.green : "#617068"} style={isWide ? { flex: 1 } : undefined}>
+        style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 10, minHeight: isWide ? 48 : 44, paddingHorizontal: 10, paddingVertical: isWide ? 8 : 8, borderRadius: radius.sm, backgroundColor: active ? shell.greenSoft : pressed ? shell.surfaceMuted : "transparent" })}>
+        <Icon name={tab.icon} size={isWide ? 20 : 18} color={active ? shell.green : "#617068"} />
+        <Txt variant={isWide ? "body" : "meta"} weight={active ? "600" : "400"} color={active ? shell.green : "#617068"} numberOfLines={2} style={isWide ? { flex: 1 } : undefined}>
           {t(tab.label)}
         </Txt>
-        {isWide ? <Icon name="chevron-right" size={17} color={active ? shell.green : "#617068"} /> : null}
       </Pressable>
     );
     if (isWide) return item;
@@ -86,8 +85,8 @@ function SettingsNav({ section, onSelect }: { section: SettingsSection; onSelect
     );
   }
   return (
-    <View accessibilityLabel={t("設定分類")} style={{ width: isDesktop ? 244 : 200, paddingRight: isDesktop ? 24 : 16, paddingTop: 6, gap: 10, borderRightWidth: 1, borderRightColor: shell.line }}>
-      <Txt variant="h3" weight="500" muted style={{ marginHorizontal: 14, marginTop: 6, marginBottom: 12 }}>
+    <View accessibilityLabel={t("設定分類")} style={{ width: isDesktop ? 192 : 172, paddingRight: 10, paddingTop: 4, gap: 4, borderRightWidth: 1, borderRightColor: shell.line }}>
+      <Txt variant="h3" weight="500" muted style={{ marginHorizontal: 10, marginTop: 4, marginBottom: 8 }}>
         {t("偏好設定")}
       </Txt>
       {items}
@@ -130,7 +129,7 @@ export default function SettingsScreen() {
   }
   return (
     <Page>
-      <View style={{ flexDirection: "row", gap: isDesktop ? 40 : 24, alignItems: "flex-start" }}>
+      <View style={{ flexDirection: "row", gap: isDesktop ? 24 : 16, alignItems: "flex-start" }}>
         <SettingsNav section={section} onSelect={select} />
         <View style={{ flex: 1, minWidth: 0 }}>{content}</View>
       </View>

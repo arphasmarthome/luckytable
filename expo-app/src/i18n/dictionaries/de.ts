@@ -1308,7 +1308,7 @@ const de: Dictionary = {
   "輸入菜名、行程、家人或頁面名稱。": "Gericht, Termin, Familienmitglied oder Seite eingeben.",
   "找不到「{q}」。": "Nichts gefunden für „{q}“.",
   "此瀏覽器不支援語音輸入（示範）": "Spracheingabe ist in diesem Browser nicht verfügbar (Demo)",
-  "搜尋菜色、行程、家人…": "Gerichte, Termine, Familie suchen…",
+  "搜尋菜色、行程、家人…": "Per Sprache suchen oder Termine bearbeiten",
   "清除": "Löschen",
   "語音搜尋": "Sprachsuche",
   "聆聽中…再按一次停止。": "Höre zu… erneut tippen zum Stoppen.",

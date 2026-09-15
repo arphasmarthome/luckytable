@@ -31,6 +31,7 @@ export default function CookScreen() {
   const addMinute = useMakeStore((s) => s.addMinute);
   const resetStep = useMakeStore((s) => s.resetStep);
   const completeStep = useMakeStore((s) => s.completeStep);
+  const selectStep = useMakeStore((s) => s.selectStep);
 
   const gated = useRef(false);
   useEffect(() => {
@@ -108,6 +109,8 @@ export default function CookScreen() {
   const sel = cook.selected[id] ?? 0;
   const s = stepAt(cook, id, sel);
   const playLabel = s?.running ? t.pause : dishRunning(cook, id) || (s && s.remaining < s.seconds) ? t.resume : t.play;
+  const stepCount = (cook.steps[id] || []).length;
+  const hasNext = sel + 1 < stepCount;
   const photoWidth = isWide ? Math.min(isDesktop ? 440 : 360, Math.round(width * 0.32)) : undefined;
 
   const photoCol = (
@@ -128,7 +131,7 @@ export default function CookScreen() {
         <Button size="lg" icon={s?.running ? "pause" : "play"} label={playLabel} variant="primary" accent={make.primary} disabled={!s || s.done} onPress={() => toggleTimer(id, sel)} style={{ flexGrow: 1.6, flexBasis: isPhone ? "47%" : 160 }} />
         <Button size="lg" icon="plus" label={t.plusMin} disabled={!s} onPress={() => addMinute(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
         <Button size="lg" icon="rotate-ccw" label={t.reset} disabled={!s} onPress={() => resetStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
-        <Button size="lg" icon="check" label={s?.done ? t.reset : t.done} variant="primary" accent={s?.done ? make.yellowStrong : make.green} onAccent={s?.done ? make.yellowInk : "#fff"} disabled={!s} onPress={() => completeStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
+        <Button size="lg" icon={s?.done ? "arrow-right" : "check"} label={s?.done ? t.next : t.done} variant="primary" accent={make.green} disabled={!s || (s.done && !hasNext)} onPress={() => (s?.done ? selectStep(id, sel + 1) : completeStep(id, sel))} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
       </View>
     </View>
   );

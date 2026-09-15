@@ -1,5 +1,5 @@
 /* Settings → 家庭 (prototype householdMarkup / householdClick / householdSubmit):
- * member cards with will-cook days on the left, the selected member's profile and 全家的共同點 on the right. */
+ * member list (name + role) in the middle, the selected member's will-cook days, profile and 全家的共同點 on the right. */
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { Avatar, Button, Chip, Segmented, TextField, Txt } from "@/components/ui";
@@ -37,31 +37,29 @@ function PrefChip({ label, onRemove, removeLabel }: { label: string; onRemove: (
   );
 }
 
-function Panel({ children, selected, dashed }: { children: React.ReactNode; selected?: boolean; dashed?: boolean }) {
+function Panel({ children, selected, dashed, compact }: { children: React.ReactNode; selected?: boolean; dashed?: boolean; compact?: boolean }) {
   return (
-    <View style={{ position: "relative", padding: 18, gap: 12, minWidth: 0, borderWidth: selected ? 2 : 1, borderStyle: dashed ? "dashed" : "solid", borderColor: selected ? shell.green : shell.line, borderRadius: radius.md, backgroundColor: selected ? "#f6faf7" : shell.surface }}>
+    <View style={{ position: "relative", padding: compact ? 12 : 16, gap: compact ? 8 : 12, minWidth: 0, borderWidth: selected ? 2 : 1, borderStyle: dashed ? "dashed" : "solid", borderColor: selected ? shell.green : shell.line, borderRadius: radius.md, backgroundColor: selected ? "#f6faf7" : shell.surface }}>
       {children}
     </View>
   );
 }
 
-function MemberCard({ member, selected, cookCount }: { member: Member; selected: boolean; cookCount: (day: number) => number }) {
-  const { t, isZh, weekday } = useI18n();
+function MemberCard({ member, selected }: { member: Member; selected: boolean }) {
+  const { t } = useI18n();
   const canRemove = useDeviceStore((s) => s.members.length > 1);
   const setHousehold = useDeviceStore((s) => s.setHousehold);
-  const toggleCookDay = useDeviceStore((s) => s.toggleCookDay);
   const removeMember = useDeviceStore((s) => s.removeMember);
-  const dayLabel = (i: number) => weekday((i + 1) % 7, "short").slice(0, isZh ? 1 : 2);
   return (
-    <Panel selected={selected}>
-      <Pressable accessibilityRole="button" accessibilityState={{ selected }} onPress={() => setHousehold({ selected: member.id })} style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingRight: 40 }}>
+    <Panel selected={selected} compact>
+      <Pressable accessibilityRole="button" accessibilityState={{ selected }} onPress={() => setHousehold({ selected: member.id })} style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingRight: 36 }}>
         <Avatar color={member.color} initials={member.initials || member.name.slice(0, 1)} />
         <View style={{ flex: 1, minWidth: 0 }}>
-          <Txt variant="card" weight="600">
+          <Txt variant="card" weight="600" numberOfLines={1}>
             {member.name}
           </Txt>
           <Txt variant="meta" muted numberOfLines={1}>
-            {`${t(member.role)} · ${householdCookLabel(member)}`}
+            {t(member.role)}
           </Txt>
         </View>
       </Pressable>
@@ -73,12 +71,22 @@ function MemberCard({ member, selected, cookCount }: { member: Member; selected:
             removeMember(member.id);
             toast(t("已移除 {name}", { name: member.name }));
           }}
-          style={({ pressed }) => ({ position: "absolute", top: 12, right: 12, width: 40, height: 40, borderRadius: radius.sm, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? "#fff3f2" : "transparent" })}>
+          style={({ pressed }) => ({ position: "absolute", top: 8, right: 8, width: 36, height: 36, borderRadius: radius.sm, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? "#fff3f2" : "transparent" })}>
           <Txt variant="h3" color={shell.muted}>
             ×
           </Txt>
         </Pressable>
       ) : null}
+    </Panel>
+  );
+}
+
+function CookDays({ member, cookCount }: { member: Member; cookCount: (day: number) => number }) {
+  const { t, isZh, weekday } = useI18n();
+  const toggleCookDay = useDeviceStore((s) => s.toggleCookDay);
+  const dayLabel = (i: number) => weekday((i + 1) % 7, "short").slice(0, isZh ? 1 : 2);
+  return (
+    <View style={{ gap: 8 }}>
       <Kicker>{t("本週掌廚")}</Kicker>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
         {DAYS.map((i) => {
@@ -99,7 +107,7 @@ function MemberCard({ member, selected, cookCount }: { member: Member; selected:
           );
         })}
       </View>
-    </Panel>
+    </View>
   );
 }
 
@@ -123,7 +131,7 @@ function AddMemberCard() {
   );
 }
 
-function Profile({ member }: { member: Member }) {
+function Profile({ member, cookCount, together }: { member: Member; cookCount: (day: number) => number; together: string[] }) {
   const { t } = useI18n();
   const field = useDeviceStore((s) => s.household.field);
   const setHousehold = useDeviceStore((s) => s.setHousehold);
@@ -138,7 +146,7 @@ function Profile({ member }: { member: Member }) {
   };
   const suggestions = HOUSEHOLD_SUGGEST[field].filter((v) => !member.prefs[field].includes(v));
   return (
-    <View style={{ padding: 22, gap: 16, borderWidth: 1, borderColor: shell.line, borderRadius: radius.md, backgroundColor: shell.surface }}>
+    <View style={{ padding: 18, gap: 14, borderWidth: 1, borderColor: shell.line, borderRadius: radius.md, backgroundColor: shell.surface }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
         <Avatar color={member.color} initials={member.initials || member.name.slice(0, 1)} size={52} />
         <View style={{ flex: 1, minWidth: 0 }}>
@@ -148,6 +156,17 @@ function Profile({ member }: { member: Member }) {
           </Txt>
         </View>
       </View>
+      <CookDays member={member} cookCount={cookCount} />
+      {together.length ? (
+        <View style={{ padding: 12, paddingHorizontal: 14, borderRadius: radius.md, backgroundColor: shell.greenSoft, gap: 2 }}>
+          <Txt variant="meta" weight="600" color={shell.green}>
+            {t("一起下廚")}
+          </Txt>
+          <Txt variant="meta" color={shell.green}>
+            {together.join(" · ")}
+          </Txt>
+        </View>
+      ) : null}
       {FIELDS.map((f) => (
         <View key={f} style={{ gap: 8 }}>
           <Kicker>{t(FIELD_LABEL[f])}</Kicker>
@@ -209,7 +228,7 @@ function SharedBlock({ title, rows }: { title: string; rows: Tally[] }) {
 
 export function HouseholdSection() {
   const { t, list, weekday } = useI18n();
-  const { isDesktop, isPhone } = useBreakpoint();
+  const { isDesktop } = useBreakpoint();
   const members = useDeviceStore((s) => s.members);
   const selectedId = useDeviceStore((s) => s.household.selected);
   const sel = members.find((m) => m.id === selectedId) || members[0];
@@ -225,33 +244,17 @@ export function HouseholdSection() {
   const firstAllergy = allergies[0];
 
   const left = (
-    <View style={{ flex: isDesktop ? 1.15 : undefined, minWidth: 0, gap: 18 }}>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 16 }}>
-        {members.map((m) => (
-          <View key={m.id} style={{ width: isPhone ? "100%" : "48%", flexGrow: 1, minWidth: isPhone ? undefined : 240 }}>
-            <MemberCard member={m} selected={Boolean(sel && sel.id === m.id)} cookCount={cookCount} />
-          </View>
-        ))}
-        <View style={{ width: isPhone ? "100%" : "48%", flexGrow: 1, minWidth: isPhone ? undefined : 240, justifyContent: "center" }}>
-          <AddMemberCard />
-        </View>
-      </View>
-      {together.length ? (
-        <View style={{ padding: 16, paddingHorizontal: 18, borderRadius: radius.md, backgroundColor: shell.greenSoft, gap: 4 }}>
-          <Txt variant="body" weight="600" color={shell.green}>
-            {t("一起下廚")}
-          </Txt>
-          <Txt variant="body" color={shell.green}>
-            {together.join(" · ")}
-          </Txt>
-        </View>
-      ) : null}
+    <View style={{ flex: isDesktop ? 0.7 : undefined, minWidth: 0, gap: 10 }}>
+      {members.map((m) => (
+        <MemberCard key={m.id} member={m} selected={Boolean(sel && sel.id === m.id)} />
+      ))}
+      <AddMemberCard />
     </View>
   );
   const right = (
-    <View style={{ flex: isDesktop ? 1 : undefined, minWidth: 0, gap: 18 }}>
-      {sel ? <Profile member={sel} /> : null}
-      <View style={{ padding: 22, gap: 16, borderWidth: 1, borderColor: shell.line, borderRadius: radius.md, backgroundColor: shell.surface }}>
+    <View style={{ flex: isDesktop ? 1.3 : undefined, minWidth: 0, gap: 14 }}>
+      {sel ? <Profile member={sel} cookCount={cookCount} together={together} /> : null}
+      <View style={{ padding: 18, gap: 14, borderWidth: 1, borderColor: shell.line, borderRadius: radius.md, backgroundColor: shell.surface }}>
         <Txt variant="h2">{t("全家的共同點")}</Txt>
         <SharedBlock title="多人都喜歡" rows={shared("likes")} />
         <SharedBlock title="多人都不喜歡" rows={shared("dislikes")} />
@@ -273,12 +276,12 @@ export function HouseholdSection() {
     <View>
       <SectionHeader title={t("家庭")} hint={t("餐桌上的家人")} />
       {isDesktop ? (
-        <View style={{ flexDirection: "row", gap: 32, alignItems: "flex-start" }}>
+        <View style={{ flexDirection: "row", gap: 20, alignItems: "flex-start" }}>
           {left}
           {right}
         </View>
       ) : (
-        <View style={{ gap: 24 }}>
+        <View style={{ gap: 18 }}>
           {left}
           {right}
         </View>

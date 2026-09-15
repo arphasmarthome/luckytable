@@ -1308,7 +1308,7 @@ const es: Dictionary = {
   "輸入菜名、行程、家人或頁面名稱。": "Escribe un plato, un evento, un familiar o una página.",
   "找不到「{q}」。": "No se encontró «{q}».",
   "此瀏覽器不支援語音輸入（示範）": "La entrada por voz no está disponible en este navegador (demo)",
-  "搜尋菜色、行程、家人…": "Buscar platos, eventos, familia…",
+  "搜尋菜色、行程、家人…": "Usa la voz para buscar o editar eventos",
   "清除": "Borrar",
   "語音搜尋": "Búsqueda por voz",
   "聆聽中…再按一次停止。": "Escuchando… toca de nuevo para detener.",
