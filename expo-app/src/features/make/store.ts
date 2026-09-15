@@ -77,6 +77,7 @@ export type MakeActions = {
   toggleAcquired: (dishId: string, name: string) => void;
   /** adds the missing ingredients of a dish to the hand-off cart; returns how many were missing */
   addMissingToCart: (dishId: string, lang: Lang) => number;
+  removeFromCart: (dishId: string, name: string) => void;
   setEvDay: (day: number) => void;
   setEvTime: (time: string) => void;
   /** saves the plan (today → also added to tonight); returns the chosen date */
@@ -386,6 +387,7 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       set({ cart });
       return missing.length;
     },
+    removeFromCart: (dishId, name) => set((s) => ({ cart: s.cart.filter((c) => !(c.dishId === dishId && c.name === name)) })),
     setEvDay: (evDay) => set({ evDay }),
     setEvTime: (evTime) => set({ evTime }),
     savePlan: (dishId) => {

@@ -48,7 +48,7 @@ export default function CookScreen() {
   const running = anyRunning(cook);
   const done = allDone(cook);
   const cookedCount = cook.dishIds.filter((id) => dishDone(cook, id)).length;
-  const exit = () => nav.home();
+  const goBack = () => nav.back();
   const finish = () => {
     finishCook();
     nav.home();
@@ -76,7 +76,7 @@ export default function CookScreen() {
       <MTxt variant="meta" muted>
         {cook.dishIds.length} {cook.dishIds.length === 1 ? t.dishN : t.dishesN} · {cookedCount} {t.cooked}
       </MTxt>
-      <Button icon="chevron-left" label={t.exit} onPress={exit} />
+      <Button icon="chevron-left" label={t.exit} onPress={goBack} />
     </MCard>
   );
 
@@ -128,7 +128,7 @@ export default function CookScreen() {
         <Button size="lg" icon={s?.running ? "pause" : "play"} label={playLabel} variant="primary" accent={make.primary} disabled={!s || s.done} onPress={() => toggleTimer(id, sel)} style={{ flexGrow: 1.6, flexBasis: isPhone ? "47%" : 160 }} />
         <Button size="lg" icon="plus" label={t.plusMin} disabled={!s} onPress={() => addMinute(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
         <Button size="lg" icon="rotate-ccw" label={t.reset} disabled={!s} onPress={() => resetStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
-        <Button size="lg" icon="check" label={s?.done ? t.reset : t.done} variant="primary" accent={make.green} disabled={!s} onPress={() => completeStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
+        <Button size="lg" icon="check" label={s?.done ? t.reset : t.done} variant="primary" accent={s?.done ? make.yellowStrong : make.green} onAccent={s?.done ? make.yellowInk : "#fff"} disabled={!s} onPress={() => completeStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
       </View>
     </View>
   );

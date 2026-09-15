@@ -15,6 +15,8 @@ import { usePantrySlice } from "@/features/make/hooks";
 import { pantryNames, readiness, useMakeStore } from "@/features/make/store";
 import { useMakeStrings } from "@/features/make/strings";
 
+const INSTACART_URL = "https://www.instacart.com";
+
 export default function DishScreen() {
   const { t, lang, zh, dishName, sep } = useMakeStrings();
   const { isWide, isPhone, isDesktop } = useBreakpoint();
@@ -78,7 +80,7 @@ export default function DishScreen() {
               {String(voteCount)}
             </MTxt>
           </View>
-          <Button icon={voted ? "check" : "thumbs-up"} label={voted ? t.voted : t.voteFor} variant={voted ? "primary" : "secondary"} accent={make.green} onPress={() => toggleVote(d.id)} />
+          <Button icon={voted ? "check" : "thumbs-up"} label={voted ? t.voted : t.voteFor} variant={voted ? "primary" : "secondary"} accent={make.yellowStrong} onAccent={make.yellowInk} onPress={() => toggleVote(d.id)} />
           <MTxt variant="caption" muted>
             {t.voteLine}
           </MTxt>
@@ -86,7 +88,7 @@ export default function DishScreen() {
         <MCard style={{ flex: isPhone ? undefined : 1.4 }}>
           <Kicker>{t.addMenuTitle}</Kicker>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-            <Button icon={inTonight ? "check" : "calendar-plus"} label={inTonight ? t.addedMenu : t.addMenu} variant={inTonight ? "soft" : "secondary"} accent={make.primary} onPress={() => toggleTonight(d.id)} />
+            <Button icon={inTonight ? "check" : "calendar-plus"} label={inTonight ? t.addedMenu : t.addMenu} variant={inTonight ? "soft" : "secondary"} accent={inTonight ? make.yellowInk : make.primary} onPress={() => toggleTonight(d.id)} />
             <Button icon="calendar-days" label={t.planDay} onPress={() => openPlanModal(d.id, `${t.planTitle} · ${dishName(d)}`)} />
             <Button icon="flame" label={t.cookNow} variant="primary" accent={make.primary} disabled={!canCook} accessibilityLabel={canCook ? undefined : t.needAll} onPress={onCook} />
           </View>
@@ -119,7 +121,7 @@ export default function DishScreen() {
         <ScrollView style={isWide ? { flex: 1, minHeight: 0 } : undefined} contentContainerStyle={{ gap: 6 }} scrollEnabled={isWide} showsVerticalScrollIndicator>
         {ings.map((i, index) => {
           const inCart = !i.have && cartedNames.has(i.name);
-          const tone = i.have ? { border: "#cfe3d9", bg: make.greenSoft, dot: make.green } : inCart ? { border: make.selectedBorder, bg: make.primarySoft, dot: make.green } : { border: make.border, bg: make.surface, dot: make.primary };
+          const tone = i.have ? { border: "#cfe3d9", bg: make.greenSoft, dot: make.yellowStrong, dotFg: make.yellowInk } : inCart ? { border: make.selectedBorder, bg: make.primarySoft, dot: make.yellowStrong, dotFg: make.yellowInk } : { border: make.border, bg: make.surface, dot: make.primary, dotFg: "#fff" };
           return (
           <Pressable
             key={`${i.name}-${index}`}
@@ -129,8 +131,8 @@ export default function DishScreen() {
             onPress={() => toggleAcquired(d.id, i.name)}
             style={{ flexDirection: "row", alignItems: "center", gap: 10, minHeight: 40, paddingVertical: 3, paddingLeft: 6, paddingRight: 12, borderWidth: 1, borderColor: tone.border, borderRadius: radius.pill, backgroundColor: tone.bg }}>
             <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: tone.dot, alignItems: "center", justifyContent: "center" }}>
-              {inCart ? <Icon name="check" size={15} color="#fff" strokeWidth={3} /> : (
-                <MTxt variant="meta" weight="700" color="#fff">
+              {inCart ? <Icon name="check" size={15} color={tone.dotFg} strokeWidth={3} /> : (
+                <MTxt variant="meta" weight="700" color={tone.dotFg}>
                   {i.have ? "✓" : "+"}
                 </MTxt>
               )}
@@ -164,15 +166,22 @@ export default function DishScreen() {
           variant={missing.length && !carted ? "primary" : "secondary"}
           accent={make.primary}
           disabled={!missing.length}
-          label={missing.length ? (carted ? `${t.addedToCart} ${missing.length} ${t.toCart} ✓` : `${t.addToCart} ${missing.length} ${t.toCart}`) : t.nothingInCart}
+          label={missing.length ? `${t.addToCart} ${missing.length} ${t.toCart}` : t.nothingInCart}
           onPress={() => {
             const n = addMissingToCart(d.id, lang);
             toast(`${t.addedToCart} ${n} ${t.toCart}`);
           }}
         />
-        <MTxt variant="caption" color={make.primaryPressed} align="center" style={{ fontFamily: "monospace" }}>
-          shop.pxgo.com.tw
-        </MTxt>
+        {carted ? (
+          <MTxt variant="caption" weight="600" color="#2f6a55" align="center">
+            {t.addedToCart} ✓
+          </MTxt>
+        ) : null}
+        <Pressable accessibilityRole="link" onPress={() => { void Linking.openURL(INSTACART_URL); }} style={{ alignSelf: "center" }}>
+          <MTxt variant="caption" color={make.primaryPressed} align="center" style={{ fontFamily: "monospace", textDecorationLine: "underline" }}>
+            instacart.com
+          </MTxt>
+        </Pressable>
       </MCard>
     </View>
   );
