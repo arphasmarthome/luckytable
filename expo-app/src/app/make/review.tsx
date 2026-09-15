@@ -55,9 +55,10 @@ export default function ReviewScreen() {
         grid
       )}
       <MCard background={make.surface2} padding={16} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 14 }}>
-        <MTxt muted style={{ marginRight: "auto" }}>
+        <MTxt muted>
           {captured.length} {t.itemized} · {units} {t.units}
         </MTxt>
+        <Button icon="camera" label={t.addMorePhotos} onPress={() => nav.go("/make/capture?more=1")} style={{ marginRight: "auto" }} />
         <Button
           size="lg"
           label={t.addToStock}

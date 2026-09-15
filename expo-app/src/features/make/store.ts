@@ -174,7 +174,7 @@ export const stockPantry = (s: Pick<MakeData, "stock">) => s.stock.map((x) => x.
 
 export function capturedItems(s: Pick<MakeData, "shots" | "qty">, lang: Lang): CapturedItem[] {
   const base: Record<string, number> = {};
-  for (let i = 0; i < s.shots && i < SHOTS.length; i++) SHOTS[i].items.forEach(([n, q]) => { base[n] = (base[n] || 0) + q; });
+  for (let i = 0; i < s.shots; i++) SHOTS[i % SHOTS.length].items.forEach(([n, q]) => { base[n] = (base[n] || 0) + q; });
   const zh = lang === "zh";
   return Object.keys(base).map((name) => {
     const meta = ITEMS[name];
@@ -395,7 +395,7 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       set({ dishId: id });
     },
     resetCapture: () => set({ shots: 0, qty: {} }),
-    snap: () => set((s) => ({ shots: Math.min(s.shots + 1, SHOTS.length) })),
+    snap: () => set((s) => ({ shots: s.shots + 1 })),
     setQty: (name, delta, lang) => {
       const c = capturedItems(get(), lang).find((x) => x.name === name);
       if (c) set((s) => ({ qty: { ...s.qty, [name]: Math.max(0, c.qty + delta) } }));

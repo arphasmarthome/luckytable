@@ -1,5 +1,6 @@
 /* Capture: the simulated camera. Each press of Capture reveals the next demo frame and itemizes
  * what it sees; Review hands the tally to the review screen. */
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo } from "react";
 import { Image } from "expo-image";
 import { Pressable, View } from "react-native";
@@ -22,11 +23,14 @@ export default function CaptureScreen() {
   const qty = useMakeStore((s) => s.qty);
   const snap = useMakeStore((s) => s.snap);
   const resetCapture = useMakeStore((s) => s.resetCapture);
+  const { more } = useLocalSearchParams<{ more?: string }>();
+  // "Add more photos" from Review comes back with ?more=1 and keeps what was already captured
+  const keep = more === "1";
   useEffect(() => {
-    resetCapture();
-  }, [resetCapture]);
+    if (!keep) resetCapture();
+  }, [keep, resetCapture]);
   const captured = useMemo(() => capturedItems({ shots, qty }, lang), [shots, qty, lang]);
-  const last = shots > 0 ? SHOTS[Math.min(shots, SHOTS.length) - 1] : null;
+  const last = shots > 0 ? SHOTS[(shots - 1) % SHOTS.length] : null;
 
   const viewfinder = (
     <View style={{ flex: isWide ? 1 : undefined, alignSelf: "stretch", aspectRatio: isWide ? undefined : 4 / 3, minHeight: isWide ? 0 : undefined, borderRadius: radius.xl, backgroundColor: "#2a2b29", overflow: "hidden", position: "relative" }}>
@@ -74,7 +78,7 @@ export default function CaptureScreen() {
         </MTxt>
       </Pressable>
       <MTxt muted align="center">
-        {t.hintHome}
+        {keep && captured.length ? t.keptSoFar : t.hintHome}
       </MTxt>
       {isWide ? <View style={{ flex: 1 }} /> : null}
       <Button size="lg" variant="primary" accent={make.green} disabled={!captured.length} label={captured.length ? `${t.review} ${captured.length} ${t.items}` : t.reviewNone} onPress={() => nav.go("/make/review")} />
