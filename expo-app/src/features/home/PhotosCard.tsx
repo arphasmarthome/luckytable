@@ -56,6 +56,13 @@ export function PhotosCard() {
                 <Txt variant="caption" color="rgba(255,255,255,0.8)" numberOfLines={1}>
                   {t(current.capturedAt)}・{t(current.owner)}
                 </Txt>
+                {count > 1 ? (
+                  <View style={{ flexDirection: "row", justifyContent: "center", gap: 5, marginTop: 8 }}>
+                    {photos.map((p, i) => (
+                      <View key={p.id} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: i === ((index % count) + count) % count ? "#fff" : "rgba(255,255,255,0.45)" }} />
+                    ))}
+                  </View>
+                ) : null}
               </View>
             </Pressable>
           </GestureDetector>
@@ -63,11 +70,6 @@ export function PhotosCard() {
             <>
               <Arrow icon="chevron-left" label={t("上一張照片")} side="left" onPress={() => step(-1)} />
               <Arrow icon="chevron-right" label={t("下一張照片")} side="right" onPress={() => step(1)} />
-              <View pointerEvents="none" style={{ position: "absolute", top: 10, right: 12, flexDirection: "row", gap: 5 }}>
-                {photos.map((p, i) => (
-                  <View key={p.id} style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: i === ((index % count) + count) % count ? "#fff" : "rgba(255,255,255,0.45)" }} />
-                ))}
-              </View>
             </>
           ) : null}
         </View>

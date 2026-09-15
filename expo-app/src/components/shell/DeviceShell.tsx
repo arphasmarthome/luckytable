@@ -9,7 +9,6 @@ import { Icon, Txt } from "@/components/ui";
 import { SearchBar } from "@/components/shell/SearchBar";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
-import { today } from "@/lib/date";
 import { NAV_ROUTES, ROUTES, routeIdFor, type RouteId } from "@/lib/routes";
 import { useDeviceStore } from "@/store/device";
 import { radius, shell } from "@/theme";
@@ -23,19 +22,18 @@ function useClock() {
   return now;
 }
 
-function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
+function NavRail({ routeId }: { routeId: RouteId }) {
   const router = useRouter();
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
-  const width = compact ? 96 : 208;
   return (
-    <View style={{ width, paddingTop: insets.top, paddingBottom: Math.max(insets.bottom, 16), backgroundColor: "#fff", borderRightWidth: 1, borderRightColor: shell.line }}>
-      <View style={{ height: compact ? 88 : 96, justifyContent: "center", paddingHorizontal: compact ? 0 : 24, alignItems: compact ? "center" : "flex-start" }}>
-        <Txt variant={compact ? "h3" : "card"} weight="700" color={shell.green} numberOfLines={1} adjustsFontSizeToFit>
-          {compact ? "LT" : "Lucky Table"}
+    <View style={{ width: 96, paddingTop: insets.top, paddingBottom: Math.max(insets.bottom, 16), backgroundColor: "#fff", borderRightWidth: 1, borderRightColor: shell.line }}>
+      <View style={{ height: 88, justifyContent: "center", alignItems: "center" }}>
+        <Txt variant="h3" weight="700" color={shell.green}>
+          LT
         </Txt>
       </View>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: compact ? 10 : 16, gap: 8, flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 10, gap: 8, flexGrow: 1 }}>
         {NAV_ROUTES.map((route) => {
           const active = route.id === routeId;
           return (
@@ -47,30 +45,20 @@ function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
               onPress={() => router.navigate(route.href as never)}
               style={({ pressed }) => ({
                 minHeight: 60,
-                paddingHorizontal: compact ? 0 : 18,
                 borderRadius: radius.sm,
-                flexDirection: compact ? "column" : "row",
                 alignItems: "center",
-                justifyContent: compact ? "center" : "flex-start",
-                gap: compact ? 4 : 12,
+                justifyContent: "center",
+                gap: 4,
                 backgroundColor: active ? shell.greenSoft : pressed ? shell.surfaceMuted : "transparent",
               })}>
-              <Icon name={route.icon} size={compact ? 24 : 24} color={active ? shell.green : shell.navText} />
-              <Txt variant={compact ? "caption" : "control"} weight={active ? "700" : "500"} color={active ? shell.green : shell.navText} numberOfLines={1} style={{ flexShrink: 1 }}>
+              <Icon name={route.icon} size={24} color={active ? shell.green : shell.navText} />
+              <Txt variant="caption" weight={active ? "700" : "500"} color={active ? shell.green : shell.navText} numberOfLines={1} style={{ flexShrink: 1 }}>
                 {t(route.label)}
               </Txt>
             </Pressable>
           );
         })}
       </ScrollView>
-      {compact ? null : (
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 28, paddingTop: 16 }}>
-          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: shell.statusDot }} />
-          <Txt variant="caption" muted numberOfLines={1} style={{ flexShrink: 1 }}>
-            LT-15 · {t("本機演示裝置")}
-          </Txt>
-        </View>
-      )}
     </View>
   );
 }
@@ -104,6 +92,16 @@ function BottomTabs({ routeId }: { routeId: RouteId }) {
   );
 }
 
+function SettingsButton({ active, size }: { active: boolean; size: number }) {
+  const router = useRouter();
+  const { t } = useI18n();
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={t("設定")} onPress={() => router.navigate("/settings" as never)} style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: active ? shell.greenSoft : shell.surfaceMuted, borderWidth: 1, borderColor: active ? shell.green : shell.line, alignItems: "center", justifyContent: "center" }}>
+      <Icon name="settings" size={size > 40 ? 22 : 20} color={shell.green} />
+    </Pressable>
+  );
+}
+
 /** Demo weather is a constant 24°C; converted to °F when the user picks Fahrenheit in
  * Settings → Display & language. */
 function formatTemp(celsius: number, unit: "C" | "F") {
@@ -113,7 +111,7 @@ function formatTemp(celsius: number, unit: "C" | "F") {
 
 function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: string; isWide: boolean }) {
   const router = useRouter();
-  const { t, formatTime, formatDate } = useI18n();
+  const { t, formatTime, formatDate, formatClock } = useI18n();
   const insets = useSafeAreaInsets();
   const now = useClock();
   const wifi = useDeviceStore((s) => s.settings.wifi);
@@ -128,50 +126,54 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
           LT
         </Txt>
       )}
-      <Txt variant={isWide ? "h1" : "h3"} numberOfLines={1} style={{ flexShrink: 1, minWidth: 60 }}>
-        {title}
-      </Txt>
-      <View style={{ flex: 1 }} />
+      <View style={{ flex: 1, minWidth: 60 }}>
+        <Txt variant={isWide ? "h1" : "h3"} numberOfLines={1}>
+          {title}
+        </Txt>
+      </View>
       <SearchBar compact={!isWide} />
       {isWide ? (
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-          <Icon name="cloud-sun" size={22} color={shell.weather} />
-          <Txt variant="card" weight="500" numberOfLines={1}>
-            {formatTemp(24, tempUnit)}
-          </Txt>
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: 14 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+            <Icon name="cloud-sun" size={22} color={shell.weather} />
+            <Txt variant="card" weight="500" numberOfLines={1}>
+              {formatTemp(24, tempUnit)}
+            </Txt>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "baseline", gap: 8 }}>
+            <Txt variant="card" muted numberOfLines={1}>
+              {formatDate(now, { weekday: "short", month: "short", day: "numeric" })}
+            </Txt>
+            <Txt variant="h3" weight="600" numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
+              {formatClock(now)}
+            </Txt>
+          </View>
+          <Pressable accessibilityRole="button" accessibilityLabel={wifi ? t("{network} · 演示連線", { network }) : t("離線模式 · 演示")} onPress={() => router.navigate("/settings?section=device" as never)} style={{ width: 40, height: 40, alignItems: "center", justifyContent: "center" }}>
+            <Icon name={wifi ? "wifi" : "wifi-off"} size={22} color={shell.green} />
+          </Pressable>
+          <SettingsButton active={onSettings} size={44} />
         </View>
-      ) : null}
-      {isWide ? (
-        <Pressable accessibilityRole="button" accessibilityLabel={wifi ? t("{network} · 演示連線", { network }) : t("離線模式 · 演示")} onPress={() => router.navigate("/settings?section=device" as never)} style={{ width: 40, height: 40, alignItems: "center", justifyContent: "center" }}>
-          <Icon name={wifi ? "wifi" : "wifi-off"} size={22} color={shell.green} />
-        </Pressable>
-      ) : null}
-      <View style={{ flexDirection: "row", alignItems: "baseline", gap: 8 }}>
-        <Txt variant={isWide ? "h1" : "h3"} weight="600" style={{ fontVariant: ["tabular-nums"] }}>
-          {formatTime(now)}
-        </Txt>
-        {isWide ? (
-          <Txt variant="body" muted numberOfLines={1}>
-            {formatDate(today, { year: "numeric", month: "long", day: "numeric" })}
+      ) : (
+        <>
+          <Txt variant="h3" weight="600" style={{ fontVariant: ["tabular-nums"] }}>
+            {formatTime(now)}
           </Txt>
-        ) : null}
-      </View>
-      <Pressable accessibilityRole="button" accessibilityLabel={t("設定")} onPress={() => router.navigate("/settings" as never)} style={{ width: isWide ? 44 : 40, height: isWide ? 44 : 40, borderRadius: 22, backgroundColor: onSettings ? shell.greenSoft : shell.surfaceMuted, borderWidth: 1, borderColor: onSettings ? shell.green : shell.line, alignItems: "center", justifyContent: "center" }}>
-        <Icon name="settings" size={isWide ? 22 : 20} color={shell.green} />
-      </Pressable>
+          <SettingsButton active={onSettings} size={40} />
+        </>
+      )}
     </View>
   );
 }
 
 export function DeviceShell({ children }: { children: ReactNode }) {
-  const { isWide, width } = useBreakpoint();
+  const { isWide } = useBreakpoint();
   const pathname = usePathname();
   const routeId = routeIdFor(pathname);
   const brightness = useDeviceStore((s) => s.settings.brightness);
   const dim = Math.max(0, (100 - brightness) / 250);
   return (
     <View style={{ flex: 1, flexDirection: isWide ? "row" : "column", backgroundColor: shell.canvas }}>
-      {isWide ? <NavRail routeId={routeId} compact={width < 1100} /> : null}
+      {isWide ? <NavRail routeId={routeId} /> : null}
       <View style={{ flex: 1, minWidth: 0 }}>
         <TopBar routeId={routeId} pathname={pathname} isWide={isWide} />
         <View style={{ flex: 1, minHeight: 0 }}>{children}</View>

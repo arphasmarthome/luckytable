@@ -64,11 +64,6 @@ export default function CartScreen() {
             <Chip key={v.id} label={v.label} active={v.id === vendor.id} accent={make.primary} onPress={() => setVendor(v.id)} style={{ minHeight: 34, paddingHorizontal: 12 }} />
           ))}
         </View>
-        <Pressable accessibilityRole="link" onPress={() => void Linking.openURL(vendor.url)} style={{ alignSelf: "center" }}>
-          <MTxt variant="caption" color={make.primaryPressed} align="center" style={{ fontFamily: "monospace", textDecorationLine: "underline" }}>
-            {vendor.host}
-          </MTxt>
-        </Pressable>
       </View>
     </Page>
   );

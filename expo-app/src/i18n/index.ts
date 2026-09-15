@@ -116,6 +116,7 @@ export function t(key: string | null | undefined, params?: TParams): string {
 
 export const formatTime = (date: Date) => `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 export const formatDate = (date: Date, options?: Intl.DateTimeFormatOptions) => date.toLocaleDateString(tag(), options);
+export const formatClock = (date: Date) => date.toLocaleTimeString(tag(), { hour: "numeric", minute: "2-digit" });
 export function monthDay(date: Date) {
   const day = date.getDate();
   const short = names().monthShort[date.getMonth()];
@@ -156,6 +157,7 @@ export function useI18n() {
       t,
       formatTime,
       formatDate,
+      formatClock,
       monthDay,
       monthYear,
       monthName,

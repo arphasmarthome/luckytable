@@ -14,7 +14,6 @@ import { cookMinutes, dishById, dishImg, hasDish } from "@/features/make/data";
 import { usePantrySlice } from "@/features/make/hooks";
 import { pantryNames, readiness, useMakeStore } from "@/features/make/store";
 import { useMakeStrings } from "@/features/make/strings";
-import { vendorById } from "@/features/make/vendors";
 
 
 export default function DishScreen() {
@@ -33,7 +32,6 @@ export default function DishScreen() {
   const myVotes = useMakeStore((s) => s.myVotes);
   const votes = useMakeStore((s) => s.votes);
   const cart = useMakeStore((s) => s.cart);
-  const vendor = vendorById(useMakeStore((s) => s.vendor));
   const toggleVote = useMakeStore((s) => s.toggleVote);
   const toggleTonight = useMakeStore((s) => s.toggleTonight);
   const toggleAcquired = useMakeStore((s) => s.toggleAcquired);
@@ -184,11 +182,6 @@ export default function DishScreen() {
             {t.addedToCart} ✓
           </MTxt>
         ) : null}
-        <Pressable accessibilityRole="link" onPress={() => { void Linking.openURL(vendor.url); }} style={{ alignSelf: "center" }}>
-          <MTxt variant="caption" color={make.primaryPressed} align="center" style={{ fontFamily: "monospace", textDecorationLine: "underline" }}>
-            {vendor.host}
-          </MTxt>
-        </Pressable>
       </MCard>
     </View>
   );
