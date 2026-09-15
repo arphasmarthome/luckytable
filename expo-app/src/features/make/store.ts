@@ -25,7 +25,7 @@ export type StepState = { seconds: number; remaining: number; done: boolean; run
 export type TimelineEvent = { kind: "start" | "pause" | "resume"; at: number };
 export type CookSession = { date: string; dishIds: string[]; active: string; split: boolean; paneB: string | null; steps: Record<string, StepState[]>; selected: Record<string, number>; timeline: TimelineEvent[] };
 /** One finished cooking session, kept for the Summary page. */
-export type CookRecord = { id: string; date: string; dishIds: string[]; timeline: TimelineEvent[]; startedAt: number; finishedAt: number; totalSeconds: number; photos: Record<string, string[]> };
+export type CookRecord = { id: string; date: string; dishIds: string[]; timeline: TimelineEvent[]; startedAt: number; finishedAt: number; totalSeconds: number; photos: string[] };
 export type MatchMode = "captured" | "stock";
 export type PlannedMeal = { dishId: string; day: string; time: string };
 export type Pane = "A" | "B" | "";
@@ -100,7 +100,7 @@ export type MakeActions = {
   enterCook: () => boolean;
   /** closes the session and returns its record (null when nothing was cooking) */
   finishCook: () => CookRecord | null;
-  addHistoryPhoto: (recordId: string, dishId: string, uri: string) => void;
+  addHistoryPhoto: (recordId: string, uri: string) => void;
   toggleSplit: () => void;
   setActiveDish: (id: string) => void;
   setPaneDish: (pane: "A" | "B", id: string) => void;
@@ -145,7 +145,10 @@ function normalizeCook(stored: CookSession | null): CookSession | null {
   return { ...stored, steps: stored.steps || {}, selected: stored.selected || {}, paneB: stored.paneB ?? null, split: Boolean(stored.split), timeline: Array.isArray(stored.timeline) ? stored.timeline : [] };
 }
 function normalizeHistory(rows: CookRecord[] | null | undefined): CookRecord[] {
-  return (Array.isArray(rows) ? rows : []).map((r) => ({ ...r, photos: r.photos && !Array.isArray(r.photos) ? r.photos : {} }));
+  return (Array.isArray(rows) ? rows : []).map((r) => {
+    const photos = Array.isArray(r.photos) ? r.photos : r.photos && typeof r.photos === "object" ? Object.values(r.photos as Record<string, string[]>).flat() : [];
+    return { ...r, photos };
+  });
 }
 function readPersisted() {
   return {
@@ -486,11 +489,11 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       const now = Date.now();
       const timeline = c.timeline.slice();
       if (anyRunning(c)) timeline.push({ kind: "pause", at: now });
-      const record: CookRecord = { id: `${c.date}-${now}`, date: c.date, dishIds: c.dishIds.slice(), timeline, startedAt: timeline[0]?.at ?? now, finishedAt: now, totalSeconds: cookingSeconds(timeline, now), photos: {} };
+      const record: CookRecord = { id: `${c.date}-${now}`, date: c.date, dishIds: c.dishIds.slice(), timeline, startedAt: timeline[0]?.at ?? now, finishedAt: now, totalSeconds: cookingSeconds(timeline, now), photos: [] };
       set({ cook: null, history: [record, ...get().history] });
       return record;
     },
-    addHistoryPhoto: (recordId, dishId, uri) => set((s) => ({ history: s.history.map((r) => (r.id === recordId ? { ...r, photos: { ...r.photos, [dishId]: (r.photos[dishId] || []).concat(uri) } } : r)) })),
+    addHistoryPhoto: (recordId, uri) => set((s) => ({ history: s.history.map((r) => (r.id === recordId ? { ...r, photos: r.photos.concat(uri) } : r)) })),
     toggleSplit: () =>
       withCook((c) => {
         c.split = !c.split;
