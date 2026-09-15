@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { Avatar, Button, Segmented, Txt } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
-import { householdCookLabel, useDeviceStore } from "@/store/device";
+import { useDeviceStore } from "@/store/device";
 import { shell } from "@/theme";
 import { HomeCard } from "./HomeCard";
 
@@ -28,9 +28,6 @@ export function FamilyCard() {
       style={{ flex: 1 }}
       footer={
         <>
-          <Txt variant="meta" muted style={{ flexShrink: 1 }}>
-            {count ? t("{n} 人用餐", { n: count }) : t("尚未選擇用餐成員")}
-          </Txt>
           <Button variant="text" size="sm" label={t("管理家人")} iconRight="arrow-right" onPress={() => router.navigate("/settings?section=family" as never)} />
           <Button variant="primary" size={isPhone ? "sm" : "md"} label={t("規劃晚餐")} iconRight="arrow-right" disabled={!count} onPress={() => router.navigate("/make" as never)} style={{ marginLeft: "auto" }} />
         </>
@@ -39,14 +36,11 @@ export function FamilyCard() {
         {members.map((m) => {
           const on = dinnerMembers.includes(m.id);
           return (
-            <View key={m.id} style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: shell.line }}>
-              <Avatar color={m.color} initials={m.initials || m.name.slice(0, 1)} size={32} />
+            <View key={m.id} style={{ flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 2, borderBottomWidth: 1, borderBottomColor: shell.line }}>
+              <Avatar color={m.color} initials={m.initials || m.name.slice(0, 1)} size={26} />
               <View style={{ flex: 1, minWidth: 0 }}>
-                <Txt variant="body" weight="600">
+                <Txt variant="meta" weight="600" numberOfLines={1}>
                   {m.name}
-                </Txt>
-                <Txt variant="meta" muted numberOfLines={1}>
-                  {householdCookLabel(m)}
                 </Txt>
               </View>
               <Segmented<"1" | "0"> size="sm" accessibilityLabel={m.name} value={on ? "1" : "0"} options={[{ value: "1", label: t("是") }, { value: "0", label: t("否") }]} onChange={(value) => setDinner(m.id, value === "1")} />

@@ -25,15 +25,15 @@ function DishRow({ dish, meta }: { dish: TonightDish; meta: string }) {
       <View style={{ ...thumb, borderRadius: radius.sm, overflow: "hidden", backgroundColor: "#edf1ee", alignItems: "center", justifyContent: "center" }}>
         {dish.img ? <Image source={{ uri: dish.img }} style={{ width: "100%", height: "100%" }} contentFit="cover" accessibilityLabel="" /> : <Icon name="utensils" size={28} color={shell.muted} />}
       </View>
-      <View style={{ flex: 1, minWidth: 0 }}>
+      <View style={{ flex: 1, minWidth: 0, gap: 4 }}>
         <Txt variant="body" weight="600" numberOfLines={1}>
           {dish.name}
         </Txt>
         <Txt variant="meta" muted numberOfLines={1}>
           {meta}
         </Txt>
+        <Pill label={badge} tone={dish.ready ? "green" : "short"} />
       </View>
-      <Pill label={badge} tone={dish.ready ? "green" : "short"} />
     </Pressable>
   );
 }

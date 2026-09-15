@@ -6,6 +6,8 @@ import { useI18n } from "@/i18n";
 import { radius, shell } from "@/theme";
 import { HomeCard } from "./HomeCard";
 
+const VOTE_GREEN = "#3ee36f";
+
 export function VotesCard() {
   const { t } = useI18n();
   const { votes } = useMakeSummary();
@@ -13,19 +15,19 @@ export function VotesCard() {
   return (
     <HomeCard title={t("大家的投票")} style={{ flex: 1 }}>
       {votes.length ? (
-        <View style={{ gap: 12 }}>
-          {votes.map((v, i) => (
-            <View key={v.id} style={{ gap: 6 }}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
-                <Txt variant="body" weight="600" style={{ flexShrink: 1 }} numberOfLines={1}>
+        <View style={{ gap: 10 }}>
+          {votes.map((v) => (
+            <View key={v.id} style={{ gap: 4 }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+                <Txt variant="meta" weight="600" style={{ flex: 1, minWidth: 0 }} numberOfLines={1}>
                   {v.label}
                 </Txt>
-                <Txt variant="meta" muted>
+                <Txt variant="caption" muted numberOfLines={1}>
                   {t("{n} 票", { n: v.n })}
                 </Txt>
               </View>
-              <View style={{ height: 10, borderRadius: radius.pill, backgroundColor: "#e7ebe8", overflow: "hidden" }}>
-                <View style={{ height: "100%", width: `${Math.round((v.n / top) * 100)}%`, borderRadius: radius.pill, backgroundColor: i === 0 ? shell.coral : "#8fb4a2" }} />
+              <View style={{ height: 8, borderRadius: radius.pill, backgroundColor: "#e7ebe8", overflow: "hidden" }}>
+                <View style={{ height: "100%", width: `${Math.round((v.n / top) * 100)}%`, borderRadius: radius.pill, backgroundColor: VOTE_GREEN }} />
               </View>
             </View>
           ))}
