@@ -1310,6 +1310,11 @@ const es: Dictionary = {
   "語音搜尋": "Búsqueda por voz",
   "聆聽中…再按一次停止。": "Escuchando… toca de nuevo para detener.",
   "搜尋": "Buscar",
+  "誰會來": "Quién viene",
+  "已同步": "Sincronizado",
+  "未同步": "Sin sincronizar",
+  "立即同步": "Sincronizar ahora",
+  "重新同步": "Sincronizar de nuevo",
 };
 
 export default es;

@@ -131,9 +131,24 @@ export function openSyncDialog() {
       <View style={{ gap: 12 }}>
         <DemoNotice>{t("本地互動原型，尚未連接家庭服務。")}</DemoNotice>
         <Txt>{t("{events} 個行程 · {tasks} 個家庭任務 · {photos} 張照片", { events: s.events.length, tasks: s.tasks.length, photos: s.photoCount || 3 })}</Txt>
+        <Txt muted>{s.settings.synced ? t("已同步") : t("未同步")}</Txt>
       </View>
     ),
-    footer: <Button variant="primary" label={t("知道了")} onPress={() => dialog.close()} />,
+    footer: (
+      <>
+        <Button label={t("取消")} onPress={() => dialog.close()} />
+        <Button
+          variant="primary"
+          icon="cloud-check"
+          label={s.settings.synced ? t("重新同步") : t("立即同步")}
+          onPress={() => {
+            useDeviceStore.getState().setSettings({ synced: true });
+            dialog.close();
+            toast(t("已同步"));
+          }}
+        />
+      </>
+    ),
   });
 }
 

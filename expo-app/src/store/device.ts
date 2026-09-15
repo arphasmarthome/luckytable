@@ -66,6 +66,7 @@ export type Settings = {
   weatherPreset: "sunlight" | "clouds" | "rain" | "snow";
   version: string;
   updateAvailable: boolean;
+  synced: boolean;
 };
 
 export type DeviceData = {
@@ -215,6 +216,7 @@ export function seedData(): DeviceData {
       weatherPreset: "clouds",
       version: "0.18.0",
       updateAvailable: true,
+      synced: false,
     },
     calendar: { view: "month", date: todayKey, member: "all" },
     family: { member: "emma", tab: "tasks", growthMode: "month", growthMonth: "" },

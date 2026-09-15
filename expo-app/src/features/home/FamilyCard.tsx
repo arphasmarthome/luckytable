@@ -20,7 +20,7 @@ export function FamilyCard() {
       accessibilityLabel={t("今晚一起吃")}
       aside={
         <Txt variant="meta" muted>
-          {t("今晚一起吃")}
+          {t("誰會來")}
         </Txt>
       }
       style={{ flex: 1 }}

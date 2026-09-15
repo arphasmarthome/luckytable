@@ -1310,6 +1310,11 @@ const en: Dictionary = {
   "語音搜尋": "Voice search",
   "聆聽中…再按一次停止。": "Listening… tap again to stop.",
   "搜尋": "Search",
+  "誰會來": "Who's joining",
+  "已同步": "Synced",
+  "未同步": "Not synced",
+  "立即同步": "Sync now",
+  "重新同步": "Sync again",
 };
 
 export default en;

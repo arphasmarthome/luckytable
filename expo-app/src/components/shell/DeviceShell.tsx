@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "expo-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Avatar, Button, DemoNotice, Icon, Txt } from "@/components/ui";
+import { Avatar, Button, Icon, Txt } from "@/components/ui";
 import { SearchBar } from "@/components/shell/SearchBar";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
@@ -135,20 +135,6 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
   const city = useDeviceStore((s) => s.settings.city);
   const wifi = useDeviceStore((s) => s.settings.wifi);
   const network = useDeviceStore((s) => s.settings.network);
-  const eventCount = useDeviceStore((s) => s.events.length);
-  const taskCount = useDeviceStore((s) => s.tasks.length);
-  const photoCount = useDeviceStore((s) => s.photoCount);
-  const openSync = () =>
-    dialog.show({
-      title: t("家庭同步"),
-      body: (
-        <View style={{ gap: 12 }}>
-          <DemoNotice>{t("本地互動原型，尚未連接家庭服務。")}</DemoNotice>
-          <Txt>{t("{events} 個行程 · {tasks} 個家庭任務 · {photos} 張照片", { events: eventCount, tasks: taskCount, photos: photoCount })}</Txt>
-        </View>
-      ),
-      footer: <Button variant="primary" label={t("知道了")} onPress={() => dialog.close()} />,
-    });
   const title = pathname.startsWith("/make/cook") ? t("料理中") : t(ROUTES.find((r) => r.id === routeId)?.label || "首頁");
   const openAccount = () =>
     dialog.show({
@@ -188,11 +174,6 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
       ) : null}
       <View style={{ flex: 1 }} />
       <SearchBar compact={!isWide} />
-      {isWide ? (
-        <Pressable accessibilityRole="button" accessibilityLabel={t("家庭同步")} onPress={openSync} style={{ width: 48, height: 48, alignItems: "center", justifyContent: "center" }}>
-          <Icon name="cloud-check" size={24} color={shell.muted} />
-        </Pressable>
-      ) : null}
       {isWide ? (
         <Pressable accessibilityRole="button" accessibilityLabel={wifi ? t("{network} · 演示連線", { network }) : t("離線模式 · 演示")} onPress={() => router.navigate("/settings?section=device" as never)} style={{ width: 48, height: 48, alignItems: "center", justifyContent: "center" }}>
           <Icon name={wifi ? "wifi" : "wifi-off"} size={24} color={shell.green} />

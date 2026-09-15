@@ -32,6 +32,8 @@ export function MakeHeader({ title, brand }: { title?: string; brand?: boolean }
   const onStock = pathname.startsWith("/make/stock");
   const onShare = pathname.startsWith("/make/share");
   const cartCount = useMakeStore((s) => s.cart.length);
+  const cooking = useMakeStore((s) => Boolean(s.cook && s.cook.dishIds.length));
+  const onCook = pathname.startsWith("/make/cook");
   return (
     <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 12, minHeight: 56 }}>
       {brand ? (
@@ -53,6 +55,7 @@ export function MakeHeader({ title, brand }: { title?: string; brand?: boolean }
         </>
       )}
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10, marginLeft: "auto" }}>
+        {cooking && !onCook ? <Button icon="flame" label={isPhone ? undefined : t.continueCook} accessibilityLabel={t.continueCook} variant="primary" accent={make.primary} onPress={() => nav.go("/make/cook")} /> : null}
         <Button icon="book-open" label={isPhone ? undefined : t.navRec} accessibilityLabel={t.navRec} variant={onRecipes ? "soft" : "secondary"} accent={make.primary} onPress={() => { if (!onRecipes) nav.go("/make/recipes"); }} />
         <Button icon="boxes" label={isPhone ? undefined : t.stockBtn} accessibilityLabel={t.stockBtn} variant={onStock ? "soft" : "secondary"} accent={make.primary} onPress={() => { if (!onStock) nav.go("/make/stock"); }} />
         <Button icon="shopping-cart" accessibilityLabel={`${t.cartBtn} · ${cartCount}`} variant={onShare ? "soft" : "secondary"} accent={make.primary} onPress={() => { if (!onShare) nav.go("/make/share"); }}>

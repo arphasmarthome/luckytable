@@ -98,7 +98,16 @@ export function DeviceSection() {
           }
         />
         <SettingsRow title={t("連結手機")} detail={settings.paired ? t("James 的手機 · 已連結") : t("尚未連結")} control={<Button icon="smartphone" label={t("管理連結")} onPress={openPairingDialog} />} />
-        <SettingsRow title={t("家庭同步")} detail={t("{events} 個行程 · {tasks} 個家庭任務", { events: eventCount, tasks: taskCount })} control={<Button icon="cloud-check" label={t("同步")} onPress={openSyncDialog} />} />
+        <SettingsRow
+          title={t("家庭同步")}
+          detail={`${settings.synced ? t("已同步") : t("未同步")} · ${t("{events} 個行程 · {tasks} 個家庭任務", { events: eventCount, tasks: taskCount })}`}
+          control={
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <Icon name={settings.synced ? "circle-check" : "circle-x"} size={24} color={settings.synced ? shell.green : shell.danger} />
+              <Button label={settings.synced ? t("已同步") : t("同步")} variant={settings.synced ? "soft" : "secondary"} onPress={openSyncDialog} />
+            </View>
+          }
+        />
       </SettingsGroup>
       <SettingsGroup title={t("資源與更新")}>
         <SettingsRow title={t("離線食譜")} detail={settings.offlineDownloaded ? t("12 道食譜 · 已就緒") : t("12 道食譜 · 86 MB")} control={<Button icon="download" label={settings.offlineDownloaded ? t("重新下載") : t("下載")} disabled={!settings.wifi} onPress={openDownloadDialog} />} />
