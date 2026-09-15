@@ -2,7 +2,6 @@
 import { useRouter } from "expo-router";
 import { View } from "react-native";
 import { Avatar, Button, Segmented, Txt } from "@/components/ui";
-import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { useDeviceStore } from "@/store/device";
 import { shell } from "@/theme";
@@ -11,7 +10,6 @@ import { HomeCard } from "./HomeCard";
 export function FamilyCard() {
   const router = useRouter();
   const { t } = useI18n();
-  const { isPhone } = useBreakpoint();
   const members = useDeviceStore((s) => s.members);
   const dinnerMembers = useDeviceStore((s) => s.dinnerMembers);
   const setDinner = useDeviceStore((s) => s.setDinner);
@@ -27,17 +25,17 @@ export function FamilyCard() {
       }
       style={{ flex: 1 }}
       footer={
-        <>
-          <Button variant="text" size="sm" label={t("管理家人")} iconRight="arrow-right" onPress={() => router.navigate("/settings?section=family" as never)} />
-          <Button variant="primary" size={isPhone ? "sm" : "md"} label={t("規劃晚餐")} iconRight="arrow-right" disabled={!count} onPress={() => router.navigate("/make" as never)} style={{ marginLeft: "auto" }} />
-        </>
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 6, minWidth: 0 }}>
+          <Button variant="text" size="sm" label={t("管理家人")} onPress={() => router.navigate("/settings?section=family" as never)} style={{ flexShrink: 1, paddingHorizontal: 6 }} />
+          <Button variant="primary" size="sm" label={t("規劃晚餐")} iconRight="arrow-right" disabled={!count} onPress={() => router.navigate("/make" as never)} style={{ marginLeft: "auto" }} />
+        </View>
       }>
       <View>
         {members.map((m) => {
           const on = dinnerMembers.includes(m.id);
           return (
-            <View key={m.id} style={{ flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 2, borderBottomWidth: 1, borderBottomColor: shell.line }}>
-              <Avatar color={m.color} initials={m.initials || m.name.slice(0, 1)} size={26} />
+            <View key={m.id} style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 1, borderBottomWidth: 1, borderBottomColor: shell.line }}>
+              <Avatar color={m.color} initials={m.initials || m.name.slice(0, 1)} size={24} />
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Txt variant="meta" weight="600" numberOfLines={1}>
                   {m.name}

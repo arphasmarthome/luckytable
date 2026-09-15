@@ -2,7 +2,7 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Pressable, View } from "react-native";
-import { Button, EmptyNote, Icon, Txt } from "@/components/ui";
+import { EmptyNote, Icon, Txt } from "@/components/ui";
 import { useMakeSummary, type TonightDish } from "@/features/make/summary";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
@@ -39,10 +39,8 @@ function DishRow({ dish, meta }: { dish: TonightDish; meta: string }) {
 }
 
 export function TonightCard() {
-  const router = useRouter();
   const { t, list } = useI18n();
-  const { isPhone } = useBreakpoint();
-  const { tonight, cartCount, allReady } = useMakeSummary();
+  const { tonight } = useMakeSummary();
   const members = useDeviceStore((s) => s.members);
   const dinnerMembers = useDeviceStore((s) => s.dinnerMembers);
   const dinnerTime = useDeviceStore((s) => s.dinner.time);
@@ -50,22 +48,7 @@ export function TonightCard() {
   const cooks = members.filter((m) => m.prefs && m.prefs.cook[cookIndexToday]);
   const cookLabel = cooks.length ? list(cooks.map((m) => m.name)) : t("全家");
   return (
-    <HomeCard title={t("今晚的菜色")} aside={<Pill label={diners.length ? t("{n} 人一起吃", { n: diners.length }) : t("尚未有人加入")} tone={diners.length ? "green" : "off"} />} style={{ flex: 1 }}
-      footer={
-        <>
-          <Button icon="shopping-cart" label={t("購物清單")} onPress={() => router.navigate("/make/share" as never)} size={isPhone ? "sm" : "md"}>
-            {cartCount ? (
-              <View style={{ minWidth: 24, height: 24, paddingHorizontal: 6, borderRadius: 12, backgroundColor: shell.greenSoft, alignItems: "center", justifyContent: "center" }}>
-                <Txt variant="caption" weight="700" color={shell.green}>
-                  {String(cartCount)}
-                </Txt>
-              </View>
-            ) : null}
-          </Button>
-          <Button icon="book-open" label={t("食譜")} onPress={() => router.navigate("/make/recipes" as never)} size={isPhone ? "sm" : "md"} />
-          <Button variant="primary" icon="flame" label={t("開始料理")} disabled={!allReady} onPress={() => router.navigate("/make/cook" as never)} size={isPhone ? "sm" : "md"} style={{ marginLeft: "auto" }} />
-        </>
-      }>
+    <HomeCard title={t("今晚的菜色")} aside={<Pill label={diners.length ? t("{n} 人一起吃", { n: diners.length }) : t("尚未有人加入")} tone={diners.length ? "green" : "off"} />} style={{ flex: 1 }}>
       {tonight.length ? (
         <View style={{ gap: 12 }}>
           {tonight.map((dish) => (

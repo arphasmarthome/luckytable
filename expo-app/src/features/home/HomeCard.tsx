@@ -8,8 +8,8 @@ import { radius, shell } from "@/theme";
 export function HomeCard({ title, aside, children, footer, style, accessibilityLabel }: { title: string; aside?: ReactNode; children?: ReactNode; footer?: ReactNode; style?: StyleProp<ViewStyle>; accessibilityLabel?: string }) {
   const { isPhone, isWide } = useBreakpoint();
   return (
-    <View accessibilityLabel={accessibilityLabel ?? title} style={[{ minWidth: 0, backgroundColor: shell.surface, borderWidth: 1, borderColor: shell.line, borderRadius: radius.md, padding: isPhone ? 16 : 16, paddingHorizontal: isPhone ? 16 : 20, gap: 10 }, style]}>
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10, minHeight: 40 }}>
+    <View accessibilityLabel={accessibilityLabel ?? title} style={[{ minWidth: 0, backgroundColor: shell.surface, borderWidth: 1, borderColor: shell.line, borderRadius: radius.md, padding: isPhone ? 16 : 12, paddingHorizontal: isPhone ? 16 : 14, gap: 8 }, style]}>
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, minHeight: 36 }}>
         <Txt variant="section" style={{ flexShrink: 1 }}>
           {title}
         </Txt>
@@ -23,7 +23,7 @@ export function HomeCard({ title, aside, children, footer, style, accessibilityL
         children
       )}
       {footer ? (
-        <View style={{ marginTop: "auto", flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: shell.line }}>
+        <View style={{ marginTop: "auto", flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: shell.line }}>
           {footer}
         </View>
       ) : null}

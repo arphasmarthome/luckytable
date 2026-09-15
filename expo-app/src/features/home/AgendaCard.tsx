@@ -29,7 +29,7 @@ export function AgendaCard() {
       footer={<Button variant="text" size={isPhone ? "sm" : "md"} label={t("全部 {n} 個行程", { n: todays.length })} iconRight="arrow-right" onPress={() => router.navigate("/calendar" as never)} style={{ marginLeft: "auto" }} />}>
       {todays.length ? (
         <View>
-          {todays.slice(0, 5).map((event) => {
+          {todays.map((event) => {
             const person = memberById(event.memberId, members);
             return (
               <Pressable
