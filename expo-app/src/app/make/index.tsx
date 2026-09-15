@@ -1,5 +1,5 @@
-/* Make home: the three entry tiles — What can I make? / I want to make… / Share. Tonight's
- * dishes are managed from Home and the dish pages; a running cooking session is reachable from
+/* Make home: the three entry tiles — What can I make? / I want to make… / Summary. Tonight's
+ * dishes are managed from Home and the dish pages; Summary lists every finished session; a running cooking session is reachable from
  * the header's "Continue cooking" button. */
 import { Image } from "expo-image";
 import { Pressable, View } from "react-native";
@@ -50,7 +50,7 @@ export default function MakeHomeScreen() {
       <Grid cols={isPhone ? 1 : 3} gap={isPhone ? 14 : 20} style={isPhone ? undefined : { flex: 1, minHeight: 0, alignContent: "stretch" }}>
         <Tile icon="camera" tone="primary" image="fridge" title={t.tile1} body={t.tile1Body} onPress={() => nav.go("/make/capture")} />
         <Tile icon="cooking-pot" tone="green" image="dish" title={t.tile2} body={t.tile2Body} onPress={() => nav.go("/make/wantmake")} />
-        <Tile icon="share-2" tone="plain" title={t.tile3} body={t.tile3Body} onPress={() => nav.go("/make/share")} />
+        <Tile icon="book-open" tone="plain" title={t.tile3} body={t.tile3Body} onPress={() => nav.go("/make/summary")} />
       </Grid>
     </Page>
   );

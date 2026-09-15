@@ -1,7 +1,7 @@
 /* Cooking: time left for all food on top, dish rail | photo + timer controls | numbered steps,
  * or the A | B split screen. Entering the route gates on tonight's readiness like the
  * prototype's activate({screen:"cook"}). */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Button, Icon, Page } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
@@ -10,10 +10,12 @@ import { toast } from "@/store/toast";
 import { make, radius } from "@/theme";
 import { openAddDishModal } from "@/features/make/components/AddDishModal";
 import { CookPane, DishRail, StepList } from "@/features/make/components/CookParts";
+import { CookSummary } from "@/features/make/components/CookSummary";
+import { FullSheet } from "@/features/make/components/FullSheet";
 import { useMakeNav } from "@/features/make/components/MakeHeader";
 import { Bar, MCard, MTxt, Photo } from "@/features/make/components/ui";
 import { dishById, dishImg, fmtMin } from "@/features/make/data";
-import { allDone, anyRunning, dishDone, dishRunning, planSeconds, stepAt, totalPct, totalRemaining, useMakeStore } from "@/features/make/store";
+import { allDone, anyRunning, dishDone, dishRunning, planSeconds, stepAt, totalPct, totalRemaining, useMakeStore, type CookRecord } from "@/features/make/store";
 import { useMakeStrings } from "@/features/make/strings";
 
 export default function CookScreen() {
@@ -25,14 +27,13 @@ export default function CookScreen() {
   const enterCook = useMakeStore((s) => s.enterCook);
   const finishCook = useMakeStore((s) => s.finishCook);
   const toggleSplit = useMakeStore((s) => s.toggleSplit);
-  const startAll = useMakeStore((s) => s.startAll);
-  const pauseAll = useMakeStore((s) => s.pauseAll);
   const toggleTimer = useMakeStore((s) => s.toggleTimer);
   const addMinute = useMakeStore((s) => s.addMinute);
   const resetStep = useMakeStore((s) => s.resetStep);
   const completeStep = useMakeStore((s) => s.completeStep);
   const selectStep = useMakeStore((s) => s.selectStep);
 
+  const [summary, setSummary] = useState<CookRecord | null>(null);
   const gated = useRef(false);
   useEffect(() => {
     if (gated.current) return;
@@ -44,16 +45,27 @@ export default function CookScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!cook || !cook.dishIds.length) return <Page background={make.background}>{null}</Page>;
+  const closeSummary = () => {
+    setSummary(null);
+    nav.home();
+    toast(t.allDone);
+  };
+  const summarySheet = (
+    <FullSheet visible={Boolean(summary)} title={t.summaryTitle} onClose={closeSummary} closeLabel={t.close} footer={<Button size="lg" variant="primary" accent={make.green} label={t.close} onPress={closeSummary} block />}>
+      {summary ? <CookSummary record={summary} /> : null}
+    </FullSheet>
+  );
+
+  if (!cook || !cook.dishIds.length) return <Page background={make.background}>{summarySheet}</Page>;
 
   const running = anyRunning(cook);
   const done = allDone(cook);
   const cookedCount = cook.dishIds.filter((id) => dishDone(cook, id)).length;
   const goBack = () => nav.back();
   const finish = () => {
-    finishCook();
-    nav.home();
-    toast(t.allDone);
+    const record = finishCook();
+    if (record) setSummary(record);
+    else closeSummary();
   };
   const addDish = (pane: "A" | "B" | "" = "") => openAddDishModal(t.addDish, pane);
 
@@ -73,7 +85,6 @@ export default function CookScreen() {
           </View>
         </View>
       </View>
-      <Button icon={running ? "pause" : "play"} label={running ? t.pauseAll : t.startAll} variant={running ? "secondary" : "primary"} accent={make.primary} disabled={done} onPress={running ? pauseAll : startAll} />
       <MTxt variant="meta" muted>
         {cook.dishIds.length} {cook.dishIds.length === 1 ? t.dishN : t.dishesN} · {cookedCount} {t.cooked}
       </MTxt>

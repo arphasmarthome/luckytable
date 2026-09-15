@@ -1,7 +1,7 @@
 /* Dish detail: photo, family vote, tonight's menu / plan / Start cooking, readiness with the
  * ingredient checklist and the hand-off cart. Steps only appear on the cooking screen. */
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Linking, Pressable, ScrollView, View } from "react-native";
 import { Button, Icon, Page } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
@@ -9,6 +9,7 @@ import { toast } from "@/store/toast";
 import { make, radius } from "@/theme";
 import { MakeHeader, useMakeNav } from "@/features/make/components/MakeHeader";
 import { openPlanModal } from "@/features/make/components/PlanModal";
+import { RecipeBook } from "@/features/make/components/RecipeBook";
 import { Bar, Kicker, MCard, MTxt, Photo } from "@/features/make/components/ui";
 import { cookMinutes, dishById, dishImg, hasDish } from "@/features/make/data";
 import { usePantrySlice } from "@/features/make/hooks";
@@ -37,6 +38,7 @@ export default function DishScreen() {
   const toggleAcquired = useMakeStore((s) => s.toggleAcquired);
   const addMissingToCart = useMakeStore((s) => s.addMissingToCart);
   const beginCook = useMakeStore((s) => s.beginCook);
+  const [recipeOpen, setRecipeOpen] = useState(false);
 
   const d = dishById(id);
   const r = useMemo(() => readiness(slice, d, lang, pantryNames(slice)), [slice, d, lang]);
@@ -58,6 +60,7 @@ export default function DishScreen() {
 
   const main = (
     <View style={{ flex: isWide ? 1 : undefined, minWidth: 0, minHeight: 0, gap: 16 }}>
+      <Pressable accessibilityRole="button" accessibilityLabel={t.openRecipe} onPress={() => setRecipeOpen(true)} style={isWide ? { flex: 1, minHeight: 200 } : undefined}>
       <Photo uri={dishImg(d.id)} height={isWide ? undefined : isPhone ? 220 : 380} round={radius.xl} style={isWide ? { flex: 1, minHeight: 200 } : undefined}>
         <View style={{ position: "absolute", left: 20, bottom: 18, maxWidth: "70%", paddingHorizontal: 18, paddingVertical: 8, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
           <MTxt variant="card" weight="600" numberOfLines={1}>
@@ -71,6 +74,8 @@ export default function DishScreen() {
           </MTxt>
         </View>
       </Photo>
+      </Pressable>
+      <RecipeBook id={d.id} ings={ings} visible={recipeOpen} onClose={() => setRecipeOpen(false)} />
       <View style={{ flexDirection: isPhone ? "column" : "row", gap: 16 }}>
         <MCard style={{ flex: isPhone ? undefined : 1 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>

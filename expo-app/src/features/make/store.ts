@@ -22,7 +22,10 @@ export type { Size, StockRow } from "./data";
 export type CartItem = { name: string; zh: string; amount: string; dishId: string };
 export type Recipe = { ing: DishIngredient[]; steps: string[]; source: string; title: string };
 export type StepState = { seconds: number; remaining: number; done: boolean; running: boolean; deadline: number };
-export type CookSession = { date: string; dishIds: string[]; active: string; split: boolean; paneB: string | null; steps: Record<string, StepState[]>; selected: Record<string, number> };
+export type TimelineEvent = { kind: "start" | "pause" | "resume"; at: number };
+export type CookSession = { date: string; dishIds: string[]; active: string; split: boolean; paneB: string | null; steps: Record<string, StepState[]>; selected: Record<string, number>; timeline: TimelineEvent[] };
+/** One finished cooking session, kept for the Summary page. */
+export type CookRecord = { id: string; date: string; dishIds: string[]; timeline: TimelineEvent[]; startedAt: number; finishedAt: number; totalSeconds: number; photos: string[] };
 export type MatchMode = "captured" | "stock";
 export type PlannedMeal = { dishId: string; day: string; time: string };
 export type Pane = "A" | "B" | "";
@@ -41,6 +44,7 @@ export type MakeData = {
   acquired: Record<string, string[]>;
   cart: CartItem[];
   vendor: VendorId;
+  history: CookRecord[];
   myVotes: string[];
   recipes: Record<string, Recipe>;
   /* in-memory */
@@ -94,7 +98,9 @@ export type MakeActions = {
   beginCook: (id: string | null) => CookStart;
   /** the prototype's activate({screen:"cook"}): true when the session is (now) running */
   enterCook: () => boolean;
-  finishCook: () => void;
+  /** closes the session and returns its record (null when nothing was cooking) */
+  finishCook: () => CookRecord | null;
+  addHistoryPhoto: (recordId: string, uri: string) => void;
   toggleSplit: () => void;
   setActiveDish: (id: string) => void;
   setPaneDish: (pane: "A" | "B", id: string) => void;
@@ -115,6 +121,7 @@ export const KEYS = {
   stock: "luckytable-make-stock",
   cart: "luckytable-make-cart",
   vendor: "luckytable-make-vendor",
+  history: "luckytable-make-history",
   acquired: "luckytable-make-acquired",
   votes: "luckytable-make-votes",
   mealdb: "luckytable-mealdb",
@@ -135,7 +142,7 @@ function normalizeTonight(stored: StoredTonight): string[] {
 }
 function normalizeCook(stored: CookSession | null): CookSession | null {
   if (!stored || stored.date !== todayKey || !Array.isArray(stored.dishIds)) return null;
-  return { ...stored, steps: stored.steps || {}, selected: stored.selected || {}, paneB: stored.paneB ?? null, split: Boolean(stored.split) };
+  return { ...stored, steps: stored.steps || {}, selected: stored.selected || {}, paneB: stored.paneB ?? null, split: Boolean(stored.split), timeline: Array.isArray(stored.timeline) ? stored.timeline : [] };
 }
 function readPersisted() {
   return {
@@ -145,6 +152,7 @@ function readPersisted() {
     acquired: loadJSON<Record<string, string[]>>(KEYS.acquired, {}),
     cart: loadJSON<CartItem[]>(KEYS.cart, []),
     vendor: loadJSON<VendorId>(KEYS.vendor, "instacart"),
+    history: loadJSON<CookRecord[]>(KEYS.history, []),
     myVotes: loadJSON<string[]>(KEYS.votes, []),
     recipes: loadJSON<Record<string, Recipe>>(KEYS.mealdb, {}),
   };
@@ -269,7 +277,28 @@ const cloneCook = (c: CookSession): CookSession => ({
   dishIds: c.dishIds.slice(),
   steps: Object.fromEntries(Object.entries(c.steps).map(([id, steps]) => [id, steps.map((s) => ({ ...s }))])),
   selected: { ...c.selected },
+  timeline: c.timeline.slice(),
 });
+/** Appends a start / pause / resume event whenever "any timer running" flips. */
+function recordRunning(c: CookSession, wasRunning: boolean, now = Date.now()) {
+  const running = anyRunning(c);
+  if (running === wasRunning) return;
+  c.timeline.push({ kind: running ? (c.timeline.length ? "resume" : "start") : "pause", at: now });
+}
+/** Running stretches of a timeline: each start / resume up to the following pause (or `end`). */
+export function timelineSegments(timeline: TimelineEvent[], end: number): { from: number; to: number }[] {
+  const out: { from: number; to: number }[] = [];
+  let open: number | null = null;
+  timeline.forEach((e) => {
+    if (e.kind === "pause") {
+      if (open != null) out.push({ from: open, to: e.at });
+      open = null;
+    } else if (open == null) open = e.at;
+  });
+  if (open != null) out.push({ from: open, to: end });
+  return out;
+}
+export const cookingSeconds = (timeline: TimelineEvent[], end: number) => Math.round(timelineSegments(timeline, end).reduce((a, x) => a + Math.max(0, x.to - x.from), 0) / 1000);
 function firstUndone(c: CookSession, id: string) {
   const steps = c.steps[id] || [];
   const i = steps.findIndex((s) => !s.done);
@@ -304,10 +333,12 @@ export const useMakeStore = create<MakeState>()((set, get) => {
     const s = get();
     if (!s.cook) return;
     const c = cloneCook(s.cook);
+    const was = anyRunning(s.cook);
     fn(c, s);
+    recordRunning(c, was);
     set({ cook: c });
   };
-  const persisted = Platform.OS === "web" ? readPersisted() : { tonight: normalizeTonight(null), cook: null, stock: normalizeStock(null), acquired: {}, cart: [], vendor: "instacart" as VendorId, myVotes: [], recipes: {} };
+  const persisted = Platform.OS === "web" ? readPersisted() : { tonight: normalizeTonight(null), cook: null, stock: normalizeStock(null), acquired: {}, cart: [], vendor: "instacart" as VendorId, history: [] as CookRecord[], myVotes: [], recipes: {} };
   return {
     ...persisted,
     votes: { ...VOTE_SEED },
@@ -446,8 +477,16 @@ export const useMakeStore = create<MakeState>()((set, get) => {
     },
     finishCook: () => {
       stopInterval();
-      set({ cook: null });
+      const c = get().cook;
+      if (!c) return null;
+      const now = Date.now();
+      const timeline = c.timeline.slice();
+      if (anyRunning(c)) timeline.push({ kind: "pause", at: now });
+      const record: CookRecord = { id: `${c.date}-${now}`, date: c.date, dishIds: c.dishIds.slice(), timeline, startedAt: timeline[0]?.at ?? now, finishedAt: now, totalSeconds: cookingSeconds(timeline, now), photos: [] };
+      set({ cook: null, history: [record, ...get().history] });
+      return record;
     },
+    addHistoryPhoto: (recordId, uri) => set((s) => ({ history: s.history.map((r) => (r.id === recordId ? { ...r, photos: r.photos.concat(uri) } : r)) })),
     toggleSplit: () =>
       withCook((c) => {
         c.split = !c.split;
@@ -532,7 +571,7 @@ function startSession(activeId: string | null): boolean {
   if (!ids.length) return false;
   ids.forEach(ensureRecipe);
   let c: CookSession;
-  if (!s.cook) c = { date: todayKey, dishIds: ids, active: activeId || ids[0], split: false, paneB: null, steps: {}, selected: {} };
+  if (!s.cook) c = { date: todayKey, dishIds: ids, active: activeId || ids[0], split: false, paneB: null, steps: {}, selected: {}, timeline: [] };
   else {
     c = cloneCook(s.cook);
     ids.forEach((id) => { if (!c.dishIds.includes(id)) c.dishIds.push(id); });
@@ -570,6 +609,7 @@ function tick() {
   if (!cur) return stopInterval();
   const c = cloneCook(cur);
   const now = Date.now();
+  const was = anyRunning(cur);
   let finished = false;
   let changed = false;
   c.dishIds.forEach((id) =>
@@ -592,6 +632,7 @@ function tick() {
       }
     }),
   );
+  recordRunning(c, was, now);
   if (changed || finished) useMakeStore.setState({ cook: c });
   if (finished) {
     beep();
@@ -667,6 +708,7 @@ useMakeStore.subscribe((s, prev) => {
   if (s.stock !== prev.stock) saveJSON(KEYS.stock, s.stock);
   if (s.cart !== prev.cart) saveJSON(KEYS.cart, s.cart);
   if (s.vendor !== prev.vendor) saveJSON(KEYS.vendor, s.vendor);
+  if (s.history !== prev.history) saveJSON(KEYS.history, s.history);
   if (s.acquired !== prev.acquired) saveJSON(KEYS.acquired, s.acquired);
   if (s.myVotes !== prev.myVotes) saveJSON(KEYS.votes, s.myVotes);
   if (s.recipes !== prev.recipes) saveJSON(KEYS.mealdb, s.recipes);
@@ -693,10 +735,11 @@ else {
     loadJSONAsync<Record<string, string[]>>(KEYS.acquired, {}),
     loadJSONAsync<CartItem[]>(KEYS.cart, []),
     loadJSONAsync<VendorId>(KEYS.vendor, "instacart"),
+    loadJSONAsync<CookRecord[]>(KEYS.history, []),
     loadJSONAsync<string[]>(KEYS.votes, []),
     loadJSONAsync<Record<string, Recipe>>(KEYS.mealdb, {}),
-  ]).then(([tonight, cook, stock, acquired, cart, vendor, myVotes, recipes]) => {
-    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, vendor, myVotes, recipes, hydrated: true });
+  ]).then(([tonight, cook, stock, acquired, cart, vendor, history, myVotes, recipes]) => {
+    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, vendor, history, myVotes, recipes, hydrated: true });
     boot();
   });
 }

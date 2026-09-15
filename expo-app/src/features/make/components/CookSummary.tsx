@@ -1,0 +1,60 @@
+/* One finished cooking session: the dishes with their photos and the start / pause / resume timeline. */
+import { Image } from "expo-image";
+import { View } from "react-native";
+import { Icon } from "@/components/ui";
+import { useBreakpoint } from "@/hooks/use-breakpoint";
+import { make, radius } from "@/theme";
+import { dishById, dishImg } from "../data";
+import { timelineSegments, type CookRecord } from "../store";
+import { useMakeStrings, type Lang } from "../strings";
+import { Kicker, MTxt } from "./ui";
+
+export const timeOfDay = (ms: number, lang: Lang) => new Date(ms).toLocaleTimeString(lang === "zh" ? "zh-TW" : "en-US", { hour: "numeric", minute: "2-digit" });
+
+export function CookSummary({ record, compact }: { record: CookRecord; compact?: boolean }) {
+  const { t, lang, dishName } = useMakeStrings();
+  const { isPhone } = useBreakpoint();
+  const segments = timelineSegments(record.timeline, record.finishedAt);
+  const size = compact ? 96 : isPhone ? 120 : 150;
+  const rows: string[] = [];
+  segments.forEach((seg, i) => {
+    if (i > 0) rows.push(t.pausedLabel);
+    rows.push(`${i === 0 ? t.startedAt : t.resumedLabel} ${timeOfDay(seg.from, lang)} – ${timeOfDay(seg.to, lang)}`);
+  });
+  return (
+    <View style={{ gap: compact ? 10 : 16 }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: compact ? 10 : 14 }}>
+        {record.dishIds.map((id) => (
+          <View key={id} style={{ width: size, gap: 6 }}>
+            <View style={{ width: size, height: size, borderRadius: radius.lg, overflow: "hidden", backgroundColor: make.surface2 }}>
+              <Image source={{ uri: dishImg(id) }} contentFit="cover" style={{ width: "100%", height: "100%" }} accessibilityLabel="" />
+              <View style={{ position: "absolute", right: 6, top: 6, width: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: make.green }}>
+                <Icon name="check" size={14} color="#fff" strokeWidth={3} />
+              </View>
+            </View>
+            <MTxt variant={compact ? "caption" : "meta"} weight="600" numberOfLines={2}>
+              {dishName(dishById(id))}
+            </MTxt>
+          </View>
+        ))}
+      </View>
+      <View style={{ gap: 6 }}>
+        <Kicker>{t.totalTime}</Kicker>
+        <MTxt variant={compact ? "section" : "h1"} weight="700" color={make.green} style={{ fontVariant: ["tabular-nums"] }}>
+          {Math.max(1, Math.round(record.totalSeconds / 60))} {t.minShort}
+        </MTxt>
+        {rows.length ? (
+          rows.map((row, i) => (
+            <MTxt key={i} variant={compact ? "caption" : "meta"} muted={row === t.pausedLabel} weight={row === t.pausedLabel ? "400" : "500"}>
+              {row === t.pausedLabel ? `· ${row}` : row}
+            </MTxt>
+          ))
+        ) : (
+          <MTxt variant="caption" muted>
+            {`${t.startedAt} ${timeOfDay(record.startedAt, lang)} – ${timeOfDay(record.finishedAt, lang)}`}
+          </MTxt>
+        )}
+      </View>
+    </View>
+  );
+}

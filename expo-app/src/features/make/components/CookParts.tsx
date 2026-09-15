@@ -148,11 +148,17 @@ function PaneChips({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A" | "B"
     <View style={{ flexDirection: "row", gap: 6, marginLeft: 4 }}>
       {cook.dishIds.map((x, i) => {
         const on = x === id;
+        const done = dishDone(cook, x);
         return (
-          <Pressable key={x} accessibilityRole="button" accessibilityLabel={dishName(dishById(x))} accessibilityState={{ selected: on }} onPress={() => setPaneDish(tag, x)} style={{ width: 40, height: 40, borderRadius: radius.md, borderWidth: 2, borderColor: on ? make.primary : make.borderStrong, backgroundColor: on ? make.primary : make.surface, alignItems: "center", justifyContent: "center" }}>
-            <MTxt variant="h3" weight="700" color={on ? "#fff" : make.foreground}>
+          <Pressable key={x} accessibilityRole="button" accessibilityLabel={dishName(dishById(x))} accessibilityState={{ selected: on }} onPress={() => setPaneDish(tag, x)} style={{ width: 40, height: 40, borderRadius: radius.md, borderWidth: 2, borderColor: on ? make.primary : done ? make.green : make.borderStrong, backgroundColor: on ? make.primary : make.surface, alignItems: "center", justifyContent: "center" }}>
+            <MTxt variant="h3" weight="700" color={on ? "#fff" : done ? make.green : make.foreground}>
               {String(i + 1)}
             </MTxt>
+            {done ? (
+              <View style={{ position: "absolute", right: -6, top: -6, width: 20, height: 20, borderRadius: 10, backgroundColor: make.green, alignItems: "center", justifyContent: "center" }}>
+                <Icon name="check" size={12} color="#fff" strokeWidth={3} />
+              </View>
+            ) : null}
           </Pressable>
         );
       })}
@@ -171,6 +177,7 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
   const { isPhone, isWide } = useBreakpoint();
   const toggleTimer = useMakeStore((s) => s.toggleTimer);
   const completeStep = useMakeStore((s) => s.completeStep);
+  const resetStep = useMakeStore((s) => s.resetStep);
   const valid = Boolean(id && cook.dishIds.includes(id));
   const head = (
     // no wrapping: both panes keep the same head height so Step 1 lines up on the A and B sides
@@ -217,6 +224,7 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
             </MTxt>
           </View>
           <Button square round icon={s?.running ? "pause" : "play"} variant="primary" accent={make.primary} disabled={!s || s.done} accessibilityLabel={s?.running ? t.pause : t.play} onPress={() => toggleTimer(id, sel)} />
+          <Button square round icon="rotate-ccw" disabled={!s} accessibilityLabel={t.reset} onPress={() => resetStep(id, sel)} />
           <Button square round icon="check" variant="primary" accent={make.green} disabled={!s} accessibilityLabel={t.done} onPress={() => completeStep(id, sel)} />
         </View>
         <View style={{ position: "absolute", right: 12, bottom: 12, maxWidth: "80%", paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
