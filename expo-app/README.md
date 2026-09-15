@@ -17,7 +17,7 @@ npm run web          # Expo dev server on http://localhost:8081
 npx expo export --platform web   # writes dist/
 ```
 
-The repo-root `vercel.json` installs and builds this folder and serves `expo-app/dist` (the legacy `prototype/` is copied alongside so the old HTML prototype stays reachable at `/prototype/device/index.html`).
+The repo-root `vercel.json` installs and builds this folder and serves `expo-app/dist`.
 
 ## Structure
 
