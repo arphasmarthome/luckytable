@@ -5,13 +5,12 @@ import { usePathname, useRouter } from "expo-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Avatar, Button, Icon, Txt } from "@/components/ui";
+import { Icon, Txt } from "@/components/ui";
 import { SearchBar } from "@/components/shell/SearchBar";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { today } from "@/lib/date";
-import { ROUTES, routeIdFor, type RouteId } from "@/lib/routes";
-import { dialog } from "@/store/dialog";
+import { NAV_ROUTES, ROUTES, routeIdFor, type RouteId } from "@/lib/routes";
 import { useDeviceStore } from "@/store/device";
 import { radius, shell } from "@/theme";
 
@@ -22,26 +21,6 @@ function useClock() {
     return () => clearInterval(id);
   }, []);
   return now;
-}
-
-function MembersList() {
-  const members = useDeviceStore((s) => s.members);
-  const { t } = useI18n();
-  return (
-    <View>
-      {members.map((person) => (
-        <View key={person.id} style={{ flexDirection: "row", alignItems: "center", gap: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: shell.line }}>
-          <Avatar color={person.color} initials={person.initials} />
-          <View>
-            <Txt variant="h3">{person.name}</Txt>
-            <Txt variant="meta" muted>
-              {t(person.role)}
-            </Txt>
-          </View>
-        </View>
-      ))}
-    </View>
-  );
 }
 
 function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
@@ -57,9 +36,8 @@ function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
         </Txt>
       </View>
       <ScrollView contentContainerStyle={{ paddingHorizontal: compact ? 10 : 16, gap: 8, flexGrow: 1 }}>
-        {ROUTES.map((route) => {
+        {NAV_ROUTES.map((route) => {
           const active = route.id === routeId;
-          const last = route.id === "settings";
           return (
             <Pressable
               key={route.id}
@@ -75,7 +53,6 @@ function NavRail({ routeId, compact }: { routeId: RouteId; compact: boolean }) {
                 alignItems: "center",
                 justifyContent: compact ? "center" : "flex-start",
                 gap: compact ? 4 : 12,
-                marginTop: last ? "auto" : 0,
                 backgroundColor: active ? shell.greenSoft : pressed ? shell.surfaceMuted : "transparent",
               })}>
               <Icon name={route.icon} size={compact ? 24 : 24} color={active ? shell.green : shell.navText} />
@@ -104,7 +81,7 @@ function BottomTabs({ routeId }: { routeId: RouteId }) {
   const insets = useSafeAreaInsets();
   return (
     <View style={{ flexDirection: "row", backgroundColor: "#fff", borderTopWidth: 1, borderTopColor: shell.line, paddingBottom: insets.bottom, paddingHorizontal: 2 }}>
-      {ROUTES.map((route) => {
+      {NAV_ROUTES.map((route) => {
         const active = route.id === routeId;
         return (
           <Pressable
@@ -127,32 +104,25 @@ function BottomTabs({ routeId }: { routeId: RouteId }) {
   );
 }
 
+/** Demo weather is a constant 24°C; converted to °F when the user picks Fahrenheit in
+ * Settings → Display & language. */
+function formatTemp(celsius: number, unit: "C" | "F") {
+  const value = unit === "F" ? Math.round((celsius * 9) / 5 + 32) : Math.round(celsius);
+  return `${value}°${unit}`;
+}
+
 function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: string; isWide: boolean }) {
   const router = useRouter();
   const { t, formatTime, formatDate } = useI18n();
   const insets = useSafeAreaInsets();
   const now = useClock();
-  const city = useDeviceStore((s) => s.settings.city);
   const wifi = useDeviceStore((s) => s.settings.wifi);
   const network = useDeviceStore((s) => s.settings.network);
+  const tempUnit = useDeviceStore((s) => s.settings.tempUnit);
   const title = pathname.startsWith("/make/cook") ? t("料理中") : t(ROUTES.find((r) => r.id === routeId)?.label || "首頁");
-  const openAccount = () =>
-    dialog.show({
-      title: t("阿發家的成員"),
-      body: () => <MembersList />,
-      footer: (
-        <Button
-          variant="primary"
-          label={t("家庭管理")}
-          onPress={() => {
-            dialog.close();
-            router.navigate("/family" as never);
-          }}
-        />
-      ),
-    });
+  const onSettings = routeId === "settings";
   return (
-    <View style={{ paddingTop: isWide ? insets.top : insets.top, minHeight: isWide ? 80 : 60, paddingHorizontal: isWide ? 28 : 16, flexDirection: "row", alignItems: "center", gap: isWide ? 20 : 10, backgroundColor: "#fff", borderBottomWidth: 1, borderBottomColor: shell.line }}>
+    <View style={{ paddingTop: insets.top, minHeight: isWide ? 76 : 60, paddingHorizontal: isWide ? 24 : 16, flexDirection: "row", alignItems: "center", gap: isWide ? 12 : 10, backgroundColor: "#fff", borderBottomWidth: 1, borderBottomColor: shell.line }}>
       {isWide ? null : (
         <Txt variant="h3" weight="700" color={shell.green} style={{ marginRight: 4 }}>
           LT
@@ -161,25 +131,22 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
       <Txt variant={isWide ? "h1" : "h3"} numberOfLines={1} style={{ flexShrink: 1, minWidth: 60 }}>
         {title}
       </Txt>
-      {isWide ? (
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginLeft: 8 }}>
-          <Icon name="cloud-sun" size={26} color={shell.weather} />
-          <Txt variant="body" muted numberOfLines={1}>
-            {t(city)}{" "}
-            <Txt variant="card" weight="500">
-              24°
-            </Txt>
-          </Txt>
-        </View>
-      ) : null}
       <View style={{ flex: 1 }} />
       <SearchBar compact={!isWide} />
       {isWide ? (
-        <Pressable accessibilityRole="button" accessibilityLabel={wifi ? t("{network} · 演示連線", { network }) : t("離線模式 · 演示")} onPress={() => router.navigate("/settings?section=device" as never)} style={{ width: 48, height: 48, alignItems: "center", justifyContent: "center" }}>
-          <Icon name={wifi ? "wifi" : "wifi-off"} size={24} color={shell.green} />
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+          <Icon name="cloud-sun" size={22} color={shell.weather} />
+          <Txt variant="card" weight="500" numberOfLines={1}>
+            {formatTemp(24, tempUnit)}
+          </Txt>
+        </View>
+      ) : null}
+      {isWide ? (
+        <Pressable accessibilityRole="button" accessibilityLabel={wifi ? t("{network} · 演示連線", { network }) : t("離線模式 · 演示")} onPress={() => router.navigate("/settings?section=device" as never)} style={{ width: 40, height: 40, alignItems: "center", justifyContent: "center" }}>
+          <Icon name={wifi ? "wifi" : "wifi-off"} size={22} color={shell.green} />
         </Pressable>
       ) : null}
-      <View style={{ flexDirection: "row", alignItems: "baseline", gap: 12 }}>
+      <View style={{ flexDirection: "row", alignItems: "baseline", gap: 8 }}>
         <Txt variant={isWide ? "h1" : "h3"} weight="600" style={{ fontVariant: ["tabular-nums"] }}>
           {formatTime(now)}
         </Txt>
@@ -189,8 +156,8 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
           </Txt>
         ) : null}
       </View>
-      <Pressable accessibilityRole="button" accessibilityLabel={t("阿發家的成員")} onPress={openAccount} style={{ width: isWide ? 48 : 40, height: isWide ? 48 : 40, borderRadius: 24, backgroundColor: shell.surfaceMuted, borderWidth: 1, borderColor: shell.line, alignItems: "center", justifyContent: "center" }}>
-        <Icon name="user-round" size={isWide ? 24 : 20} color={shell.green} />
+      <Pressable accessibilityRole="button" accessibilityLabel={t("設定")} onPress={() => router.navigate("/settings" as never)} style={{ width: isWide ? 44 : 40, height: isWide ? 44 : 40, borderRadius: 22, backgroundColor: onSettings ? shell.greenSoft : shell.surfaceMuted, borderWidth: 1, borderColor: onSettings ? shell.green : shell.line, alignItems: "center", justifyContent: "center" }}>
+        <Icon name="settings" size={isWide ? 22 : 20} color={shell.green} />
       </Pressable>
     </View>
   );

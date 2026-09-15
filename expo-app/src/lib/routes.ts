@@ -11,6 +11,10 @@ export const ROUTES: { id: RouteId; href: string; label: string; icon: string }[
   { id: "settings", href: "/settings", label: "設定", icon: "settings" },
 ];
 
+/** ROUTES minus Settings, for the primary nav rail / bottom tabs — Settings has its own
+ * icon-only entry in the top bar instead of taking a slot in the main navigation. */
+export const NAV_ROUTES = ROUTES.filter((route) => route.id !== "settings");
+
 export function routeIdFor(pathname: string): RouteId {
   const first = pathname.split("?")[0].split("/").filter(Boolean)[0] || "";
   const match = ROUTES.find((r) => r.id === first);

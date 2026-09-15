@@ -1,6 +1,6 @@
 /* Settings → 顯示與語言 (brightness · language · units · weather city). */
 import { View } from "react-native";
-import { Button, Select } from "@/components/ui";
+import { Button, Segmented, Select } from "@/components/ui";
 import { useI18n } from "@/i18n";
 import { useDeviceStore, type Settings } from "@/store/device";
 import { toast } from "@/store/toast";
@@ -51,19 +51,37 @@ export function DisplaySection() {
           title={t("度量單位")}
           detail={unitLabel(settings.units)}
           control={
-            <Select<Settings["units"]>
+            <Segmented<Settings["units"]>
+              size="sm"
               accessibilityLabel={t("度量單位")}
-              title={t("度量單位")}
               value={settings.units === "imperial" ? "imperial" : "metric"}
               options={[
-                { value: "metric", label: t("公制 · kg / ml") },
-                { value: "imperial", label: t("英制 · lb / oz") },
+                { value: "metric", label: "kg / ml" },
+                { value: "imperial", label: "lb / oz" },
               ]}
               onChange={(units) => {
                 setSettings({ units });
                 toast(t("設定已更新 · 本次操作有效"));
               }}
-              style={{ minWidth: 220 }}
+            />
+          }
+        />
+        <SettingsRow
+          title={t("溫度單位")}
+          detail={settings.tempUnit === "F" ? t("華氏 · °F") : t("攝氏 · °C")}
+          control={
+            <Segmented<Settings["tempUnit"]>
+              size="sm"
+              accessibilityLabel={t("溫度單位")}
+              value={settings.tempUnit}
+              options={[
+                { value: "C", label: "°C" },
+                { value: "F", label: "°F" },
+              ]}
+              onChange={(tempUnit) => {
+                setSettings({ tempUnit });
+                toast(t("設定已更新 · 本次操作有效"));
+              }}
             />
           }
         />

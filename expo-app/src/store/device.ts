@@ -56,6 +56,7 @@ export type Settings = {
   brightness: number;
   city: string;
   units: "metric" | "imperial";
+  tempUnit: "C" | "F";
   reminders: boolean;
   leadTime: number;
   notificationPermission: boolean;
@@ -206,6 +207,7 @@ export function seedData(): DeviceData {
       brightness: 85,
       city: "臺北市",
       units: "metric",
+      tempUnit: "C",
       reminders: true,
       leadTime: 15,
       notificationPermission: false,
