@@ -28,7 +28,7 @@ export function AgendaCard() {
       style={{ flex: 1 }}
       footer={<Button variant="text" size={isPhone ? "sm" : "md"} label={t("全部 {n} 個行程", { n: todays.length })} iconRight="arrow-right" onPress={() => router.navigate("/calendar" as never)} style={{ marginLeft: "auto" }} />}>
       {todays.length ? (
-        <View>
+        <View style={{ flex: 1 }}>
           {todays.map((event) => {
             const person = memberById(event.memberId, members);
             return (
@@ -37,7 +37,7 @@ export function AgendaCard() {
                 accessibilityRole="button"
                 accessibilityLabel={t(event.title)}
                 onPress={() => router.navigate(`/calendar?view=day&date=${todayKey}&eventId=${event.id}` as never)}
-                style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 46, paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: shell.line, opacity: pressed ? 0.7 : 1 })}>
+                style={({ pressed }) => ({ flex: 1, minHeight: 46, maxHeight: 92, flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: shell.line, opacity: pressed ? 0.7 : 1 })}>
                 <Txt variant="body" muted style={{ width: isPhone ? 52 : 60, fontVariant: ["tabular-nums"] }}>
                   {!event.time ? t("全天") : event.time}
                 </Txt>

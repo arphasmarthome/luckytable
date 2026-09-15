@@ -63,6 +63,8 @@ function useKeyboard() {
   }, []);
 }
 
+const SLIDESHOW_MS = 3000;
+
 export function PhotoFrameScreen() {
   const { t } = useI18n();
   const { isPhone } = useBreakpoint();
@@ -76,6 +78,11 @@ export function PhotoFrameScreen() {
   useFullscreenSync();
 
   const playing = Boolean(photo?.motion && autoPlay);
+  useEffect(() => {
+    if (!autoPlay || photos.length < 2) return;
+    const handle = setInterval(() => frame.changePhoto(1), SLIDESHOW_MS);
+    return () => clearInterval(handle);
+  }, [autoPlay, photos.length]);
   const onAi = (photoId: string) => {
     if (useFrameStore.getState().cinema) void exitFullscreen();
     openAiDialog(photoId);

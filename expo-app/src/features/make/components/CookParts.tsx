@@ -49,7 +49,7 @@ export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id:
     );
   }
   const rows = (
-    <View style={{ gap: 10 }}>
+    <View style={{ gap: compact ? 6 : 8 }}>
       {steps.map((s, i) => {
         const current = cook.selected[id] === i;
         const timerColor = s.done ? make.green : s.running ? make.primaryPressed : current ? make.foreground : make.muted;
@@ -65,20 +65,20 @@ export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id:
             style={({ pressed }) => ({
               flexDirection: "row",
               alignItems: "center",
-              gap: 14,
-              minHeight: compact ? 64 : 80,
-              paddingVertical: 10,
-              paddingLeft: 10,
-              paddingRight: 16,
+              gap: compact ? 10 : 14,
+              minHeight: compact ? 56 : 76,
+              paddingVertical: compact ? 6 : 8,
+              paddingLeft: compact ? 8 : 10,
+              paddingRight: compact ? 10 : 14,
               borderWidth: 2,
               borderRadius: radius.lg,
               borderColor: current ? make.yellowStrong : make.border,
               backgroundColor: current ? make.yellow : make.surface,
               opacity: s.done ? 0.62 : pressed ? 0.85 : 1,
             })}>
-            <View style={{ width: 42, height: 42, borderRadius: 21, alignItems: "center", justifyContent: "center", backgroundColor: s.done || current ? make.yellowStrong : make.surface2 }}>
-              {s.done ? <Icon name="check" size={22} color={make.yellowInk} /> : (
-                <MTxt variant="h3" weight="700" color={current ? make.yellowInk : make.foreground}>
+            <View style={{ width: compact ? 36 : 42, height: compact ? 36 : 42, borderRadius: 21, alignItems: "center", justifyContent: "center", backgroundColor: s.done || current ? make.yellowStrong : make.surface2 }}>
+              {s.done ? <Icon name="check" size={compact ? 18 : 22} color={make.yellowInk} /> : (
+                <MTxt variant={compact ? "body" : "h3"} weight="700" color={current ? make.yellowInk : make.foreground}>
                   {String(i + 1)}
                 </MTxt>
               )}
@@ -86,7 +86,8 @@ export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id:
             <MTxt variant={compact ? "body" : "card"} style={[{ flex: 1 }, s.done ? { textDecorationLine: "line-through" } : null]}>
               {plan[i]?.text || ""}
             </MTxt>
-            <MTxt variant={current ? "section" : "h2"} weight="700" color={timerColor} style={{ minWidth: 72, textAlign: "right", fontVariant: ["tabular-nums"] }}>
+            {/* one size and a fixed column so "1:00" → "Done" never resizes the row */}
+            <MTxt variant={compact ? "h3" : "section"} weight="700" color={timerColor} numberOfLines={1} style={{ width: compact ? 64 : 84, textAlign: "right", fontVariant: ["tabular-nums"] }}>
               {s.done ? t.stepDone : fmtClock(s.remaining)}
             </MTxt>
           </Pressable>
@@ -144,18 +145,18 @@ function PaneChips({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A" | "B"
   const { t, dishName } = useMakeStrings();
   const setPaneDish = useMakeStore((s) => s.setPaneDish);
   return (
-    <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginLeft: 6 }}>
+    <View style={{ flexDirection: "row", gap: 6, marginLeft: 4 }}>
       {cook.dishIds.map((x, i) => {
         const on = x === id;
         return (
-          <Pressable key={x} accessibilityRole="button" accessibilityLabel={dishName(dishById(x))} accessibilityState={{ selected: on }} onPress={() => setPaneDish(tag, x)} style={{ width: 46, height: 46, borderRadius: radius.md, borderWidth: 2, borderColor: on ? make.primary : make.borderStrong, backgroundColor: on ? make.primary : make.surface, alignItems: "center", justifyContent: "center" }}>
+          <Pressable key={x} accessibilityRole="button" accessibilityLabel={dishName(dishById(x))} accessibilityState={{ selected: on }} onPress={() => setPaneDish(tag, x)} style={{ width: 40, height: 40, borderRadius: radius.md, borderWidth: 2, borderColor: on ? make.primary : make.borderStrong, backgroundColor: on ? make.primary : make.surface, alignItems: "center", justifyContent: "center" }}>
             <MTxt variant="h3" weight="700" color={on ? "#fff" : make.foreground}>
               {String(i + 1)}
             </MTxt>
           </Pressable>
         );
       })}
-      <Pressable accessibilityRole="button" accessibilityLabel={t.addDish} onPress={onAdd} style={{ width: 46, height: 46, borderRadius: radius.md, borderWidth: 2, borderStyle: "dashed", borderColor: make.borderStrong, alignItems: "center", justifyContent: "center" }}>
+      <Pressable accessibilityRole="button" accessibilityLabel={t.addDish} onPress={onAdd} style={{ width: 40, height: 40, borderRadius: radius.md, borderWidth: 2, borderStyle: "dashed", borderColor: make.borderStrong, alignItems: "center", justifyContent: "center" }}>
         <MTxt variant="h3" weight="700" muted>
           +
         </MTxt>
@@ -172,15 +173,16 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
   const completeStep = useMakeStore((s) => s.completeStep);
   const valid = Boolean(id && cook.dishIds.includes(id));
   const head = (
-    <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 10, minHeight: 52 }}>
-      <View style={{ width: 44, height: 44, borderRadius: radius.md, backgroundColor: make.foreground, alignItems: "center", justifyContent: "center" }}>
+    // no wrapping: both panes keep the same head height so Step 1 lines up on the A and B sides
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 8, height: 44 }}>
+      <View style={{ width: 40, height: 40, borderRadius: radius.md, backgroundColor: make.foreground, alignItems: "center", justifyContent: "center" }}>
         <MTxt variant="h3" weight="700" color="#fff">
           {tag}
         </MTxt>
       </View>
       <PaneChips cook={cook} tag={tag} id={valid ? id : null} onAdd={onAdd} />
       {valid ? (
-        <MTxt variant="card" weight="600" numberOfLines={1} style={{ marginLeft: "auto", flexShrink: 1 }}>
+        <MTxt variant="body" weight="600" numberOfLines={1} style={{ marginLeft: "auto", flexShrink: 1 }}>
           {dishName(dishById(id!))}
         </MTxt>
       ) : null}
@@ -188,7 +190,7 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
   );
   if (!valid || !id) {
     return (
-      <View style={{ flex: 1, gap: 12, padding: 16, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
+      <View style={{ flex: 1, gap: 8, padding: 12, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
         {head}
         <View style={{ alignItems: "center", gap: 12, padding: 24 }}>
           <Icon name="cooking-pot" size={40} color={make.muted} />
@@ -202,23 +204,23 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
   const sel = cook.selected[id] ?? 0;
   const s = stepAt(cook, id, sel);
   return (
-    <View style={{ flex: 1, minHeight: 0, gap: 12, padding: isPhone ? 12 : 16, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
+    <View style={{ flex: 1, minHeight: 0, gap: 8, padding: isPhone ? 10 : 12, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
       {head}
-      <Photo uri={dishImg(id)} height={isPhone ? 240 : isWide ? 220 : 300} round={16}>
-        <View style={{ position: "absolute", left: 16, top: 16, flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 10, paddingLeft: 18, paddingRight: 14, borderRadius: 16, backgroundColor: "#1f1f1dcc" }}>
-          <View>
+      <Photo uri={dishImg(id)} height={isPhone ? 200 : isWide ? 168 : 240} round={16}>
+        <View style={{ position: "absolute", left: 12, top: 12, flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 6, paddingLeft: 14, paddingRight: 10, borderRadius: 14, backgroundColor: "#1f1f1dcc" }}>
+          <View style={{ minWidth: 96 }}>
             <MTxt variant="caption" color="#ffffffcc" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
               {t.step} {sel + 1}
             </MTxt>
-            <MTxt variant="timer" weight="700" color={s?.running ? "#ffb27a" : "#fff"} style={{ fontVariant: ["tabular-nums"] }}>
+            <MTxt variant="h1" weight="700" color={s?.running ? "#ffb27a" : "#fff"} numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
               {s ? (s.done ? t.stepDone : fmtClock(s.remaining)) : "--"}
             </MTxt>
           </View>
           <Button square round icon={s?.running ? "pause" : "play"} variant="primary" accent={make.primary} disabled={!s || s.done} accessibilityLabel={s?.running ? t.pause : t.play} onPress={() => toggleTimer(id, sel)} />
           <Button square round icon="check" variant="primary" accent={s?.done ? make.yellowStrong : make.green} onAccent={s?.done ? make.yellowInk : "#fff"} disabled={!s} accessibilityLabel={t.done} onPress={() => completeStep(id, sel)} />
         </View>
-        <View style={{ position: "absolute", right: 16, bottom: 16, maxWidth: "80%", paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
-          <MTxt weight="600" numberOfLines={1}>
+        <View style={{ position: "absolute", right: 12, bottom: 12, maxWidth: "80%", paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
+          <MTxt variant="meta" weight="600" numberOfLines={1}>
             {cook.dishIds.indexOf(id) + 1} · {dishName(dishById(id))}
           </MTxt>
         </View>

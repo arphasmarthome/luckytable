@@ -57,18 +57,18 @@ export default function CookScreen() {
   const addDish = (pane: "A" | "B" | "" = "") => openAddDishModal(t.addDish, pane);
 
   const top = (
-    <MCard padding={isPhone ? 12 : 14} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: isPhone ? 12 : 18 }}>
+    <MCard padding={isPhone ? 10 : 12} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: isPhone ? 10 : 14 }}>
       <Button square icon="columns-2" variant={cook.split ? "primary" : "secondary"} accent={make.primary} accessibilityLabel={cook.split ? t.singleScreen : t.splitScreen} onPress={toggleSplit} />
-      <View style={{ flex: 1, minWidth: 200, gap: 4 }}>
-        <MTxt variant="meta" muted weight="600" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
+      <View style={{ flex: 1, minWidth: 200, gap: 2 }}>
+        <MTxt variant="caption" muted weight="600" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
           {t.timeLeftAll}
         </MTxt>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
-          <MTxt variant="timer" weight="700" color={running ? make.primaryPressed : make.foreground} style={{ fontVariant: ["tabular-nums"] }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <MTxt variant="h1" weight="700" color={running ? make.primaryPressed : make.foreground} style={{ fontVariant: ["tabular-nums"], minWidth: 72 }}>
             {fmtClock(totalRemaining(cook))}
           </MTxt>
           <View style={{ flex: 1 }}>
-            <Bar pct={totalPct(cook)} color={make.primary} height={14} />
+            <Bar pct={totalPct(cook)} color={make.primary} height={10} />
           </View>
         </View>
       </View>
@@ -92,9 +92,9 @@ export default function CookScreen() {
 
   if (cook.split) {
     return (
-      <Page background={make.background} gap={12} scroll={!isWide}>
+      <Page background={make.background} gap={8} scroll={!isWide}>
         {top}
-        <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 14, alignItems: isWide ? "stretch" : undefined }}>
+        <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: 10, alignItems: isWide ? "stretch" : undefined }}>
           <CookPane cook={cook} tag="A" id={cook.active} onAdd={() => addDish("A")} />
           <CookPane cook={cook} tag="B" id={cook.paneB} onAdd={() => addDish("B")} />
         </View>
@@ -146,9 +146,9 @@ export default function CookScreen() {
   );
 
   return (
-    <Page background={make.background} gap={12} scroll={!isWide}>
+    <Page background={make.background} gap={10} scroll={!isWide}>
       {top}
-      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: isPhone ? 12 : 16, alignItems: isWide ? "stretch" : undefined }}>
+      <View style={{ flex: isWide ? 1 : undefined, minHeight: 0, flexDirection: isWide ? "row" : "column", gap: isPhone ? 10 : 14, alignItems: isWide ? "stretch" : undefined }}>
         <DishRail cook={cook} horizontal={!isWide} onAdd={() => addDish("")} />
         {photoCol}
         {stepsCol}
