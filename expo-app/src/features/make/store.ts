@@ -45,6 +45,8 @@ export type MakeData = {
   cart: CartItem[];
   vendor: VendorId;
   history: CookRecord[];
+  /** deduct one unit per dish from matching stock rows when a cooking session finishes */
+  autoDeduct: boolean;
   myVotes: string[];
   recipes: Record<string, Recipe>;
   /* in-memory */
@@ -101,6 +103,7 @@ export type MakeActions = {
   /** closes the session and returns its record (null when nothing was cooking) */
   finishCook: () => CookRecord | null;
   addHistoryPhoto: (recordId: string, uri: string) => void;
+  setAutoDeduct: (value: boolean) => void;
   toggleSplit: () => void;
   setActiveDish: (id: string) => void;
   setPaneDish: (pane: "A" | "B", id: string) => void;
@@ -122,6 +125,7 @@ export const KEYS = {
   cart: "luckytable-make-cart",
   vendor: "luckytable-make-vendor",
   history: "luckytable-make-history",
+  autoDeduct: "luckytable-make-autodeduct",
   acquired: "luckytable-make-acquired",
   votes: "luckytable-make-votes",
   mealdb: "luckytable-mealdb",
@@ -159,6 +163,7 @@ function readPersisted() {
     cart: loadJSON<CartItem[]>(KEYS.cart, []),
     vendor: loadJSON<VendorId>(KEYS.vendor, "instacart"),
     history: normalizeHistory(loadJSON<CookRecord[]>(KEYS.history, [])),
+    autoDeduct: loadJSON<boolean>(KEYS.autoDeduct, false),
     myVotes: loadJSON<string[]>(KEYS.votes, []),
     recipes: loadJSON<Record<string, Recipe>>(KEYS.mealdb, {}),
   };
@@ -278,6 +283,24 @@ export function tonightDetail(s: Pick<MakeData, "tonight" | "recipes" | "acquire
   });
 }
 
+/** One unit off every stock row an ingredient of the cooked dishes matches (staples and "any" aliases skipped). */
+function deductStock(stock: StockRow[], s: Pick<MakeData, "recipes">, dishIds: string[]): StockRow[] {
+  const used = new Map<string, number>();
+  dishIds.forEach((id) => {
+    ingList(s, dishById(id)).forEach(([name]) => {
+      const k = String(name).toLowerCase();
+      if (ALIAS[k] === "*" || STAPLES.includes(k)) return;
+      const key = ALIAS[k] || k;
+      const row = stock.find((x) => {
+        const n = x.name.toLowerCase();
+        return n === key || key.includes(n) || n.includes(key);
+      });
+      if (row) used.set(row.name, (used.get(row.name) || 0) + 1);
+    });
+  });
+  return used.size ? stock.map((x) => (used.has(x.name) ? { ...x, qty: Math.max(0, x.qty - (used.get(x.name) || 0)) } : x)) : stock;
+}
+
 /* ───────── session helpers (mutate a cloned session) ───────── */
 const cloneCook = (c: CookSession): CookSession => ({
   ...c,
@@ -345,7 +368,7 @@ export const useMakeStore = create<MakeState>()((set, get) => {
     recordRunning(c, was);
     set({ cook: c });
   };
-  const persisted = Platform.OS === "web" ? readPersisted() : { tonight: normalizeTonight(null), cook: null, stock: normalizeStock(null), acquired: {}, cart: [], vendor: "instacart" as VendorId, history: [] as CookRecord[], myVotes: [], recipes: {} };
+  const persisted = Platform.OS === "web" ? readPersisted() : { tonight: normalizeTonight(null), cook: null, stock: normalizeStock(null), acquired: {}, cart: [], vendor: "instacart" as VendorId, history: [] as CookRecord[], autoDeduct: false, myVotes: [], recipes: {} };
   return {
     ...persisted,
     votes: { ...VOTE_SEED },
@@ -490,9 +513,11 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       const timeline = c.timeline.slice();
       if (anyRunning(c)) timeline.push({ kind: "pause", at: now });
       const record: CookRecord = { id: `${c.date}-${now}`, date: c.date, dishIds: c.dishIds.slice(), timeline, startedAt: timeline[0]?.at ?? now, finishedAt: now, totalSeconds: cookingSeconds(timeline, now), photos: [] };
-      set({ cook: null, history: [record, ...get().history] });
+      const s = get();
+      set({ cook: null, history: [record, ...s.history], stock: s.autoDeduct ? deductStock(s.stock, s, c.dishIds) : s.stock });
       return record;
     },
+    setAutoDeduct: (autoDeduct) => set({ autoDeduct }),
     addHistoryPhoto: (recordId, uri) => set((s) => ({ history: s.history.map((r) => (r.id === recordId ? { ...r, photos: r.photos.concat(uri) } : r)) })),
     toggleSplit: () =>
       withCook((c) => {
@@ -716,6 +741,7 @@ useMakeStore.subscribe((s, prev) => {
   if (s.cart !== prev.cart) saveJSON(KEYS.cart, s.cart);
   if (s.vendor !== prev.vendor) saveJSON(KEYS.vendor, s.vendor);
   if (s.history !== prev.history) saveJSON(KEYS.history, s.history);
+  if (s.autoDeduct !== prev.autoDeduct) saveJSON(KEYS.autoDeduct, s.autoDeduct);
   if (s.acquired !== prev.acquired) saveJSON(KEYS.acquired, s.acquired);
   if (s.myVotes !== prev.myVotes) saveJSON(KEYS.votes, s.myVotes);
   if (s.recipes !== prev.recipes) saveJSON(KEYS.mealdb, s.recipes);
@@ -743,10 +769,11 @@ else {
     loadJSONAsync<CartItem[]>(KEYS.cart, []),
     loadJSONAsync<VendorId>(KEYS.vendor, "instacart"),
     loadJSONAsync<CookRecord[]>(KEYS.history, []),
+    loadJSONAsync<boolean>(KEYS.autoDeduct, false),
     loadJSONAsync<string[]>(KEYS.votes, []),
     loadJSONAsync<Record<string, Recipe>>(KEYS.mealdb, {}),
-  ]).then(([tonight, cook, stock, acquired, cart, vendor, history, myVotes, recipes]) => {
-    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, vendor, history: normalizeHistory(history), myVotes, recipes, hydrated: true });
+  ]).then(([tonight, cook, stock, acquired, cart, vendor, history, autoDeduct, myVotes, recipes]) => {
+    useMakeStore.setState({ tonight: normalizeTonight(tonight), cook: normalizeCook(cook), stock: normalizeStock(stock), acquired, cart, vendor, history: normalizeHistory(history), autoDeduct, myVotes, recipes, hydrated: true });
     boot();
   });
 }

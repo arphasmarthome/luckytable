@@ -119,6 +119,34 @@ export const DAY_ZH = ["日", "一", "二", "三", "四", "五", "六"];
 export const WEEK_MEALS: Record<string, string[]> = { Mon: ["beef-broccoli"], Tue: ["tomato-egg"], Wed: [], Thu: ["egg-foo-young"], Fri: ["banh-mi-bowl"], Sat: [], Sun: [] };
 export const PLAN_TIMES = ["17:00", "17:30", "18:00", "18:30", "19:00", "19:30"];
 
+/** Typical retail size per category, shown when an item has no measured size ("Weight/Unit" column). */
+export const TYPICAL_SIZE: Record<IngredientCategory, Size> = {
+  Vegetable: { kind: "weight", g: 200 },
+  Fruit: { kind: "weight", g: 150 },
+  Grain: { kind: "weight", g: 1000 },
+  Protein: { kind: "weight", g: 450 },
+  Condiment: { kind: "volume", ml: 500 },
+  Herb: { kind: "weight", g: 20 },
+  Dairy: { kind: "volume", ml: 1000 },
+};
+const TYPICAL_UNIT: Record<IngredientCategory, { en: string; zh: string }> = {
+  Vegetable: { en: "each", zh: "個" },
+  Fruit: { en: "each", zh: "個" },
+  Grain: { en: "bag", zh: "袋" },
+  Protein: { en: "pack", zh: "盒" },
+  Condiment: { en: "bottle", zh: "瓶" },
+  Herb: { en: "bunch", zh: "把" },
+  Dairy: { en: "carton", zh: "盒" },
+};
+const UNIT_EN: Record<string, string> = { heads: "head", packs: "pack", stalks: "stalk", pieces: "each", bulbs: "bulb" };
+export const typicalSize = (name: string, size?: Size): Size => (size && size.kind !== "count" ? size : TYPICAL_SIZE[categoryOf(name)]);
+export function unitLabel(name: string, zh: boolean) {
+  const u = ITEMS[name]?.unit;
+  if (u) return zh ? UNIT[u] || u : UNIT_EN[u] || u;
+  const c = TYPICAL_UNIT[categoryOf(name)];
+  return zh ? c.zh : c.en;
+}
+
 const trimNum = (n: number) => String(Math.round(n * 10) / 10);
 /** "500 g" / "1.1 lb" / "500 ml" / "16.9 fl oz" / "—" for count-only items. */
 export function sizeLabel(size: Size | undefined, units: "metric" | "imperial") {
