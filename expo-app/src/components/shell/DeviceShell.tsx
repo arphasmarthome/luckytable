@@ -118,7 +118,8 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
   const wifi = useDeviceStore((s) => s.settings.wifi);
   const network = useDeviceStore((s) => s.settings.network);
   const tempUnit = useDeviceStore((s) => s.settings.tempUnit);
-  const title = pathname.startsWith("/make/cook") ? t("料理中") : t(ROUTES.find((r) => r.id === routeId)?.label || "首頁");
+  const familyName = useDeviceStore((s) => s.settings.familyName);
+  const title = pathname.startsWith("/make/cook") ? t("料理中") : pathname.startsWith("/calendar") ? t(familyName) : t(ROUTES.find((r) => r.id === routeId)?.label || "首頁");
   const onSettings = routeId === "settings";
   return (
     <View style={{ paddingTop: insets.top, minHeight: isWide ? 76 : 60, paddingHorizontal: isWide ? 24 : 16, flexDirection: "row", alignItems: "center", gap: isWide ? 12 : 10, backgroundColor: "#fff", borderBottomWidth: 1, borderBottomColor: shell.line }}>

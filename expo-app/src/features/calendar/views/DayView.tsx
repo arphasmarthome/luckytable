@@ -22,7 +22,7 @@ function AgendaRow({ event, roomy }: { event: CalEvent; roomy: boolean }) {
   const doneLabel = event.done ? t("標記未完成") : t("標記完成");
   const open = () => openEventDetail(event.id);
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: isPhone ? 10 : 16, minHeight: roomy ? 96 : 64, paddingVertical: roomy ? 16 : 10, paddingLeft: 12, paddingRight: 12, marginBottom: roomy ? 12 : 5, borderLeftWidth: roomy ? 3 : 4, borderLeftColor: owner.color, borderRadius: 5, backgroundColor: tint(owner.color, roomy ? 0.05 : 0.09) }}>
+    <View style={{ flexDirection: "row", alignItems: "center", gap: isPhone ? 10 : 16, minHeight: roomy ? 96 : 64, paddingVertical: roomy ? 16 : 10, paddingLeft: 12, paddingRight: 12, marginBottom: roomy ? 12 : 5, borderLeftWidth: roomy ? 3 : 4, borderLeftColor: owner.color, borderRadius: 5, backgroundColor: tint(owner.color, roomy ? 0.16 : 0.2) }}>
       <Pressable accessibilityRole="button" accessibilityLabel={t("查看{title}", { title: t(event.title) })} onPress={open} style={{ width: isPhone ? 64 : 88, minHeight: 44, justifyContent: "center", gap: 4 }}>
         <Txt variant={roomy ? "section" : "h3"} weight="500" color="#45574c">
           {event.time || t("全天")}

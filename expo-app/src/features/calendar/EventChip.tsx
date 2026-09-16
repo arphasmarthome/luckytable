@@ -27,7 +27,7 @@ export function EventChip({ event, compact }: { event: CalEvent; compact?: boole
         borderLeftWidth: 3,
         borderLeftColor: owner.color,
         borderRadius: compact ? 3 : 5,
-        backgroundColor: tint(owner.color, pressed ? 0.18 : 0.07),
+        backgroundColor: tint(owner.color, pressed ? 0.36 : 0.22),
         opacity: event.done ? 0.65 : 1,
       })}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 4, flexShrink: 0 }}>

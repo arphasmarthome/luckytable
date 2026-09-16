@@ -1,4 +1,4 @@
-/* The 行事曆 screen: toolbar, member sidebar (chip row on phones), period navigation and the
+/* The 行事曆 screen: a horizontal family-member filter row, period navigation, and the
  * year / month / week / day views (port of render() in prototype/device/calendar.js). */
 import { useEffect, useRef, useState } from "react";
 import { ScrollView, View } from "react-native";
@@ -11,12 +11,12 @@ import { radius } from "@/theme";
 import { goToday, patchCalendar, setView, shiftPeriod } from "./actions";
 import { openEventDetail, openEventForm, openVoiceMember } from "./dialogs";
 import { NEXT_LABELS, PREVIOUS_LABELS, VIEWS, cal, filterEvents, isView, monthRows, periodEvents, type CalView } from "./helpers";
-import { MemberBar, Upcoming, Weather } from "./Sidebar";
+import { MemberBar } from "./Sidebar";
 import { useCalendarUi } from "./store";
 import { DayView } from "./views/DayView";
 import { MonthView } from "./views/MonthView";
 import { WeekView } from "./views/WeekView";
-import { MiniMonth, YearView } from "./views/YearView";
+import { YearView } from "./views/YearView";
 
 /** Query parameters other modules link here with: /calendar?date=…&view=…&member=…&action=new|voice&eventId=… */
 export type CalendarParams = { date?: string; view?: string; member?: string; action?: string; eventId?: string };
@@ -42,10 +42,9 @@ function useArrivalParams(params: CalendarParams) {
 
 export function CalendarScreen({ params }: { params: CalendarParams }) {
   const { t, monthDay, monthYear, yearLabel, dayTitle } = useI18n();
-  const { isPhone, isWide, isTablet } = useBreakpoint();
+  const { isPhone } = useBreakpoint();
   const calendar = useDeviceStore((s) => s.calendar);
   const events = useDeviceStore((s) => s.events);
-  const members = useDeviceStore((s) => s.members);
   useArrivalParams(params);
 
   const view: CalView = isView(calendar.view) ? calendar.view : "month";
@@ -71,12 +70,6 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
   const body =
     view === "year" ? <YearView date={date} events={visible} /> : view === "month" ? <MonthView date={date} events={visible} compact={compactMonth} cellHeight={cellHeight} /> : view === "day" ? <DayView date={date} events={filterEvents(visible, "all", dateKey(date))} scrollTo={scrollTo} /> : <WeekView date={date} events={inPeriod} />;
 
-  const actions = (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: isPhone ? 8 : 12 }}>
-      <Button variant="primary" accent={cal.green} icon="plus" label={t("新增行程")} onPress={() => openEventForm({ date: calendar.date })} />
-    </View>
-  );
-
   const navigation = (
     <View style={{ flexDirection: isPhone ? "column" : "row", alignItems: isPhone ? "stretch" : "center", gap: 12, paddingBottom: 12 }}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 7, minWidth: 0 }}>
@@ -95,48 +88,17 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
   return (
     <Page scroll={false} gap={0}>
       <View accessibilityLabel={t("行事曆")} style={{ flex: 1, minHeight: 0 }}>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12, paddingBottom: isPhone ? 12 : 10, marginBottom: isPhone ? 12 : 12, borderBottomWidth: 1, borderBottomColor: cal.line }}>
-          {isPhone ? <View /> : <Txt variant="page">{t("家庭行事曆")}</Txt>}
-          {actions}
-        </View>
-        <View style={{ flex: 1, minHeight: 0, flexDirection: "row", gap: 24 }}>
-          {isWide ? (
-            <View style={{ width: isTablet ? 220 : 248, borderRightWidth: 1, borderRightColor: cal.line, paddingRight: 20, minHeight: 0 }}>
-              <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 10, flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-                <MemberBar view={view} date={date} />
-                {view === "week" ? (
-                  <View style={{ borderTopWidth: 1, borderTopColor: cal.line, paddingTop: 12 }}>
-                    <MiniMonth date={date} month={date.getMonth()} events={visible} compact dayHeight={28} />
-                    <Upcoming date={date} events={visible} />
-                  </View>
-                ) : (
-                  <View style={{ borderTopWidth: 1, borderTopColor: cal.line }}>
-                    <Upcoming date={date} events={visible} />
-                  </View>
-                )}
-                <Weather />
-              </ScrollView>
-            </View>
-          ) : null}
-          <View style={{ flex: 1, minWidth: 0, minHeight: 0 }}>
-            {navigation}
-            {isWide ? null : (
-              <View style={{ paddingBottom: 12 }}>
-                <MemberBar view={view} date={date} horizontal />
-              </View>
-            )}
-            <View onLayout={(e) => setContent({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })} style={{ flex: 1, minHeight: 0, backgroundColor: "#fff", borderWidth: 1, borderColor: cal.line, borderRadius: radius.md, overflow: "hidden" }}>
-              <ScrollView ref={scrollRef} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-                {body}
-                {isWide ? null : (
-                  <View style={{ paddingHorizontal: 16, paddingBottom: 16, borderTopWidth: 1, borderTopColor: cal.line }}>
-                    <Upcoming date={date} events={visible} />
-                    {isPhone ? null : <Weather />}
-                  </View>
-                )}
-              </ScrollView>
-            </View>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10, paddingBottom: 12, marginBottom: 12, borderBottomWidth: 1, borderBottomColor: cal.line }}>
+          <View style={{ flex: 1, minWidth: 0 }}>
+            <MemberBar view={view} date={date} />
           </View>
+          <Button square variant="primary" accent={cal.green} icon="plus" accessibilityLabel={t("新增行程")} onPress={() => openEventForm({ date: calendar.date })} />
+        </View>
+        {navigation}
+        <View onLayout={(e) => setContent({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })} style={{ flex: 1, minHeight: 0, backgroundColor: "#fff", borderWidth: 1, borderColor: cal.line, borderRadius: radius.md, overflow: "hidden" }}>
+          <ScrollView ref={scrollRef} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+            {body}
+          </ScrollView>
         </View>
       </View>
     </Page>
