@@ -21,7 +21,7 @@ export type { Size, StockRow } from "./data";
 /* ───────── types ───────── */
 export type CartItem = { name: string; zh: string; amount: string; dishId: string };
 export type Recipe = { ing: DishIngredient[]; steps: string[]; source: string; title: string };
-export type StepState = { seconds: number; remaining: number; done: boolean; running: boolean; deadline: number };
+export type StepState = { seconds: number; remaining: number; done: boolean; running: boolean; deadline: number; alarming: boolean };
 export type TimelineEvent = { kind: "start" | "pause" | "resume"; at: number };
 export type CookSession = { date: string; dishIds: string[]; active: string; split: boolean; paneB: string | null; steps: Record<string, StepState[]>; selected: Record<string, number>; timeline: TimelineEvent[] };
 /** One finished cooking session, kept for the Summary page. */
@@ -109,9 +109,11 @@ export type MakeActions = {
   setPaneDish: (pane: "A" | "B", id: string) => void;
   selectStep: (id: string, i: number) => void;
   toggleTimer: (id: string, i: number) => void;
-  startAll: () => void;
-  pauseAll: () => void;
-  addMinute: (id: string, i: number) => void;
+  /** Adjusts a step's timer by whole minutes or seconds (live, while running too); used by the
+   * per-step +/- steppers. */
+  nudgeStep: (id: string, i: number, unit: "min" | "sec", delta: 1 | -1) => void;
+  /** Silences a finished step's alarm, marks it done, and lets the next step auto-start. */
+  dismissAlarm: (id: string, i: number) => void;
   resetStep: (id: string, i: number) => void;
   completeStep: (id: string, i: number) => void;
 };
@@ -134,7 +136,6 @@ export const KEYS = {
 type StoredTonight = { date: string; ids: string[] } | null;
 
 const currentLang = (): Lang => langOf(useI18nStore.getState().locale);
-const strings = () => STR[currentLang()];
 
 function normalizeStock(rows: StockRow[] | null | undefined): StockRow[] {
   const base = Array.isArray(rows) && rows.length ? rows : STOCK;
@@ -256,14 +257,10 @@ export function planSeconds(s: Pick<MakeData, "recipes">, id: string) {
   return p.length ? p.reduce((a, x) => a + x.seconds, 0) : cookMinutes(dishById(id)) * 60;
 }
 
-export const stepAt = (c: CookSession | null, id: string, i: number): StepState | undefined => c?.steps[id]?.[i];
 export const anyRunning = (c: CookSession | null) => Boolean(c) && Object.values(c!.steps).some((steps) => steps.some((s) => s.running));
-export const dishRunning = (c: CookSession | null, id: string) => (c?.steps[id] || []).some((s) => s.running);
-export const totalRemaining = (c: CookSession | null) => (c ? c.dishIds.reduce((a, id) => a + (c.steps[id] || []).reduce((b, s) => b + (s.done ? 0 : s.remaining), 0), 0) : 0);
-export const totalSeconds = (c: CookSession | null) => (c ? c.dishIds.reduce((a, id) => a + (c.steps[id] || []).reduce((b, s) => b + s.seconds, 0), 0) : 0);
+export const anyAlarming = (c: CookSession | null) => Boolean(c) && Object.values(c!.steps).some((steps) => steps.some((s) => s.alarming));
 export const dishDone = (c: CookSession | null, id: string) => Boolean(c) && (c!.steps[id] || []).length > 0 && c!.steps[id].every((s) => s.done);
 export const allDone = (c: CookSession | null) => Boolean(c) && c!.dishIds.length > 0 && c!.dishIds.every((id) => dishDone(c, id));
-export const totalPct = (c: CookSession | null) => Math.round((1 - totalRemaining(c) / Math.max(1, totalSeconds(c))) * 100);
 
 export function voteRows(s: Pick<MakeData, "votes" | "myVotes">, lang: Lang): VoteRow[] {
   const ids = Object.keys(VOTE_SEED).concat(s.myVotes.filter((id) => !(id in VOTE_SEED)));
@@ -337,7 +334,7 @@ function firstUndone(c: CookSession, id: string) {
 function syncSteps(c: CookSession, s: Pick<MakeData, "recipes">) {
   c.dishIds.forEach((id) => {
     const plan = planFor(s, id, "en");
-    if (!c.steps[id] || c.steps[id].length !== plan.length) c.steps[id] = plan.map((p) => ({ seconds: p.seconds, remaining: p.seconds, done: false, running: false, deadline: 0 }));
+    if (!c.steps[id] || c.steps[id].length !== plan.length) c.steps[id] = plan.map((p) => ({ seconds: p.seconds, remaining: p.seconds, done: false, running: false, deadline: 0, alarming: false }));
     if (c.selected[id] == null || c.selected[id] >= c.steps[id].length) c.selected[id] = firstUndone(c, id);
   });
 }
@@ -354,6 +351,14 @@ function pauseStep(s: StepState, now: number) {
   s.remaining = Math.max(0, Math.ceil((s.deadline - now) / 1000));
   s.running = false;
   s.deadline = 0;
+}
+/** After a step is dismissed/marked done: the next unfinished step (of this dish) auto-starts. */
+function advanceAfterDone(c: CookSession, id: string, i: number, now: number) {
+  const steps = c.steps[id] || [];
+  let next = steps.findIndex((x, j) => j > i && !x.done);
+  if (next === -1) next = steps.findIndex((x) => !x.done);
+  if (next !== -1) startStep(c, id, next, now);
+  else c.selected[id] = i;
 }
 
 /* ───────── store ───────── */
@@ -547,30 +552,35 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       });
       ensureInterval();
     },
-    startAll: () => {
-      withCook((c) => {
-        c.dishIds.forEach((id) => {
-          const steps = c.steps[id] || [];
-          if (!steps.length || steps.every((s) => s.done) || steps.some((s) => s.running)) return;
-          const sel = c.selected[id];
-          const i = steps[sel] && !steps[sel].done ? sel : firstUndone(c, id);
-          startStep(c, id, i);
-        });
-      });
-      ensureInterval();
-    },
-    pauseAll: () => {
-      const now = Date.now();
-      withCook((c) => c.dishIds.forEach((id) => (c.steps[id] || []).forEach((s) => { if (s.running) pauseStep(s, now); })));
-      stopInterval();
-    },
-    addMinute: (id, i) =>
+    nudgeStep: (id, i, unit, delta) => {
       withCook((c) => {
         const s = c.steps[id]?.[i];
         if (!s) return;
-        s.remaining += 60;
-        if (s.running) s.deadline += 60000;
-        if (s.done) s.done = false;
+        const change = (unit === "min" ? 60 : 1) * delta;
+        const next = Math.min(99 * 60 + 59, Math.max(0, s.remaining + change));
+        const diff = next - s.remaining;
+        if (!diff) return;
+        s.remaining = next;
+        s.seconds = next;
+        if (s.running) s.deadline += diff * 1000;
+        if (next > 0) {
+          s.done = false;
+          s.alarming = false;
+        }
+      });
+      ensureInterval();
+    },
+    dismissAlarm: (id, i) =>
+      withCook((c) => {
+        const s = c.steps[id]?.[i];
+        if (!s || !s.alarming) return;
+        s.alarming = false;
+        s.done = true;
+        s.running = false;
+        s.deadline = 0;
+        s.remaining = 0;
+        lastAlarmBeep.delete(`${id}:${i}`);
+        advanceAfterDone(c, id, i, Date.now());
       }),
     resetStep: (id, i) =>
       withCook((c) => {
@@ -580,6 +590,8 @@ export const useMakeStore = create<MakeState>()((set, get) => {
         s.running = false;
         s.deadline = 0;
         s.done = false;
+        s.alarming = false;
+        lastAlarmBeep.delete(`${id}:${i}`);
       }),
     completeStep: (id, i) =>
       withCook((c) => {
@@ -588,7 +600,9 @@ export const useMakeStore = create<MakeState>()((set, get) => {
         s.done = !s.done;
         s.running = false;
         s.deadline = 0;
+        s.alarming = false;
         s.remaining = s.done ? 0 : s.seconds;
+        lastAlarmBeep.delete(`${id}:${i}`);
         c.selected[id] = s.done ? firstUndone(c, id) : i;
       }),
   };
@@ -629,6 +643,8 @@ function announceMeal() {
 
 /* ───────── timer engine ───────── */
 let interval: ReturnType<typeof setInterval> | null = null;
+/** Last beep time per alarming step ("dishId:index"), so the alarm re-chimes every ~1.5s until dismissed. */
+const lastAlarmBeep = new Map<string, number>();
 function ensureInterval() {
   if (!interval && anyRunning(useMakeStore.getState().cook)) interval = setInterval(tick, 500);
 }
@@ -642,35 +658,35 @@ function tick() {
   const c = cloneCook(cur);
   const now = Date.now();
   const was = anyRunning(cur);
-  let finished = false;
   let changed = false;
   c.dishIds.forEach((id) =>
     (c.steps[id] || []).forEach((s, i) => {
+      if (s.alarming) {
+        const key = `${id}:${i}`;
+        if (now - (lastAlarmBeep.get(key) || 0) >= 1500) {
+          beep();
+          lastAlarmBeep.set(key, now);
+        }
+      }
       if (!s.running) return;
       const remaining = Math.max(0, Math.ceil((s.deadline - now) / 1000));
       if (remaining !== s.remaining) changed = true;
       s.remaining = remaining;
       if (remaining === 0) {
+        /* stops counting down and rings — the step is only marked done, and the next one only
+         * starts, once the cook dismisses the alarm (see dismissAlarm) */
         s.running = false;
-        s.done = true;
         s.deadline = 0;
-        finished = true;
-        /* the dish keeps going: the next unfinished step starts on its own */
-        const steps = c.steps[id];
-        let next = steps.findIndex((x, j) => j > i && !x.done);
-        if (next === -1) next = steps.findIndex((x) => !x.done);
-        if (next !== -1) startStep(c, id, next, now);
-        else c.selected[id] = i;
+        s.alarming = true;
+        changed = true;
+        beep();
+        lastAlarmBeep.set(`${id}:${i}`, now);
       }
     }),
   );
   recordRunning(c, was, now);
-  if (changed || finished) useMakeStore.setState({ cook: c });
-  if (finished) {
-    beep();
-    toast(strings().timerDone);
-  }
-  if (!anyRunning(c)) stopInterval();
+  if (changed) useMakeStore.setState({ cook: c });
+  if (!anyRunning(c) && !anyAlarming(c)) stopInterval();
 }
 
 /** Short 880 Hz beep through WebAudio (web only, guarded). */

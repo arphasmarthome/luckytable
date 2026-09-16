@@ -1,17 +1,143 @@
-/* Cooking-screen pieces: the numbered step list with a timer per step, the dish rail, and the
- * split-screen pane (photo with the timer overlaid, step list below). */
-import { useEffect, useRef } from "react";
-import { Platform, Pressable, ScrollView, View } from "react-native";
-import { Button, Icon } from "@/components/ui";
+/* Cooking-screen pieces: the numbered step list with a per-step timer, the dish rail, and the
+ * split-screen pane (photo overlay + step list below). */
+import { useEffect, useRef, useState } from "react";
+import { Animated, Platform, Pressable, ScrollView, View } from "react-native";
+import { Icon } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
-import { fmtClock } from "@/lib/date";
 import { make, radius } from "@/theme";
 import { dishById, dishImg } from "../data";
-import { dishDone, ensureRecipe, planFor, stepAt, useMakeStore, type CookSession } from "../store";
+import { dishDone, ensureRecipe, planFor, useMakeStore, type CookSession, type StepState } from "../store";
 import { useMakeStrings } from "../strings";
 import { MTxt, Photo } from "./ui";
 
 const online = () => Platform.OS !== "web" || typeof navigator === "undefined" || navigator.onLine !== false;
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const MAX_STEP_SECONDS = 99 * 60 + 59;
+
+/** A small round −/+ button: one tap = one step; holding repeats rapidly after a short delay. */
+function StepperButton({ icon, accessibilityLabel, onStep, disabled, compact }: { icon: string; accessibilityLabel: string; onStep: () => void; disabled?: boolean; compact?: boolean }) {
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const repeatTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const stop = () => {
+    if (holdTimer.current) clearTimeout(holdTimer.current);
+    if (repeatTimer.current) clearInterval(repeatTimer.current);
+    holdTimer.current = null;
+    repeatTimer.current = null;
+  };
+  useEffect(() => stop, []);
+  const size = compact ? 28 : 34;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ disabled: Boolean(disabled) }}
+      disabled={disabled}
+      onPressIn={() => {
+        if (disabled) return;
+        onStep();
+        holdTimer.current = setTimeout(() => {
+          repeatTimer.current = setInterval(onStep, 90);
+        }, 450);
+      }}
+      onPressOut={stop}
+      style={({ pressed }) => ({ width: size, height: size, borderRadius: size / 2, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? make.surfacePressed : make.surface2, opacity: disabled ? 0.4 : 1 })}>
+      <Icon name={icon} size={compact ? 14 : 16} color={make.foreground} />
+    </Pressable>
+  );
+}
+
+/** The tappable "MM" or "SS" half of the clock — tapping it makes that unit the +/- target. */
+function TimePart({ label, value, active, onPress, compact }: { label: string; value: string; active: boolean; onPress: () => void; compact?: boolean }) {
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: active }} onPress={onPress} hitSlop={4} style={{ paddingHorizontal: 3, paddingVertical: 1, borderRadius: 4, backgroundColor: active ? make.primarySoft : "transparent" }}>
+      <MTxt variant={compact ? "body" : "section"} weight="700" color={active ? make.primaryPressed : make.foreground} numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
+        {value}
+      </MTxt>
+    </Pressable>
+  );
+}
+
+/** Loops a 0→1→0 pulse while `active`, used to flash the timer when a step's alarm is ringing. */
+function useAlarmPulse(active: boolean) {
+  const value = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (!active) {
+      value.stopAnimation();
+      value.setValue(0);
+      return;
+    }
+    const loop = Animated.loop(Animated.sequence([Animated.timing(value, { toValue: 1, duration: 420, useNativeDriver: false }), Animated.timing(value, { toValue: 0, duration: 420, useNativeDriver: false })]));
+    loop.start();
+    return () => loop.stop();
+  }, [active, value]);
+  return value;
+}
+
+/** Per-step timer: [+] MM:SS [-] with a play/pause dot, or the flashing "time's up" alarm once the
+ * step reaches zero — tapping it anywhere silences the alarm, marks the step done, and the next
+ * step's own timer starts on its own. */
+function StepTimer({ dishId, index, step, compact }: { dishId: string; index: number; step: StepState; compact?: boolean }) {
+  const { t } = useMakeStrings();
+  const toggleTimer = useMakeStore((s) => s.toggleTimer);
+  const nudgeStep = useMakeStore((s) => s.nudgeStep);
+  const dismissAlarm = useMakeStore((s) => s.dismissAlarm);
+  const resetStep = useMakeStore((s) => s.resetStep);
+  const completeStep = useMakeStore((s) => s.completeStep);
+  const [unit, setUnit] = useState<"min" | "sec">("min");
+  const pulse = useAlarmPulse(step.alarming);
+
+  if (step.alarming) {
+    const bg = pulse.interpolate({ inputRange: [0, 1], outputRange: [make.danger, "#f3b3ae"] });
+    return (
+      <AnimatedPressable
+        accessibilityRole="button"
+        accessibilityLabel={t.stopAlarm}
+        onPress={() => dismissAlarm(dishId, index)}
+        style={{ flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: compact ? 8 : 12, minHeight: compact ? 32 : 40, borderRadius: radius.pill, backgroundColor: bg }}>
+        <Icon name="bell-ring" size={compact ? 15 : 17} color="#fff" />
+        {compact ? null : (
+          <MTxt variant="control" weight="700" color="#fff">
+            {t.stopAlarm}
+          </MTxt>
+        )}
+      </AnimatedPressable>
+    );
+  }
+
+  if (step.done) {
+    return (
+      <Pressable accessibilityRole="button" accessibilityLabel={t.reset} onPress={() => resetStep(dishId, index)} style={{ minWidth: compact ? 60 : 78, alignItems: "flex-end", justifyContent: "center", minHeight: 32 }}>
+        <Icon name="check" size={compact ? 18 : 22} color={make.green} />
+      </Pressable>
+    );
+  }
+
+  const mm = String(Math.floor(step.remaining / 60)).padStart(2, "0");
+  const ss = String(step.remaining % 60).padStart(2, "0");
+  const atZero = step.remaining <= 0;
+  const atMax = step.remaining >= MAX_STEP_SECONDS;
+  const unitLabel = unit === "min" ? t.minutesLabel : t.secondsLabel;
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center", gap: compact ? 3 : 5 }}>
+      <StepperButton icon="plus" compact={compact} disabled={atMax} accessibilityLabel={`+ ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, 1)} />
+      <Pressable accessibilityRole="button" accessibilityLabel={step.running ? t.pause : t.play} onPress={() => toggleTimer(dishId, index)} style={{ width: compact ? 26 : 30, height: compact ? 26 : 30, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: step.running ? make.primarySoft : make.surface2 }}>
+        <Icon name={step.running ? "pause" : "play"} size={compact ? 12 : 14} color={step.running ? make.primaryPressed : make.foreground} />
+      </Pressable>
+      <TimePart label={t.minutesLabel} value={mm} active={unit === "min"} onPress={() => setUnit("min")} compact={compact} />
+      <MTxt variant={compact ? "body" : "section"} weight="700" color={make.muted}>
+        :
+      </MTxt>
+      <TimePart label={t.secondsLabel} value={ss} active={unit === "sec"} onPress={() => setUnit("sec")} compact={compact} />
+      <StepperButton icon="minus" compact={compact} disabled={atZero} accessibilityLabel={`- ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, -1)} />
+      <Pressable accessibilityRole="button" accessibilityLabel={t.reset} onPress={() => resetStep(dishId, index)} style={{ width: compact ? 26 : 30, height: compact ? 26 : 30, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.surface2, marginLeft: 2 }}>
+        <Icon name="rotate-ccw" size={compact ? 12 : 14} color={make.muted} />
+      </Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel={t.done} onPress={() => completeStep(dishId, index)} style={{ width: compact ? 26 : 30, height: compact ? 26 : 30, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.greenSoft }}>
+        <Icon name="check" size={compact ? 12 : 14} color={make.green} />
+      </Pressable>
+    </View>
+  );
+}
 
 /** Numbered steps. `scroll` makes the list fill its column and scroll on its own; the list follows
  * the selected step (completed steps stay above, crossed out, and can be scrolled back to). */
@@ -52,17 +178,13 @@ export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id:
     <View style={{ gap: compact ? 6 : 8 }}>
       {steps.map((s, i) => {
         const current = cook.selected[id] === i;
-        const timerColor = s.done ? make.green : s.running ? make.primaryPressed : current ? make.foreground : make.muted;
         return (
-          <Pressable
+          <View
             key={i}
             onLayout={(e) => {
               offsets.current[i] = e.nativeEvent.layout.y;
             }}
-            accessibilityRole="button"
-            accessibilityState={{ selected: current }}
-            onPress={() => selectStep(id, i)}
-            style={({ pressed }) => ({
+            style={{
               flexDirection: "row",
               alignItems: "center",
               gap: compact ? 10 : 14,
@@ -74,23 +196,22 @@ export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id:
               borderRadius: radius.lg,
               borderColor: current ? make.yellowStrong : make.border,
               backgroundColor: current ? make.yellow : make.surface,
-              opacity: s.done ? 0.62 : pressed ? 0.85 : 1,
-            })}>
-            <View style={{ width: compact ? 36 : 42, height: compact ? 36 : 42, borderRadius: 21, alignItems: "center", justifyContent: "center", backgroundColor: s.done ? make.green : current ? make.yellowStrong : make.surface2 }}>
-              {s.done ? <Icon name="check" size={compact ? 18 : 22} color="#fff" /> : (
-                <MTxt variant={compact ? "body" : "h3"} weight="700" color={current ? make.yellowInk : make.foreground}>
-                  {String(i + 1)}
-                </MTxt>
-              )}
-            </View>
-            <MTxt variant={compact ? "body" : "card"} style={[{ flex: 1 }, s.done ? { textDecorationLine: "line-through" } : null]}>
-              {plan[i]?.text || ""}
-            </MTxt>
-            {/* one size and a fixed column so "1:00" → "Done" never resizes the row */}
-            <MTxt variant={compact ? "h3" : "section"} weight="700" color={timerColor} numberOfLines={1} style={{ width: compact ? 64 : 84, textAlign: "right", fontVariant: ["tabular-nums"] }}>
-              {s.done ? t.stepDone : fmtClock(s.remaining)}
-            </MTxt>
-          </Pressable>
+              opacity: s.done ? 0.62 : 1,
+            }}>
+            <Pressable accessibilityRole="button" accessibilityState={{ selected: current }} onPress={() => selectStep(id, i)} style={({ pressed }) => ({ flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: compact ? 10 : 14, opacity: pressed ? 0.85 : 1 })}>
+              <View style={{ width: compact ? 36 : 42, height: compact ? 36 : 42, borderRadius: 21, alignItems: "center", justifyContent: "center", backgroundColor: s.done ? make.green : current ? make.yellowStrong : make.surface2 }}>
+                {s.done ? <Icon name="check" size={compact ? 18 : 22} color="#fff" /> : (
+                  <MTxt variant={compact ? "body" : "h3"} weight="700" color={current ? make.yellowInk : make.foreground}>
+                    {String(i + 1)}
+                  </MTxt>
+                )}
+              </View>
+              <MTxt variant={compact ? "body" : "card"} style={[{ flex: 1 }, s.done ? { textDecorationLine: "line-through" } : null]}>
+                {plan[i]?.text || ""}
+              </MTxt>
+            </Pressable>
+            <StepTimer dishId={id} index={i} step={s} compact={compact} />
+          </View>
         );
       })}
     </View>
@@ -175,9 +296,6 @@ function PaneChips({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A" | "B"
 export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A" | "B"; id: string | null; onAdd: () => void }) {
   const { t, dishName } = useMakeStrings();
   const { isPhone, isWide } = useBreakpoint();
-  const toggleTimer = useMakeStore((s) => s.toggleTimer);
-  const completeStep = useMakeStore((s) => s.completeStep);
-  const resetStep = useMakeStore((s) => s.resetStep);
   const valid = Boolean(id && cook.dishIds.includes(id));
   const head = (
     // no wrapping: both panes keep the same head height so Step 1 lines up on the A and B sides
@@ -209,23 +327,14 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
     );
   }
   const sel = cook.selected[id] ?? 0;
-  const s = stepAt(cook, id, sel);
   return (
     <View style={{ flex: 1, minHeight: 0, gap: 8, padding: isPhone ? 10 : 12, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
       {head}
-      <Photo uri={dishImg(id)} height={isPhone ? 200 : isWide ? 168 : 240} round={16}>
-        <View style={{ position: "absolute", left: 12, top: 12, flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 6, paddingLeft: 14, paddingRight: 10, borderRadius: 14, backgroundColor: "#1f1f1dcc" }}>
-          <View style={{ minWidth: 96 }}>
-            <MTxt variant="caption" color="#ffffffcc" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
-              {t.step} {sel + 1}
-            </MTxt>
-            <MTxt variant="h1" weight="700" color={s?.running ? "#ffb27a" : "#fff"} numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
-              {s ? (s.done ? t.stepDone : fmtClock(s.remaining)) : "--"}
-            </MTxt>
-          </View>
-          <Button square round icon={s?.running ? "pause" : "play"} variant="primary" accent={make.primary} disabled={!s || s.done} accessibilityLabel={s?.running ? t.pause : t.play} onPress={() => toggleTimer(id, sel)} />
-          <Button square round icon="rotate-ccw" disabled={!s} accessibilityLabel={t.reset} onPress={() => resetStep(id, sel)} />
-          <Button square round icon="check" variant="primary" accent={make.green} disabled={!s || s.done} accessibilityLabel={t.done} onPress={() => completeStep(id, sel)} />
+      <Photo uri={dishImg(id)} height={isPhone ? 160 : isWide ? 130 : 200} round={16}>
+        <View style={{ position: "absolute", left: 12, top: 12, paddingVertical: 6, paddingHorizontal: 12, borderRadius: 14, backgroundColor: "#1f1f1dcc" }}>
+          <MTxt variant="caption" color="#ffffffcc" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
+            {t.step} {sel + 1}
+          </MTxt>
         </View>
         <View style={{ position: "absolute", right: 12, bottom: 12, maxWidth: "80%", paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: "#ffffffe6" }}>
           <MTxt variant="meta" weight="600" numberOfLines={1}>

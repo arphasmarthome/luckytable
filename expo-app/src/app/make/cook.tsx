@@ -1,11 +1,10 @@
-/* Cooking: time left for all food on top, dish rail | photo + timer controls | numbered steps,
- * or the A | B split screen. Entering the route gates on tonight's readiness like the
- * prototype's activate({screen:"cook"}). */
+/* Cooking: dish rail | photo | numbered steps (each with its own timer), or the A | B split
+ * screen. Entering the route gates on tonight's readiness like the prototype's
+ * activate({screen:"cook"}). */
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Button, Icon, Page } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
-import { fmtClock } from "@/lib/date";
 import { toast } from "@/store/toast";
 import { make, radius } from "@/theme";
 import { openAddDishModal } from "@/features/make/components/AddDishModal";
@@ -13,9 +12,9 @@ import { CookPane, DishRail, StepList } from "@/features/make/components/CookPar
 import { CookSummary } from "@/features/make/components/CookSummary";
 import { FullSheet } from "@/features/make/components/FullSheet";
 import { useMakeNav } from "@/features/make/components/MakeHeader";
-import { Bar, MCard, MTxt, Photo } from "@/features/make/components/ui";
-import { dishById, dishImg, fmtMin } from "@/features/make/data";
-import { allDone, anyRunning, dishDone, dishRunning, planSeconds, stepAt, totalPct, totalRemaining, useMakeStore, type CookRecord } from "@/features/make/store";
+import { MCard, MTxt, Photo } from "@/features/make/components/ui";
+import { dishById, dishImg } from "@/features/make/data";
+import { allDone, dishDone, useMakeStore, type CookRecord } from "@/features/make/store";
 import { useMakeStrings } from "@/features/make/strings";
 
 export default function CookScreen() {
@@ -23,15 +22,9 @@ export default function CookScreen() {
   const { isWide, isPhone, isDesktop, width } = useBreakpoint();
   const nav = useMakeNav();
   const cook = useMakeStore((s) => s.cook);
-  const recipes = useMakeStore((s) => s.recipes);
   const enterCook = useMakeStore((s) => s.enterCook);
   const finishCook = useMakeStore((s) => s.finishCook);
   const toggleSplit = useMakeStore((s) => s.toggleSplit);
-  const toggleTimer = useMakeStore((s) => s.toggleTimer);
-  const addMinute = useMakeStore((s) => s.addMinute);
-  const resetStep = useMakeStore((s) => s.resetStep);
-  const completeStep = useMakeStore((s) => s.completeStep);
-  const selectStep = useMakeStore((s) => s.selectStep);
 
   const [summary, setSummary] = useState<CookRecord | null>(null);
   const gated = useRef(false);
@@ -58,7 +51,6 @@ export default function CookScreen() {
 
   if (!cook || !cook.dishIds.length) return <Page background={make.background}>{summarySheet}</Page>;
 
-  const running = anyRunning(cook);
   const done = allDone(cook);
   const cookedCount = cook.dishIds.filter((id) => dishDone(cook, id)).length;
   const goBack = () => nav.back();
@@ -72,20 +64,7 @@ export default function CookScreen() {
   const top = (
     <MCard padding={isPhone ? 10 : 12} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: isPhone ? 10 : 14 }}>
       <Button square icon="columns-2" variant={cook.split ? "primary" : "secondary"} accent={make.primary} accessibilityLabel={cook.split ? t.singleScreen : t.splitScreen} onPress={toggleSplit} />
-      <View style={{ flex: 1, minWidth: 200, gap: 2 }}>
-        <MTxt variant="caption" muted weight="600" style={{ textTransform: "uppercase", letterSpacing: 1 }}>
-          {t.timeLeftAll}
-        </MTxt>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-          <MTxt variant="h1" weight="700" color={running ? make.primaryPressed : make.foreground} style={{ fontVariant: ["tabular-nums"], minWidth: 72 }}>
-            {fmtClock(totalRemaining(cook))}
-          </MTxt>
-          <View style={{ flex: 1 }}>
-            <Bar pct={totalPct(cook)} color={make.primary} height={10} />
-          </View>
-        </View>
-      </View>
-      <MTxt variant="meta" muted>
+      <MTxt variant="meta" muted style={{ marginLeft: "auto" }}>
         {cook.dishIds.length} {cook.dishIds.length === 1 ? t.dishN : t.dishesN} · {cookedCount} {t.cooked}
       </MTxt>
       <Button icon="chevron-left" label={t.exit} onPress={goBack} />
@@ -117,11 +96,6 @@ export default function CookScreen() {
 
   const id = cook.active;
   const d = dishById(id);
-  const sel = cook.selected[id] ?? 0;
-  const s = stepAt(cook, id, sel);
-  const playLabel = s?.running ? t.pause : dishRunning(cook, id) || (s && s.remaining < s.seconds) ? t.resume : t.play;
-  const stepCount = (cook.steps[id] || []).length;
-  const hasNext = sel + 1 < stepCount;
   const photoWidth = isWide ? Math.min(isDesktop ? 440 : 360, Math.round(width * 0.32)) : undefined;
 
   const photoCol = (
@@ -138,12 +112,6 @@ export default function CookScreen() {
           </MTxt>
         </View>
       </Photo>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-        <Button size="lg" icon={s?.running ? "pause" : "play"} label={playLabel} variant="primary" accent={make.primary} disabled={!s || s.done} onPress={() => toggleTimer(id, sel)} style={{ flexGrow: 1.6, flexBasis: isPhone ? "47%" : 160 }} />
-        <Button size="lg" icon="plus" label={t.plusMin} disabled={!s} onPress={() => addMinute(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
-        <Button size="lg" icon="rotate-ccw" label={t.reset} disabled={!s} onPress={() => resetStep(id, sel)} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
-        <Button size="lg" icon={s?.done ? "arrow-right" : "check"} label={s?.done ? t.next : t.done} variant="primary" accent={make.green} disabled={!s || (s.done && !hasNext)} onPress={() => (s?.done ? selectStep(id, sel + 1) : completeStep(id, sel))} style={{ flexGrow: 1, flexBasis: isPhone ? "47%" : 100 }} />
-      </View>
     </View>
   );
 
@@ -152,7 +120,7 @@ export default function CookScreen() {
       <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 14, paddingHorizontal: 4 }}>
         <MTxt variant="section">{dishName(d)}</MTxt>
         <MTxt variant="meta" muted>
-          {(cook.steps[id] || []).length} {t.steps} · {t.est} {fmtMin(planSeconds({ recipes }, id))}
+          {(cook.steps[id] || []).length} {t.steps}
         </MTxt>
       </View>
       <StepList cook={cook} id={id} scroll={isWide} />

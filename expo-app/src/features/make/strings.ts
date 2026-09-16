@@ -42,11 +42,12 @@ const en = {
     { num: "3", title: "Family table", body: "A shared calendar of who's cooking what, this week.", cta: "Open calendar" },
   ] as ShareOption[],
   handoffEmpty: "Nothing on the list yet. Add missing ingredients from a dish page.",
-  timeLeftAll: "Time left for all food", splitScreen: "Split screen", singleScreen: "Single dish", exit: "Back", steps: "steps", step: "Step",
-  play: "Start", pause: "Pause", resume: "Resume", plusMin: "+1 min", reset: "Reset", done: "Done", next: "Finished", stepDone: "Done", startAll: "Start all", pauseAll: "Pause all",
+  splitScreen: "Split screen", singleScreen: "Single dish", exit: "Back", steps: "steps", step: "Step",
+  play: "Start", pause: "Pause", resume: "Resume", reset: "Reset", done: "Done", next: "Finished", stepDone: "Done",
+  minutesLabel: "Minutes", secondsLabel: "Seconds", stopAlarm: "Time's up — tap to stop",
   allDone: "All dishes are done — time to eat!", finish: "Finish cooking", cooked: "Cooked", pickDish: "Pick a dish", chooseSide: "Choose a dish for this side",
   est: "est.", loadingSteps: "Loading the recipe steps…", stepsOffline: "Steps come from TheMealDB and need an internet connection the first time.",
-  copied: "List copied", copyFail: "Copy not available here", sent: "Shared (demo)", timerDone: "Timer finished", offlineSteps: "Recipe photos and source steps load from TheMealDB when online.",
+  copied: "List copied", copyFail: "Copy not available here", sent: "Shared (demo)", offlineSteps: "Recipe photos and source steps load from TheMealDB when online.",
   /* labels that were bare aria-labels in the prototype */
   homeBtn: "Home", backBtn: "Back", source: "Source recipe",
 };
@@ -87,11 +88,12 @@ const zh: MakeStrings = {
     { num: "3", title: "家庭餐桌", body: "共用行事曆，看這週誰負責做哪一餐。", cta: "開啟行事曆" },
   ],
   handoffEmpty: "清單還是空的，先在料理頁加入缺少的食材。",
-  timeLeftAll: "所有料理剩餘時間", splitScreen: "分割畫面", singleScreen: "單一料理", exit: "返回", steps: "個步驟", step: "步驟",
-  play: "開始", pause: "暫停", resume: "繼續", plusMin: "+1 分鐘", reset: "重設", done: "完成", next: "下一步", stepDone: "已完成", startAll: "全部開始", pauseAll: "全部暫停",
+  splitScreen: "分割畫面", singleScreen: "單一料理", exit: "返回", steps: "個步驟", step: "步驟",
+  play: "開始", pause: "暫停", resume: "繼續", reset: "重設", done: "完成", next: "下一步", stepDone: "已完成",
+  minutesLabel: "分鐘", secondsLabel: "秒", stopAlarm: "時間到，點按停止",
   allDone: "全部完成，可以開飯了！", finish: "完成料理", cooked: "已完成", pickDish: "選一道菜", chooseSide: "為這一側選一道菜",
   est: "約", loadingSteps: "正在載入食譜步驟…", stepsOffline: "步驟來自 TheMealDB，第一次載入需要連網。",
-  copied: "已複製清單", copyFail: "此環境無法複製", sent: "已分享（演示）", timerDone: "計時完成", offlineSteps: "料理照片與原始食譜在連網時由 TheMealDB 載入。",
+  copied: "已複製清單", copyFail: "此環境無法複製", sent: "已分享（演示）", offlineSteps: "料理照片與原始食譜在連網時由 TheMealDB 載入。",
   homeBtn: "首頁", backBtn: "返回", source: "原始食譜",
 };
 

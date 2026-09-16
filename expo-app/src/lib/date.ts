@@ -26,12 +26,3 @@ export function addMonths(date: Date, amount: number) {
 export const weekStart = (date: Date) => addDays(date, -date.getDay());
 
 export const uid = (prefix: string) => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
-
-/** m:ss or h:mm:ss */
-export function fmtClock(seconds: number) {
-  const s = Math.max(0, Math.round(seconds));
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const sec = s % 60;
-  return h ? `${h}:${pad2(m)}:${pad2(sec)}` : `${m}:${pad2(sec)}`;
-}
