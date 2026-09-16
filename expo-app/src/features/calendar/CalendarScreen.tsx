@@ -88,17 +88,17 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
   return (
     <Page scroll={false} gap={0}>
       <View accessibilityLabel={t("行事曆")} style={{ flex: 1, minHeight: 0 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10, paddingBottom: 12, marginBottom: 12, borderBottomWidth: 1, borderBottomColor: cal.line }}>
-          <View style={{ flex: 1, minWidth: 0 }}>
-            <MemberBar view={view} date={date} />
-          </View>
-          <Button square variant="primary" accent={cal.green} icon="plus" accessibilityLabel={t("新增行程")} onPress={() => openEventForm({ date: calendar.date })} />
+        <View style={{ paddingBottom: 12, marginBottom: 12, borderBottomWidth: 1, borderBottomColor: cal.line }}>
+          <MemberBar view={view} date={date} />
         </View>
         {navigation}
-        <View onLayout={(e) => setContent({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })} style={{ flex: 1, minHeight: 0, backgroundColor: "#fff", borderWidth: 1, borderColor: cal.line, borderRadius: radius.md, overflow: "hidden" }}>
-          <ScrollView ref={scrollRef} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-            {body}
-          </ScrollView>
+        <View style={{ flex: 1, minHeight: 0 }}>
+          <View onLayout={(e) => setContent({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })} style={{ flex: 1, minHeight: 0, backgroundColor: "#fff", borderWidth: 1, borderColor: cal.line, borderRadius: radius.md, overflow: "hidden" }}>
+            <ScrollView ref={scrollRef} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+              {body}
+            </ScrollView>
+          </View>
+          <Button square round variant="primary" accent={cal.green} icon="plus" size="lg" accessibilityLabel={t("新增行程")} onPress={() => openEventForm({ date: calendar.date })} style={{ position: "absolute", left: 16, bottom: 16 }} />
         </View>
       </View>
     </Page>
