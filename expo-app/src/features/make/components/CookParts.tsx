@@ -1,5 +1,5 @@
-/* Cooking-screen pieces: the numbered step list with a per-step timer, the dish rail, and the
- * split-screen pane (photo overlay + step list below). */
+/* Cooking-screen pieces: the numbered step list, the dish rail, the timer for whichever step is
+ * selected (shown below the photo), and the split-screen pane. */
 import { useEffect, useRef, useState } from "react";
 import { Animated, Platform, Pressable, ScrollView, View } from "react-native";
 import { Icon } from "@/components/ui";
@@ -73,10 +73,10 @@ function useAlarmPulse(active: boolean) {
   return value;
 }
 
-/** Per-step timer: [+] MM:SS [-] with a play/pause dot, or the flashing "time's up" alarm once the
- * step reaches zero — tapping it anywhere silences the alarm, marks the step done, and the next
- * step's own timer starts on its own. */
-function StepTimer({ dishId, index, step, compact }: { dishId: string; index: number; step: StepState; compact?: boolean }) {
+/** The selected step's timer: [+] MM:SS [-] with a play/pause dot, or the flashing "time's up"
+ * alarm once the step reaches zero — tapping it anywhere silences the alarm, marks the step done,
+ * and the next step's own timer starts on its own. */
+export function StepTimer({ dishId, index, step, compact }: { dishId: string; index: number; step: StepState; compact?: boolean }) {
   const { t } = useMakeStrings();
   const toggleTimer = useMakeStore((s) => s.toggleTimer);
   const nudgeStep = useMakeStore((s) => s.nudgeStep);
@@ -210,7 +210,6 @@ export function StepList({ cook, id, compact, scroll }: { cook: CookSession; id:
                 {plan[i]?.text || ""}
               </MTxt>
             </Pressable>
-            <StepTimer dishId={id} index={i} step={s} compact={compact} />
           </View>
         );
       })}
@@ -327,6 +326,7 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
     );
   }
   const sel = cook.selected[id] ?? 0;
+  const activeStep = (cook.steps[id] || [])[sel];
   return (
     <View style={{ flex: 1, minHeight: 0, gap: 8, padding: isPhone ? 10 : 12, borderWidth: 1, borderColor: make.border, borderRadius: radius.xl, backgroundColor: make.surface2 }}>
       {head}
@@ -342,6 +342,11 @@ export function CookPane({ cook, tag, id, onAdd }: { cook: CookSession; tag: "A"
           </MTxt>
         </View>
       </Photo>
+      {activeStep ? (
+        <View style={{ alignItems: "center", paddingVertical: 4 }}>
+          <StepTimer key={`${id}-${sel}`} dishId={id} index={sel} step={activeStep} compact />
+        </View>
+      ) : null}
       <StepList cook={cook} id={id} compact scroll={isWide} />
     </View>
   );

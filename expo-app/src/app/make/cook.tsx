@@ -8,7 +8,7 @@ import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { toast } from "@/store/toast";
 import { make, radius } from "@/theme";
 import { openAddDishModal } from "@/features/make/components/AddDishModal";
-import { CookPane, DishRail, StepList } from "@/features/make/components/CookParts";
+import { CookPane, DishRail, StepList, StepTimer } from "@/features/make/components/CookParts";
 import { CookSummary } from "@/features/make/components/CookSummary";
 import { FullSheet } from "@/features/make/components/FullSheet";
 import { useMakeNav } from "@/features/make/components/MakeHeader";
@@ -96,6 +96,8 @@ export default function CookScreen() {
 
   const id = cook.active;
   const d = dishById(id);
+  const sel = cook.selected[id] ?? 0;
+  const activeStep = (cook.steps[id] || [])[sel];
   const photoWidth = isWide ? Math.min(isDesktop ? 440 : 360, Math.round(width * 0.32)) : undefined;
 
   const photoCol = (
@@ -112,6 +114,11 @@ export default function CookScreen() {
           </MTxt>
         </View>
       </Photo>
+      {activeStep ? (
+        <View style={{ alignItems: "center", paddingVertical: 8, borderRadius: radius.lg, backgroundColor: make.surface2 }}>
+          <StepTimer key={`${id}-${sel}`} dishId={id} index={sel} step={activeStep} />
+        </View>
+      ) : null}
     </View>
   );
 
