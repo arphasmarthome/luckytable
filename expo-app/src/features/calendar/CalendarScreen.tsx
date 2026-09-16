@@ -6,10 +6,10 @@ import { Button, Page, Segmented, Txt } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { addDays, dateKey, fromKey, today, weekStart } from "@/lib/date";
-import { memberById, useDeviceStore } from "@/store/device";
+import { useDeviceStore } from "@/store/device";
 import { radius } from "@/theme";
 import { goToday, patchCalendar, setView, shiftPeriod } from "./actions";
-import { openEventDetail, openEventForm, openJump, openSync, openVoiceMember } from "./dialogs";
+import { openEventDetail, openEventForm, openJump, openVoiceMember } from "./dialogs";
 import { NEXT_LABELS, PREVIOUS_LABELS, VIEWS, cal, filterEvents, isView, monthRows, periodEvents, type CalView } from "./helpers";
 import { MemberBar, Upcoming, Weather } from "./Sidebar";
 import { useCalendarUi } from "./store";
@@ -52,7 +52,6 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
   const date = fromKey(calendar.date) || today;
   const start = weekStart(date);
   const title = view === "year" ? yearLabel(date.getFullYear()) : view === "week" ? `${monthDay(start)} - ${monthDay(addDays(start, 6))}` : view === "day" ? dayTitle(date) : monthYear(date);
-  const owner = calendar.member === "all" ? t("全家") : memberById(calendar.member, members).name;
   const visible = filterEvents(events, calendar.member);
   const inPeriod = periodEvents(events, view, date, calendar.member);
 
@@ -74,8 +73,6 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
 
   const actions = (
     <View style={{ flexDirection: "row", alignItems: "center", gap: isPhone ? 8 : 12 }}>
-      {isPhone ? <Button square variant="ghost" icon="cloud" accessibilityLabel={t("家庭同步（本地演示）")} onPress={openSync} /> : <Button variant="ghost" icon="cloud" label={t("同步")} accessibilityLabel={t("家庭同步（本地演示）")} onPress={openSync} />}
-      {isPhone ? <Button square variant="secondary" icon="mic" accessibilityLabel={t("語音新增")} onPress={openVoiceMember} /> : <Button variant="secondary" icon="mic" label={t("語音新增")} onPress={openVoiceMember} />}
       <Button variant="primary" accent={cal.green} icon="plus" label={t("新增行程")} onPress={() => openEventForm({ date: calendar.date })} />
     </View>
   );
@@ -101,12 +98,7 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
     <Page scroll={false} gap={0}>
       <View accessibilityLabel={t("行事曆")} style={{ flex: 1, minHeight: 0 }}>
         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12, paddingBottom: isPhone ? 12 : 10, marginBottom: isPhone ? 12 : 12, borderBottomWidth: 1, borderBottomColor: cal.line }}>
-          <View style={{ flexDirection: "row", alignItems: "baseline", flexWrap: "wrap", gap: isPhone ? 8 : 18, flexShrink: 1, minWidth: 0 }}>
-            {isPhone ? null : <Txt variant="page">{t("家庭行事曆")}</Txt>}
-            <Txt variant={isPhone ? "body" : "card"} color={cal.muted} numberOfLines={1}>
-              {owner} · {t("{n} 個行程", { n: inPeriod.length })}
-            </Txt>
-          </View>
+          {isPhone ? <View /> : <Txt variant="page">{t("家庭行事曆")}</Txt>}
           {actions}
         </View>
         <View style={{ flex: 1, minHeight: 0, flexDirection: "row", gap: 24 }}>

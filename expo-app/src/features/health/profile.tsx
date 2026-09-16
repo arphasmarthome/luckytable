@@ -16,8 +16,8 @@ const recipeImage = require("../../../assets/images/lucky/recipe-preparation.web
 
 function Basic({ label, value, unit, wide }: { label: string; value: string; unit?: string; wide?: boolean }) {
   return (
-    <View style={{ flexBasis: wide ? "100%" : "45%", flexGrow: 1, minWidth: 0, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: fh.line }}>
-      <Txt variant="meta" color="#6e786f" style={{ marginBottom: 4 }}>
+    <View style={{ flexBasis: wide ? "100%" : "45%", flexGrow: 1, minWidth: 0, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: fh.line }}>
+      <Txt variant="meta" color="#6e786f" style={{ marginBottom: 2 }}>
         {label}
       </Txt>
       <Txt variant={wide ? "h3" : "h2"} weight="600">
@@ -36,7 +36,7 @@ function Calorie({ label, value, last }: { label: string; value: string; last?: 
   const { t } = useI18n();
   return (
     <View style={{ flex: 1, minWidth: 90 }}>
-      <Txt variant="meta" color="#6f796b" style={{ marginBottom: 8 }}>
+      <Txt variant="meta" color="#6f796b" style={{ marginBottom: 4 }}>
         {label}
       </Txt>
       <Txt variant="h1" weight="600" color={last ? "#aa8c4d" : "#44513f"}>
@@ -64,7 +64,7 @@ export function HealthProfile({ person }: { person: Member }) {
   const child = p.age < 18;
 
   const basics = (
-    <View style={{ width: isWide ? 320 : undefined, paddingRight: isWide ? 24 : 0, borderRightWidth: isWide ? 1 : 0, borderColor: fh.line, gap: 12 }}>
+    <View style={{ width: isWide ? 300 : undefined, paddingRight: isWide ? 20 : 0, borderRightWidth: isWide ? 1 : 0, borderColor: fh.line, gap: 8 }}>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
         <Txt variant="h2">{t("基本資料")}</Txt>
         <Txt variant="meta" color="#8b9885">
@@ -134,7 +134,7 @@ export function HealthProfile({ person }: { person: Member }) {
   return (
     <View style={{ flexDirection: isWide ? "row" : "column", gap: isWide ? 32 : 24 }}>
       {basics}
-      <View style={{ flex: 1, minWidth: 0, gap: 12 }}>
+      <View style={{ flex: 1, minWidth: 0, gap: 8 }}>
         <Txt variant="h2">{t("健康摘要")}</Txt>
         {summary}
         {estimate ? (
@@ -142,7 +142,7 @@ export function HealthProfile({ person }: { person: Member }) {
             {t("成人參考區間 18.5-24.9；估算僅供參考，不用於醫療診斷。")}
           </Txt>
         ) : null}
-        <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: fh.line, gap: 10 }}>
+        <View style={{ paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: fh.line, gap: 6 }}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
             <Txt variant="h3">{t("餐盤搭配")}</Txt>
             <Txt variant="meta" muted>
@@ -166,9 +166,9 @@ export function HealthProfile({ person }: { person: Member }) {
           </View>
         </View>
         <Txt variant="h3">{t("料理推薦")}</Txt>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: fh.line }}>
-          <Image source={recipeImage} accessibilityLabel={t("豆腐、蔬菜與均衡搭配的家庭料理")} contentFit="cover" style={{ width: 96, height: 96, borderRadius: radius.sm }} />
-          <View style={{ flex: 1, minWidth: 180, gap: 6 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 14, paddingBottom: 6, borderBottomWidth: 1, borderBottomColor: fh.line }}>
+          <Image source={recipeImage} accessibilityLabel={t("豆腐、蔬菜與均衡搭配的家庭料理")} contentFit="cover" style={{ width: 72, height: 72, borderRadius: radius.sm }} />
+          <View style={{ flex: 1, minWidth: 180, gap: 2 }}>
             <Txt variant="h3">{t("均衡家常料理")}</Txt>
             <Txt variant="meta" muted>
               {t("蔬菜 · 優質蛋白 · 全穀物")}
