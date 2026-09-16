@@ -101,7 +101,7 @@ export default function CookScreen() {
   const photoWidth = isWide ? Math.min(isDesktop ? 440 : 360, Math.round(width * 0.32)) : undefined;
 
   const photoCol = (
-    <View style={{ width: photoWidth, gap: 12, minHeight: 0 }}>
+    <View style={{ width: photoWidth, gap: 6, minHeight: 0 }}>
       <Photo uri={dishImg(id)} aspectRatio={isWide ? undefined : 1} round={radius.xl} style={isWide ? { flex: 1, minHeight: 160 } : undefined}>
         <View style={{ position: "absolute", left: 16, right: 16, bottom: 16, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.lg, backgroundColor: "#ffffffe8" }}>
           <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: make.primary, alignItems: "center", justifyContent: "center" }}>
@@ -115,7 +115,7 @@ export default function CookScreen() {
         </View>
       </Photo>
       {activeStep ? (
-        <View style={{ paddingVertical: 12, paddingHorizontal: 16, borderRadius: radius.lg, backgroundColor: make.surface2 }}>
+        <View style={{ paddingVertical: 8, paddingHorizontal: 12, borderRadius: radius.lg, backgroundColor: make.surface2 }}>
           <StepTimer key={`${id}-${sel}`} dishId={id} index={sel} step={activeStep} />
         </View>
       ) : null}

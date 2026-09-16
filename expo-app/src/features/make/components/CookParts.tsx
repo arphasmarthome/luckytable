@@ -110,23 +110,27 @@ export function StepTimer({ dishId, index, step, compact }: { dishId: string; in
   const atMax = step.remaining >= MAX_STEP_SECONDS;
   const unitLabel = unit === "min" ? t.minutesLabel : t.secondsLabel;
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: compact ? "flex-start" : "space-between", width: compact ? undefined : "100%", gap: compact ? 3 : 8 }}>
-      <StepperButton icon="plus" compact={compact} disabled={atMax} accessibilityLabel={`+ ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, 1)} />
-      <TimePart label={t.minutesLabel} value={mm} active={unit === "min"} onPress={() => setUnit("min")} compact={compact} />
-      <MTxt variant={compact ? "body" : "timer"} weight="700" color={make.muted}>
-        :
-      </MTxt>
-      <TimePart label={t.secondsLabel} value={ss} active={unit === "sec"} onPress={() => setUnit("sec")} compact={compact} />
-      <StepperButton icon="minus" compact={compact} disabled={atZero} accessibilityLabel={`- ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, -1)} />
-      <Pressable accessibilityRole="button" accessibilityLabel={step.running ? t.pause : t.play} onPress={() => toggleTimer(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: step.running ? make.primarySoft : make.surface2 }}>
-        <Icon name={step.running ? "pause" : "play"} size={compact ? 12 : 20} color={step.running ? make.primaryPressed : make.foreground} />
-      </Pressable>
-      <Pressable accessibilityRole="button" accessibilityLabel={t.reset} onPress={() => resetStep(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.surface2 }}>
-        <Icon name="rotate-ccw" size={compact ? 12 : 20} color={make.muted} />
-      </Pressable>
-      <Pressable accessibilityRole="button" accessibilityLabel={t.done} accessibilityState={{ selected: step.done }} onPress={() => completeStep(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: step.done ? make.green : make.greenSoft }}>
-        <Icon name="check" size={compact ? 12 : 20} color={step.done ? "#fff" : make.green} />
-      </Pressable>
+    <View style={{ alignItems: "center", gap: compact ? 6 : 10 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: compact ? 3 : 10 }}>
+        <StepperButton icon="plus" compact={compact} disabled={atMax} accessibilityLabel={`+ ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, 1)} />
+        <TimePart label={t.minutesLabel} value={mm} active={unit === "min"} onPress={() => setUnit("min")} compact={compact} />
+        <MTxt variant={compact ? "body" : "timer"} weight="700" color={make.muted}>
+          :
+        </MTxt>
+        <TimePart label={t.secondsLabel} value={ss} active={unit === "sec"} onPress={() => setUnit("sec")} compact={compact} />
+        <StepperButton icon="minus" compact={compact} disabled={atZero} accessibilityLabel={`- ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, -1)} />
+      </View>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: compact ? 10 : 14 }}>
+        <Pressable accessibilityRole="button" accessibilityLabel={step.running ? t.pause : t.play} onPress={() => toggleTimer(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: step.running ? make.primarySoft : make.surface2 }}>
+          <Icon name={step.running ? "pause" : "play"} size={compact ? 12 : 20} color={step.running ? make.primaryPressed : make.foreground} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel={t.reset} onPress={() => resetStep(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.surface2 }}>
+          <Icon name="rotate-ccw" size={compact ? 12 : 20} color={make.muted} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel={t.done} accessibilityState={{ selected: step.done }} onPress={() => completeStep(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: step.done ? make.green : make.greenSoft }}>
+          <Icon name="check" size={compact ? 12 : 20} color={step.done ? "#fff" : make.green} />
+        </Pressable>
+      </View>
     </View>
   );
 }
