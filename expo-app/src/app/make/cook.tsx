@@ -115,7 +115,7 @@ export default function CookScreen() {
         </View>
       </Photo>
       {activeStep ? (
-        <View style={{ alignItems: "center", paddingVertical: 8, borderRadius: radius.lg, backgroundColor: make.surface2 }}>
+        <View style={{ paddingVertical: 12, paddingHorizontal: 16, borderRadius: radius.lg, backgroundColor: make.surface2 }}>
           <StepTimer key={`${id}-${sel}`} dishId={id} index={sel} step={activeStep} />
         </View>
       ) : null}

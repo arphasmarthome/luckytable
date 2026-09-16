@@ -556,7 +556,7 @@ export const useMakeStore = create<MakeState>()((set, get) => {
       withCook((c) => {
         const s = c.steps[id]?.[i];
         if (!s) return;
-        const change = (unit === "min" ? 60 : 1) * delta;
+        const change = (unit === "min" ? 60 : 5) * delta;
         const next = Math.min(99 * 60 + 59, Math.max(0, s.remaining + change));
         const diff = next - s.remaining;
         if (!diff) return;

@@ -25,7 +25,7 @@ function StepperButton({ icon, accessibilityLabel, onStep, disabled, compact }: 
     repeatTimer.current = null;
   };
   useEffect(() => stop, []);
-  const size = compact ? 28 : 34;
+  const size = compact ? 28 : 52;
   return (
     <Pressable
       accessibilityRole="button"
@@ -41,7 +41,7 @@ function StepperButton({ icon, accessibilityLabel, onStep, disabled, compact }: 
       }}
       onPressOut={stop}
       style={({ pressed }) => ({ width: size, height: size, borderRadius: size / 2, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? make.surfacePressed : make.surface2, opacity: disabled ? 0.4 : 1 })}>
-      <Icon name={icon} size={compact ? 14 : 16} color={make.foreground} />
+      <Icon name={icon} size={compact ? 14 : 24} color={make.foreground} />
     </Pressable>
   );
 }
@@ -49,8 +49,8 @@ function StepperButton({ icon, accessibilityLabel, onStep, disabled, compact }: 
 /** The tappable "MM" or "SS" half of the clock — tapping it makes that unit the +/- target. */
 function TimePart({ label, value, active, onPress, compact }: { label: string; value: string; active: boolean; onPress: () => void; compact?: boolean }) {
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: active }} onPress={onPress} hitSlop={4} style={{ paddingHorizontal: 3, paddingVertical: 1, borderRadius: 4, backgroundColor: active ? make.primarySoft : "transparent" }}>
-      <MTxt variant={compact ? "body" : "section"} weight="700" color={active ? make.primaryPressed : make.foreground} numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
+    <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: active }} onPress={onPress} hitSlop={4} style={{ paddingHorizontal: compact ? 3 : 6, paddingVertical: compact ? 1 : 2, borderRadius: 8, backgroundColor: active ? make.primarySoft : "transparent" }}>
+      <MTxt variant={compact ? "body" : "timer"} weight="700" color={active ? make.primaryPressed : make.foreground} numberOfLines={1} style={{ fontVariant: ["tabular-nums"] }}>
         {value}
       </MTxt>
     </Pressable>
@@ -93,10 +93,10 @@ export function StepTimer({ dishId, index, step, compact }: { dishId: string; in
         accessibilityRole="button"
         accessibilityLabel={t.stopAlarm}
         onPress={() => dismissAlarm(dishId, index)}
-        style={{ flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: compact ? 8 : 12, minHeight: compact ? 32 : 40, borderRadius: radius.pill, backgroundColor: bg }}>
-        <Icon name="bell-ring" size={compact ? 15 : 17} color="#fff" />
+        style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: compact ? 6 : 10, width: compact ? undefined : "100%", paddingHorizontal: compact ? 8 : 12, minHeight: compact ? 32 : 64, borderRadius: radius.pill, backgroundColor: bg }}>
+        <Icon name="bell-ring" size={compact ? 15 : 24} color="#fff" />
         {compact ? null : (
-          <MTxt variant="control" weight="700" color="#fff">
+          <MTxt variant="h2" weight="700" color="#fff">
             {t.stopAlarm}
           </MTxt>
         )}
@@ -106,8 +106,17 @@ export function StepTimer({ dishId, index, step, compact }: { dishId: string; in
 
   if (step.done) {
     return (
-      <Pressable accessibilityRole="button" accessibilityLabel={t.reset} onPress={() => resetStep(dishId, index)} style={{ minWidth: compact ? 60 : 78, alignItems: "flex-end", justifyContent: "center", minHeight: 32 }}>
-        <Icon name="check" size={compact ? 18 : 22} color={make.green} />
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t.reset}
+        onPress={() => resetStep(dishId, index)}
+        style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: compact ? 6 : 10, width: compact ? undefined : "100%", minWidth: compact ? 60 : undefined, minHeight: compact ? 32 : 64 }}>
+        <Icon name="check" size={compact ? 18 : 28} color={make.green} />
+        {compact ? null : (
+          <MTxt variant="h2" weight="700" color={make.green}>
+            {t.stepDone}
+          </MTxt>
+        )}
       </Pressable>
     );
   }
@@ -118,22 +127,22 @@ export function StepTimer({ dishId, index, step, compact }: { dishId: string; in
   const atMax = step.remaining >= MAX_STEP_SECONDS;
   const unitLabel = unit === "min" ? t.minutesLabel : t.secondsLabel;
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: compact ? 3 : 5 }}>
+    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: compact ? "flex-start" : "space-between", width: compact ? undefined : "100%", gap: compact ? 3 : 8 }}>
       <StepperButton icon="plus" compact={compact} disabled={atMax} accessibilityLabel={`+ ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, 1)} />
-      <Pressable accessibilityRole="button" accessibilityLabel={step.running ? t.pause : t.play} onPress={() => toggleTimer(dishId, index)} style={{ width: compact ? 26 : 30, height: compact ? 26 : 30, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: step.running ? make.primarySoft : make.surface2 }}>
-        <Icon name={step.running ? "pause" : "play"} size={compact ? 12 : 14} color={step.running ? make.primaryPressed : make.foreground} />
+      <Pressable accessibilityRole="button" accessibilityLabel={step.running ? t.pause : t.play} onPress={() => toggleTimer(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: step.running ? make.primarySoft : make.surface2 }}>
+        <Icon name={step.running ? "pause" : "play"} size={compact ? 12 : 20} color={step.running ? make.primaryPressed : make.foreground} />
       </Pressable>
       <TimePart label={t.minutesLabel} value={mm} active={unit === "min"} onPress={() => setUnit("min")} compact={compact} />
-      <MTxt variant={compact ? "body" : "section"} weight="700" color={make.muted}>
+      <MTxt variant={compact ? "body" : "timer"} weight="700" color={make.muted}>
         :
       </MTxt>
       <TimePart label={t.secondsLabel} value={ss} active={unit === "sec"} onPress={() => setUnit("sec")} compact={compact} />
       <StepperButton icon="minus" compact={compact} disabled={atZero} accessibilityLabel={`- ${unitLabel}`} onStep={() => nudgeStep(dishId, index, unit, -1)} />
-      <Pressable accessibilityRole="button" accessibilityLabel={t.reset} onPress={() => resetStep(dishId, index)} style={{ width: compact ? 26 : 30, height: compact ? 26 : 30, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.surface2, marginLeft: 2 }}>
-        <Icon name="rotate-ccw" size={compact ? 12 : 14} color={make.muted} />
+      <Pressable accessibilityRole="button" accessibilityLabel={t.reset} onPress={() => resetStep(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.surface2, marginLeft: compact ? 2 : 0 }}>
+        <Icon name="rotate-ccw" size={compact ? 12 : 20} color={make.muted} />
       </Pressable>
-      <Pressable accessibilityRole="button" accessibilityLabel={t.done} onPress={() => completeStep(dishId, index)} style={{ width: compact ? 26 : 30, height: compact ? 26 : 30, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.greenSoft }}>
-        <Icon name="check" size={compact ? 12 : 14} color={make.green} />
+      <Pressable accessibilityRole="button" accessibilityLabel={t.done} onPress={() => completeStep(dishId, index)} style={{ width: compact ? 26 : 46, height: compact ? 26 : 46, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: make.greenSoft }}>
+        <Icon name="check" size={compact ? 12 : 20} color={make.green} />
       </Pressable>
     </View>
   );
