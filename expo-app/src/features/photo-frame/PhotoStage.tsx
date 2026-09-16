@@ -170,7 +170,7 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
           {t(photo.title)}
         </Txt>
       </View>
-      {footer ? null : (
+      {footer || cinema ? null : (
         <View style={{ position: "absolute", right: edge, bottom: edge, flexDirection: "row", gap: 7 }}>
           <RoundButton icon="chevron-left" label={t("上一張照片")} onPress={onPrevious} />
           <RoundButton icon="chevron-right" label={t("下一張照片")} onPress={onNext} />
@@ -178,7 +178,7 @@ export function PhotoStage({ photo, playing, cinema = false, onPrevious, onNext,
       )}
       <View style={{ position: "absolute", top: cinema || fill ? edge : 14, right: cinema || fill ? edge : 14, flexDirection: "row", gap: 8 }}>
         {toolbar}
-        <RoundButton light icon="wand-sparkles" label={aiLabel} onPress={() => onAi(photo.id)} />
+        {cinema ? null : <RoundButton light icon="wand-sparkles" label={aiLabel} onPress={() => onAi(photo.id)} />}
       </View>
 
       {cinema && onExitCinema ? <RoundButton icon="minimize" label={t("離開全螢幕")} onPress={onExitCinema} style={{ position: "absolute", top: edge, left: edge }} /> : null}

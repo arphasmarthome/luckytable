@@ -5,6 +5,7 @@ import { Button, Select, Toggle } from "@/components/ui";
 import { useI18n } from "@/i18n";
 import { useDeviceStore, type Settings } from "@/store/device";
 import { toast } from "@/store/toast";
+import { RangeSlider } from "./RangeSlider";
 import { SectionHeader, SettingsGroup, SettingsRow } from "./SettingsRow";
 
 const WEATHER_PRESETS: [Settings["weatherPreset"], string][] = [
@@ -38,6 +39,25 @@ export function FrameSection() {
                 setSettings({ autoPlayMotion });
                 updated();
               }}
+            />
+          }
+        />
+        <SettingsRow
+          title={t("投影片秒數")}
+          detail={t("切換到下一張照片前的停留時間")}
+          control={
+            <RangeSlider
+              value={settings.slideshowSeconds}
+              onChange={(slideshowSeconds) => {
+                setSettings({ slideshowSeconds });
+                updated();
+              }}
+              min={3}
+              max={30}
+              step={1}
+              trackWidth={200}
+              accessibilityLabel={t("投影片秒數")}
+              format={(v) => t("{n} 秒", { n: v })}
             />
           }
         />
@@ -80,7 +100,6 @@ export function FrameSection() {
             }
           />
         ) : null}
-        <SettingsRow title={t("全螢幕播放")} detail={t("家庭相框")} control={<Button icon="maximize" label={t("播放")} onPress={() => router.navigate("/photo-frame?action=fullscreen" as never)} />} />
       </SettingsGroup>
     </View>
   );

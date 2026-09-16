@@ -186,6 +186,8 @@ const de: Dictionary = {
   "管理照片": "Fotos verwalten",
   "自動播放 AI 動態": "KI-Animation automatisch abspielen",
   "同張照片內的 5 秒動作或天氣變化": "5 Sekunden Bewegung oder Wetterwechsel im selben Foto",
+  "投影片秒數": "Diashow-Dauer",
+  "切換到下一張照片前的停留時間": "Wie lange jedes Foto angezeigt wird, bevor gewechselt wird",
   "預設動態方式": "Standard-Animationsstil",
   "下次產生時使用": "Wird bei der nächsten Erzeugung verwendet",
   "動作延伸": "Bewegungserweiterung",

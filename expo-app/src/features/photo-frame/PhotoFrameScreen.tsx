@@ -63,8 +63,6 @@ function useKeyboard() {
   }, []);
 }
 
-const SLIDESHOW_MS = 3000;
-
 export function PhotoFrameScreen() {
   const { t } = useI18n();
   const { isPhone } = useBreakpoint();
@@ -72,6 +70,7 @@ export function PhotoFrameScreen() {
   const photo = useFrameStore((s) => currentPhoto(s));
   const cinema = useFrameStore((s) => s.cinema);
   const autoPlay = useDeviceStore((s) => s.settings.autoPlayMotion);
+  const slideshowSeconds = useDeviceStore((s) => s.settings.slideshowSeconds);
   const setSettings = useDeviceStore((s) => s.setSettings);
   useRouteActions();
   useKeyboard();
@@ -80,9 +79,9 @@ export function PhotoFrameScreen() {
   const playing = Boolean(photo?.motion && autoPlay);
   useEffect(() => {
     if (!autoPlay || photos.length < 2) return;
-    const handle = setInterval(() => frame.changePhoto(1), SLIDESHOW_MS);
+    const handle = setInterval(() => frame.changePhoto(1), slideshowSeconds * 1000);
     return () => clearInterval(handle);
-  }, [autoPlay, photos.length]);
+  }, [autoPlay, photos.length, slideshowSeconds]);
   const onAi = (photoId: string) => {
     if (useFrameStore.getState().cinema) void exitFullscreen();
     openAiDialog(photoId);

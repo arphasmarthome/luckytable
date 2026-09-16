@@ -186,6 +186,8 @@ const es: Dictionary = {
   "管理照片": "Gestionar fotos",
   "自動播放 AI 動態": "Reproducir movimiento IA automáticamente",
   "同張照片內的 5 秒動作或天氣變化": "5 segundos de movimiento o cambio de tiempo dentro de la misma foto",
+  "投影片秒數": "Duración de la presentación",
+  "切換到下一張照片前的停留時間": "Cuánto tiempo se muestra cada foto antes de avanzar",
   "預設動態方式": "Estilo de movimiento predeterminado",
   "下次產生時使用": "Se usará en la próxima generación",
   "動作延伸": "Extensión de movimiento",

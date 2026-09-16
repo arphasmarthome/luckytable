@@ -67,6 +67,8 @@ export type Settings = {
   deviceId: string;
   familyName: string;
   autoPlayMotion: boolean;
+  /** seconds each photo shows before auto-advancing when Auto-play AI motion is on */
+  slideshowSeconds: number;
   effectType: "action-extension" | "weather-transition";
   weatherPreset: "sunlight" | "clouds" | "rain" | "snow";
   version: string;
@@ -221,6 +223,7 @@ export function seedData(): DeviceData {
       deviceId: "LT-DEMO-001",
       familyName: "阿發之家",
       autoPlayMotion: true,
+      slideshowSeconds: 3,
       effectType: "action-extension",
       weatherPreset: "clouds",
       version: "0.18.0",

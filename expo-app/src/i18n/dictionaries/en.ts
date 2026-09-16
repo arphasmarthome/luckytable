@@ -186,6 +186,8 @@ const en: Dictionary = {
   "管理照片": "Manage photos",
   "自動播放 AI 動態": "Auto-play AI motion",
   "同張照片內的 5 秒動作或天氣變化": "5-second motion or weather change within the same photo",
+  "投影片秒數": "Slideshow duration",
+  "切換到下一張照片前的停留時間": "How long each photo shows before advancing",
   "預設動態方式": "Default motion style",
   "下次產生時使用": "Used for the next generation",
   "動作延伸": "Motion extension",
