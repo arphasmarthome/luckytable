@@ -10,6 +10,7 @@ import { SearchBar } from "@/components/shell/SearchBar";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { NAV_ROUTES, ROUTES, routeIdFor, type RouteId } from "@/lib/routes";
+import { useRsvpSync } from "@/features/rsvp/useRsvpSync";
 import { useDeviceStore } from "@/store/device";
 import { radius, shell } from "@/theme";
 
@@ -167,6 +168,7 @@ function TopBar({ routeId, pathname, isWide }: { routeId: RouteId; pathname: str
 
 export function DeviceShell({ children }: { children: ReactNode }) {
   const { isWide } = useBreakpoint();
+  useRsvpSync();
   const pathname = usePathname();
   const routeId = routeIdFor(pathname);
   const brightness = useDeviceStore((s) => s.settings.brightness);

@@ -8,6 +8,8 @@ import { memberById, todaysEvents, useDeviceStore } from "@/store/device";
 import { dialog } from "@/store/dialog";
 import { toast } from "@/store/toast";
 import { radius, shell } from "@/theme";
+import { phoneLink } from "@/features/rsvp/client";
+import { QrCode } from "@/features/rsvp/QrCode";
 
 const NETWORKS = ["Family_WiFi", "LuckyTable_Guest", "Home_5G"];
 
@@ -61,6 +63,17 @@ export const openNetworkDialog = () => dialog.show({ title: t("切換網路"), b
 const setPhones = (phones: { id: string; name: string }[]) => useDeviceStore.getState().setSettings({ phones, paired: phones.length > 0 });
 function PairingForm() {
   const phones = useDeviceStore((s) => s.settings.phones);
+  const deviceId = useDeviceStore((s) => s.settings.deviceId);
+  const pageLink = phoneLink(deviceId);
+  const copyLink = async () => {
+    try {
+      if (typeof navigator === "undefined" || !navigator.clipboard) throw new Error("clipboard unavailable");
+      await navigator.clipboard.writeText(pageLink);
+      toast(t("已複製連結"));
+    } catch {
+      toast(pageLink);
+    }
+  };
   const [selected, setSelected] = useState<string | null>(null);
   const [name, setName] = useState("");
   const link = () => {
@@ -80,7 +93,24 @@ function PairingForm() {
   };
   return (
     <View style={{ gap: 14 }}>
-      <DemoNotice>{t("正式產品由手機 App 掃碼綁定。本原型沒有綁定服務，也不產生可掃描的假二維碼。")}</DemoNotice>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 16, padding: 14, borderRadius: radius.md, backgroundColor: shell.greenSoft }}>
+        <View style={{ padding: 8, borderRadius: radius.sm, backgroundColor: "#fff" }}>
+          <QrCode value={pageLink} size={132} accessibilityLabel={t("用手機回覆")} />
+        </View>
+        <View style={{ flex: 1, minWidth: 200, gap: 8 }}>
+          <Txt variant="h3">{t("用手機回覆")}</Txt>
+          <Txt variant="meta" muted>
+            {t("用手機掃描，或開啟此連結：")}
+          </Txt>
+          <Txt variant="caption" color={shell.green} selectable style={{ fontFamily: "monospace" }}>
+            {pageLink}
+          </Txt>
+          <Txt variant="caption" muted>
+            {t("此手機頁面不需要安裝 App")}
+          </Txt>
+          <Button size="sm" icon="copy" label={t("複製連結")} onPress={() => void copyLink()} style={{ alignSelf: "flex-start" }} />
+        </View>
+      </View>
       <Txt variant="meta" muted>
         {phones.length ? t("選擇要解除連結的手機") : t("尚未連結任何手機")}
       </Txt>

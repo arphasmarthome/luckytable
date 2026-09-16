@@ -21,3 +21,10 @@ The root `vercel.json` installs and builds `expo-app/` (`npx expo export --platf
 Settings → 顯示與語言, or open with `?lang=en`, `?lang=de` or `?lang=es`. Traditional Chinese source strings are the message ids; translations live in `expo-app/src/i18n/dictionaries/`.
 
 See `expo-app/README.md` for the project structure.
+
+## Phone RSVP (Settings › Link phone)
+
+Family members answer "joining dinner tonight?" from their phone: Settings › Device & data › Manage link shows a QR code / link to `/phone?device=<Device ID>`. The page needs no app install. The device and the phones talk through the serverless relay in `api/rsvp.js`:
+
+- On Vercel it deploys automatically next to the static export. State is kept in the function instance's memory unless `KV_REST_API_URL` and `KV_REST_API_TOKEN` are set (Vercel KV / Upstash Redis REST), in which case replies persist for 3 days.
+- For local development run `npm run rsvp:dev` inside `expo-app/` (relay on http://localhost:8787); the Expo dev server on :8081 uses it automatically. `EXPO_PUBLIC_RSVP_API` overrides the relay URL.
