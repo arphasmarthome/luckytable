@@ -43,14 +43,6 @@ export const shiftMonth = (direction: -1 | 1) => goTo(addMonths(currentDate(), d
 export const openDate = (key: string) => patchCalendar({ date: key, view: "day" });
 export const openMonth = (key: string) => patchCalendar({ date: key, view: "month" });
 
-/** cal-jump-form submit */
-export function jumpTo(key: string): string | null {
-  if (!fromKey(key) || key < DATE_MIN || key > DATE_MAX) return t("請選擇有效日期。");
-  patchCalendar({ date: key });
-  dialog.close();
-  return null;
-}
-
 export function toggleDone(id: string) {
   useDeviceStore.setState((s) => ({ events: s.events.map((event) => (event.id === id ? { ...event, done: !event.done } : event)) }));
 }

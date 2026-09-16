@@ -1,7 +1,7 @@
 /* 家庭健康 (route /health) — port of modules.health in prototype/device/family-health.js. */
 import { useEffect } from "react";
 import { View } from "react-native";
-import { Button, Page, Select, Txt } from "@/components/ui";
+import { Button, DropdownMenu, Page, Txt } from "@/components/ui";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { useI18n } from "@/i18n";
 import { useDeviceStore } from "@/store/device";
@@ -39,7 +39,7 @@ export function HealthScreen() {
         {family ? (
           <Button variant="primary" icon="watch" label={t("連線手環")} onPress={() => openWearableDialog()} style={{ marginBottom: 6 }} />
         ) : (
-          <Select accessibilityLabel={t("選擇健康資料成員")} title={t("家庭成員")} value={person.id} options={members.map((m) => ({ value: m.id, label: m.name }))} onChange={(id) => setHealth({ member: id })} style={{ minWidth: 170, marginBottom: 6 }} />
+          <DropdownMenu accessibilityLabel={t("選擇健康資料成員")} value={person.id} options={members.map((m) => ({ value: m.id, label: m.name }))} onChange={(id) => setHealth({ member: id })} style={{ minWidth: 170, marginBottom: 6 }} />
         )}
       </View>
       <Board>{family ? <HealthActivity /> : <HealthProfile person={person} />}</Board>

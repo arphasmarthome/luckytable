@@ -4,6 +4,7 @@ export { Card } from "./Card";
 export { Chip } from "./Chip";
 export { DemoNotice } from "./DemoNotice";
 export { DialogHost } from "./DialogHost";
+export { DropdownMenu, type DropdownOption } from "./DropdownMenu";
 export { EmptyNote } from "./EmptyNote";
 export { Icon, iconComponent } from "./Icon";
 export { Page } from "./Page";

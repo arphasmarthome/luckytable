@@ -11,7 +11,7 @@ import { memberById, useDeviceStore } from "@/store/device";
 import { dialog } from "@/store/dialog";
 import { toast } from "@/store/toast";
 import { radius, shell, tint } from "@/theme";
-import { deleteEvent, jumpTo, saveEvent } from "./actions";
+import { deleteEvent, saveEvent } from "./actions";
 import { cal, memberInitial, type CalEvent, type EventDraft } from "./helpers";
 import { useCalendarUi } from "./store";
 import { parseVoice } from "./voice";
@@ -261,34 +261,6 @@ function DeleteConfirm({ id }: { id: string }) {
 export function openDeleteConfirm(id: string) {
   if (!useDeviceStore.getState().events.some((item) => item.id === id)) return;
   dialog.show({ title: translate("刪除這條行程？"), body: () => <DeleteConfirm id={id} /> });
-}
-
-/* ───────── jump to date ───────── */
-
-function JumpForm() {
-  const { t } = useI18n();
-  const current = useDeviceStore((s) => s.calendar.date);
-  const [value, setValue] = useState(current);
-  const [error, setError] = useState("");
-  const submit = () => {
-    const message = jumpTo(value.trim());
-    if (message) setError(message);
-  };
-  return (
-    <View style={{ gap: 15 }}>
-      <TextField label={t("選擇日期")} value={value} onChangeText={setValue} placeholder="YYYY-MM-DD" maxLength={10} autoFocus autoCapitalize="none" onSubmitEditing={submit} />
-      <FormError message={error} />
-      <DialogActions>
-        <Button variant="ghost" label={t("取消")} onPress={() => dialog.close()} />
-        <Button variant="primary" label={t("前往")} onPress={submit} />
-      </DialogActions>
-    </View>
-  );
-}
-
-/** cal-jump */
-export function openJump() {
-  dialog.show({ title: translate("跳轉日期"), body: () => <JumpForm key={Date.now()} /> });
 }
 
 /* ───────── family sync (local demo) ───────── */

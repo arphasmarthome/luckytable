@@ -9,7 +9,7 @@ import { addDays, dateKey, fromKey, today, weekStart } from "@/lib/date";
 import { useDeviceStore } from "@/store/device";
 import { radius } from "@/theme";
 import { goToday, patchCalendar, setView, shiftPeriod } from "./actions";
-import { openEventDetail, openEventForm, openJump, openVoiceMember } from "./dialogs";
+import { openEventDetail, openEventForm, openVoiceMember } from "./dialogs";
 import { NEXT_LABELS, PREVIOUS_LABELS, VIEWS, cal, filterEvents, isView, monthRows, periodEvents, type CalView } from "./helpers";
 import { MemberBar, Upcoming, Weather } from "./Sidebar";
 import { useCalendarUi } from "./store";
@@ -82,11 +82,9 @@ export function CalendarScreen({ params }: { params: CalendarParams }) {
       <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 7, minWidth: 0 }}>
         <Button square variant="secondary" icon="chevron-left" accessibilityLabel={t(PREVIOUS_LABELS[view])} onPress={() => shiftPeriod(-1)} />
         <Button square variant="secondary" icon="chevron-right" accessibilityLabel={t(NEXT_LABELS[view])} onPress={() => shiftPeriod(1)} />
-        <Button variant="ghost" iconRight="chevron-down" accessibilityLabel={t("跳轉日期")} onPress={openJump} style={{ flexShrink: 1, minWidth: 0, paddingHorizontal: 8, marginLeft: 4 }}>
-          <Txt variant={isPhone ? "h3" : "h1"} numberOfLines={1} style={{ flexShrink: 1 }}>
-            {title}
-          </Txt>
-        </Button>
+        <Txt variant={isPhone ? "h3" : "h1"} numberOfLines={1} style={{ flexShrink: 1, minWidth: 0, paddingHorizontal: 8, marginLeft: 4 }}>
+          {title}
+        </Txt>
         <View style={{ flex: 1 }} />
         <Button variant="secondary" label={t("今天")} onPress={goToday} />
       </View>
