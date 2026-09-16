@@ -102,6 +102,7 @@ export type DeviceActions = {
   setDinnerMembers: (ids: string[]) => void;
   addMember: (name: string) => Member;
   removeMember: (id: string) => void;
+  renameMember: (id: string, name: string) => void;
   toggleCookDay: (memberId: string, day: number) => void;
   addPref: (memberId: string, field: keyof Omit<Prefs, "cook">, value: string) => void;
   removePref: (memberId: string, field: keyof Omit<Prefs, "cook">, index: number) => void;
@@ -128,7 +129,12 @@ export const HOUSEHOLD_COLORS = ["#38829b", "#d47860", "#9d79ad", "#b28c37", "#3
 export const cookIndexToday = (today.getDay() + 6) % 7;
 
 export const emptyPrefs = (): Prefs => ({ likes: [], dislikes: [], allergies: [], cook: [0, 0, 0, 0, 0, 0, 0] });
+/** Fallback shape used only to rebuild a member's Health object across hydration merges — every
+ * field here is overwritten by that member's own seed/stored data, so the numbers are never shown. */
 const defaultHealth = (age: number | null): Health => ({ height: 165, weight: 60, age: age || 30, sex: "female", activity: 1.4, goal: "maintain", records: [] });
+/** A newly added member's health starts genuinely blank (height/weight/age 0 reads as "no record
+ * yet" everywhere `!h.height || !h.weight` is checked) until someone fills in the profile form. */
+const emptyHealth = (): Health => ({ height: 0, weight: 0, age: 0, sex: "female", activity: 1.4, goal: "maintain", records: [] });
 
 /** Keeps the free-text diet summary (used by health / recipes) in step with the structured prefs. */
 export function syncDiet(person: Member): Member {
@@ -278,7 +284,7 @@ export function newMember(name: string, index: number): Member {
     allergy: "",
     preference: "",
     prefs: emptyPrefs(),
-    health: defaultHealth(null),
+    health: emptyHealth(),
   });
 }
 
@@ -310,6 +316,13 @@ export const useDeviceStore = create<DeviceState>()(
             health: { ...s.health, member: s.health.member === id ? first : s.health.member },
           };
         }),
+      renameMember: (id, name) => {
+        const next = name.trim();
+        if (!next) return;
+        set((s) => ({
+          members: s.members.map((m) => (m.id === id ? { ...m, name: next, initials: next.slice(0, 1).toUpperCase(), initial: next.slice(0, 1).toUpperCase() } : m)),
+        }));
+      },
       toggleCookDay: (memberId, day) =>
         set((s) => ({
           members: s.members.map((m) => (m.id === memberId ? { ...m, prefs: { ...m.prefs, cook: m.prefs.cook.map((on, i) => (i === day ? (on ? 0 : 1) : on)) } } : m)),

@@ -1,7 +1,7 @@
 /* Dialogs of the 健康 module: the health profile form (with the child / adult goal switch) and the wearable demo pairing. */
 import { useState } from "react";
 import { View } from "react-native";
-import { DemoNotice, Icon, Txt } from "@/components/ui";
+import { DemoNotice, Icon, TextField, Txt } from "@/components/ui";
 import { t as tt, useI18n } from "@/i18n";
 import { dialog } from "@/store/dialog";
 import { useDeviceStore, type Health } from "@/store/device";
@@ -15,7 +15,9 @@ import { activityNames, activityOptions, goalNames, goalOptions } from "./estima
 function HealthForm({ memberId }: { memberId: string }) {
   const { t } = useI18n();
   const person = useDeviceStore((s) => s.members.find((m) => m.id === memberId));
+  const renameMember = useDeviceStore((s) => s.renameMember);
   const p = person?.health;
+  const [name, setName] = useState(person?.name || "");
   const [height, setHeight] = useState(p?.height ? String(p.height) : "");
   const [weight, setWeight] = useState(p?.weight ? String(p.weight) : "");
   const [age, setAge] = useState(p?.age ? String(p.age) : "");
@@ -27,6 +29,10 @@ function HealthForm({ memberId }: { memberId: string }) {
   const adult = Number.isInteger(ageValue) && ageValue >= 18 && ageValue <= 100;
   const ageNote = ageValue >= 1 && ageValue <= 100 ? t("未滿 18 歲僅記錄成長資料，不計算成人 BMI 與熱量目標。") : t("請先填寫 1 至 100 歲的有效年齡；未滿 18 歲僅記錄成長資料。");
   const submit = () => {
+    if (!name.trim()) {
+      setError(t("請輸入姓名。"));
+      return;
+    }
     const message = saveHealthProfile(memberId, {
       height: height.trim() === "" ? NaN : Number(height),
       weight: weight.trim() === "" ? NaN : Number(weight),
@@ -35,10 +41,15 @@ function HealthForm({ memberId }: { memberId: string }) {
       activity: Number(activity),
       goal: adult ? goal : "maintain",
     });
-    if (message) setError(message);
+    if (message) {
+      setError(message);
+      return;
+    }
+    renameMember(memberId, name);
   };
   return (
     <View style={{ gap: 16 }}>
+      <TextField label={t("姓名")} value={name} onChangeText={setName} maxLength={20} autoComplete="off" />
       <FormGrid>
         <FormCell>
           <NumberField label={t("身高 · cm")} value={height} onChange={setHeight} />

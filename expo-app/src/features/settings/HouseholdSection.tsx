@@ -17,6 +17,17 @@ const FIELDS: PrefField[] = ["likes", "dislikes", "allergies"];
 const FIELD_LABEL: Record<PrefField, string> = { likes: "喜歡", dislikes: "不喜歡", allergies: "過敏" };
 const DAYS = [0, 1, 2, 3, 4, 5, 6];
 
+/** "Eggs" -> "Egg" so two members' free-typed preferences group under one label regardless of
+ * which form they typed. Only touches plain Latin-script words (Chinese has no plurals) and skips
+ * short/`ss`/`us`/`is` endings to avoid false singularizations (e.g. "boss", "hummus"). */
+function singularize(label: string): string {
+  const trimmed = label.trim();
+  if (trimmed.length > 3 && /^[A-Za-z][A-Za-z '-]*[A-Za-z]$/.test(trimmed) && /[a-z]s$/i.test(trimmed) && !/(ss|us|is)$/i.test(trimmed)) {
+    return trimmed.slice(0, -1);
+  }
+  return trimmed;
+}
+
 function Kicker({ children }: { children: string }) {
   return (
     <Txt variant="caption" weight="600" muted style={{ letterSpacing: 1, textTransform: "uppercase" }}>
@@ -59,9 +70,6 @@ function MemberCard({ member, selected }: { member: Member; selected: boolean })
         <View style={{ flex: 1, minWidth: 0 }}>
           <Txt variant="card" weight="600" numberOfLines={1}>
             {member.name}
-          </Txt>
-          <Txt variant="meta" muted numberOfLines={1}>
-            {t(member.role)}
           </Txt>
         </View>
       </Pressable>
@@ -192,7 +200,7 @@ function Profile({ member, cookCount, together }: { member: Member; cookCount: (
         <View style={{ flex: 1, minWidth: 0 }}>
           <Txt variant="h2">{member.name}</Txt>
           <Txt variant="meta" muted>
-            {`${t(member.role)} · ${householdCookLabel(member)}`}
+            {householdCookLabel(member)}
           </Txt>
         </View>
       </View>
@@ -251,7 +259,7 @@ function SharedBlock({ title, rows }: { title: string; rows: Tally[] }) {
         rows.map((r) => (
           <View key={r.value} style={{ flexDirection: "row", justifyContent: "space-between", gap: 12, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: shell.line }}>
             <Txt variant="body" weight="600" style={{ flexShrink: 1 }}>
-              {t(r.value)}
+              {r.value}
             </Txt>
             <Txt variant="meta" muted align="right" style={{ flexShrink: 1 }}>
               {list(r.who)}
@@ -275,12 +283,21 @@ export function HouseholdSection() {
   const sel = members.find((m) => m.id === selectedId) || members[0];
   const cookCount = (i: number) => members.filter((m) => m.prefs.cook[i]).length;
   const together = DAYS.filter((i) => cookCount(i) > 1).map((i) => `${weekday((i + 1) % 7)} — ${list(members.filter((m) => m.prefs.cook[i]).map((m) => m.name))}`);
+  /** Groups by the singularized, display-language label so "Egg" and "Eggs" (or a Chinese-source
+   * suggestion and someone's free-typed translation of it) count as the same shared item. */
   const tally = (field: PrefField): Tally[] => {
-    const seen: Record<string, string[]> = {};
-    members.forEach((m) => m.prefs[field].forEach((v) => (seen[v] = seen[v] || []).push(m.name)));
-    return Object.entries(seen).map(([value, who]) => ({ value, who }));
+    const seen: Record<string, Tally> = {};
+    members.forEach((m) =>
+      m.prefs[field].forEach((v) => {
+        const value = singularize(t(v));
+        const key = value.toLowerCase();
+        const entry = seen[key] || (seen[key] = { value, who: [] });
+        entry.who.push(m.name);
+      }),
+    );
+    return Object.values(seen).sort((a, b) => b.who.length - a.who.length);
   };
-  const shared = (field: PrefField) => tally(field).filter((x) => x.who.length > 1).sort((a, b) => b.who.length - a.who.length);
+  const shared = (field: PrefField) => tally(field).filter((x) => x.who.length > 1);
   const allergies = tally("allergies");
   const firstAllergy = allergies[0];
 
@@ -306,7 +323,7 @@ export function HouseholdSection() {
               {t("過敏優先")}
             </Txt>
             <Txt variant="body" color="#946126">
-              {t("只要 {name} 在餐桌上，所有建議都不會出現{allergy}。", { name: firstAllergy.who[0], allergy: t(firstAllergy.value) })}
+              {t("只要 {name} 在餐桌上，所有建議都不會出現{allergy}。", { name: firstAllergy.who[0], allergy: firstAllergy.value })}
             </Txt>
           </View>
         ) : null}
